@@ -10,6 +10,7 @@ export const Media: CollectionConfig = {
       name: 'alt',
       type: 'text',
       required: true,
+      label: '代替テキスト（画像の説明）',
     },
   ],
   upload: true,
