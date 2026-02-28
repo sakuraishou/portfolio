@@ -1,41 +1,41 @@
 ---
-title: Queries
-description: Local API, REST, and GraphQL query patterns
+title: クエリ
+description: Local API・REST・GraphQL のクエリパターン
 tags: [payload, queries, local-api, rest, graphql]
 ---
 
-# Payload CMS Queries
+# Payload CMS クエリ
 
-## Query Operators
+## クエリ演算子
 
 ```typescript
-// Equals
+// 等しい
 { color: { equals: 'blue' } }
 
-// Not equals
+// 等しくない
 { status: { not_equals: 'draft' } }
 
-// Greater/less than
+// より大きい / 以下
 { price: { greater_than: 100 } }
 { age: { less_than_equal: 65 } }
 
-// Contains (case-insensitive)
+// 含む（大文字小文字を区別しない）
 { title: { contains: 'payload' } }
 
-// Like (all words present)
+// Like（すべての単語が含まれる）
 { description: { like: 'cms headless' } }
 
-// In/not in
+// 配列内に含まれる / 含まれない
 { category: { in: ['tech', 'news'] } }
 
-// Exists
+// 存在する
 { image: { exists: true } }
 
-// Near (point fields)
-{ location: { near: [10, 20, 5000] } } // [lng, lat, maxDistance]
+// 近くにある（ポイントフィールド）
+{ location: { near: [10, 20, 5000] } } // [経度, 緯度, 最大距離]
 ```
 
-## AND/OR Logic
+## AND/OR ロジック
 
 ```typescript
 {
@@ -51,7 +51,7 @@ tags: [payload, queries, local-api, rest, graphql]
 }
 ```
 
-## Nested Properties
+## ネストプロパティ
 
 ```typescript
 {
@@ -63,14 +63,14 @@ tags: [payload, queries, local-api, rest, graphql]
 ## Local API
 
 ```typescript
-// Find documents
+// ドキュメントを検索
 const posts = await payload.find({
   collection: 'posts',
   where: {
     status: { equals: 'published' },
     'author.name': { contains: 'john' },
   },
-  depth: 2, // Populate relationships
+  depth: 2,      // リレーションを展開
   limit: 10,
   page: 1,
   sort: '-createdAt',
@@ -81,23 +81,23 @@ const posts = await payload.find({
   },
 })
 
-// Find by ID
+// ID で検索
 const post = await payload.findByID({
   collection: 'posts',
   id: '123',
   depth: 2,
 })
 
-// Create
+// 作成
 const post = await payload.create({
   collection: 'posts',
   data: {
-    title: 'New Post',
+    title: '新しい投稿',
     status: 'draft',
   },
 })
 
-// Update
+// 更新
 await payload.update({
   collection: 'posts',
   id: '123',
@@ -106,13 +106,13 @@ await payload.update({
   },
 })
 
-// Delete
+// 削除
 await payload.delete({
   collection: 'posts',
   id: '123',
 })
 
-// Count
+// 件数カウント
 const count = await payload.count({
   collection: 'posts',
   where: {
@@ -121,37 +121,37 @@ const count = await payload.count({
 })
 ```
 
-## Access Control in Local API
+## Local API のアクセス制御
 
-**CRITICAL**: Local API bypasses access control by default (`overrideAccess: true`).
+**重要**: Local API はデフォルトでアクセス制御をスキップします（`overrideAccess: true`）。
 
 ```typescript
-// ❌ WRONG: User is passed but access control is bypassed
+// ❌ 間違い: user を渡してもアクセス制御がスキップされる
 const posts = await payload.find({
   collection: 'posts',
   user: currentUser,
-  // Result: Operation runs with ADMIN privileges
+  // 結果: 管理者権限で動作してしまう
 })
 
-// ✅ CORRECT: Respects user's access control permissions
+// ✅ 正しい: ユーザーのアクセス制御を正しく適用する
 const posts = await payload.find({
   collection: 'posts',
   user: currentUser,
-  overrideAccess: false, // Required to enforce access control
+  overrideAccess: false, // アクセス制御の強制に必須
 })
 
-// Administrative operation (intentionally bypass access control)
+// 管理操作（意図的にアクセス制御をスキップ）
 const allPosts = await payload.find({
   collection: 'posts',
-  // No user parameter, overrideAccess defaults to true
+  // user パラメータなし、overrideAccess はデフォルトで true
 })
 ```
 
-**When to use `overrideAccess: false`:**
+**`overrideAccess: false` を使う場面:**
 
-- Performing operations on behalf of a user
-- Testing access control logic
-- API routes that should respect user permissions
+- ユーザーの代わりに操作を実行する場合
+- アクセス制御ロジックをテストする場合
+- ユーザー権限を尊重すべき API ルート
 
 ## REST API
 
@@ -175,18 +175,18 @@ const response = await fetch(`https://api.example.com/api/posts${queryString}`)
 const data = await response.json()
 ```
 
-### REST Endpoints
+### REST エンドポイント
 
 ```
-GET    /api/{collection}           - Find documents
-GET    /api/{collection}/{id}      - Find by ID
-POST   /api/{collection}           - Create
-PATCH  /api/{collection}/{id}      - Update
-DELETE /api/{collection}/{id}      - Delete
-GET    /api/{collection}/count     - Count documents
+GET    /api/{collection}           - ドキュメントを検索
+GET    /api/{collection}/{id}      - ID で検索
+POST   /api/{collection}           - 作成
+PATCH  /api/{collection}/{id}      - 更新
+DELETE /api/{collection}/{id}      - 削除
+GET    /api/{collection}/count     - 件数カウント
 
-GET    /api/globals/{slug}         - Get global
-POST   /api/globals/{slug}         - Update global
+GET    /api/globals/{slug}         - グローバルを取得
+POST   /api/globals/{slug}         - グローバルを更新
 ```
 
 ## GraphQL
@@ -207,17 +207,17 @@ query {
 }
 
 mutation {
-  createPost(data: { title: "New Post", status: draft }) {
+  createPost(data: { title: "新しい投稿", status: draft }) {
     id
     title
   }
 }
 ```
 
-## Performance Best Practices
+## パフォーマンスのベストプラクティス
 
-- Set `maxDepth` on relationships to prevent over-fetching
-- Use `select` to limit returned fields
-- Index frequently queried fields
-- Use `virtual` fields for computed data
-- Cache expensive operations in hook `context`
+- リレーションには `maxDepth` を設定して過剰なデータ取得を防ぐ
+- `select` で返却フィールドを絞る
+- よく検索するフィールドにインデックスを付ける
+- 計算データには `virtual` フィールドを使う
+- コストの高い処理はフックの `context` にキャッシュする

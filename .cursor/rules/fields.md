@@ -1,19 +1,19 @@
 ---
-title: Fields
-description: Field types, patterns, and configurations
+title: フィールド
+description: フィールドの種類・パターン・設定
 tags: [payload, fields, validation, conditional]
 ---
 
-# Payload CMS Fields
+# Payload CMS フィールド
 
-## Common Field Patterns
+## よく使うフィールドパターン
 
 ```typescript
-// Auto-generate slugs
+// スラグの自動生成
 import { slugField } from 'payload'
 slugField({ fieldToUse: 'title' })
 
-// Relationship with filtering
+// フィルタリング付きリレーション
 {
   name: 'category',
   type: 'relationship',
@@ -21,7 +21,7 @@ slugField({ fieldToUse: 'title' })
   filterOptions: { active: { equals: true } },
 }
 
-// Conditional field
+// 条件付きフィールド
 {
   name: 'featuredImage',
   type: 'upload',
@@ -31,7 +31,7 @@ slugField({ fieldToUse: 'title' })
   },
 }
 
-// Virtual field
+// 仮想フィールド
 {
   name: 'fullName',
   type: 'text',
@@ -42,9 +42,9 @@ slugField({ fieldToUse: 'title' })
 }
 ```
 
-## Field Types
+## フィールドの種類
 
-### Text Field
+### テキストフィールド
 
 ```typescript
 {
@@ -56,17 +56,17 @@ slugField({ fieldToUse: 'title' })
   maxLength: 100,
   index: true,
   localized: true,
-  defaultValue: 'Default Title',
-  validate: (value) => Boolean(value) || 'Required',
+  defaultValue: 'デフォルトタイトル',
+  validate: (value) => Boolean(value) || '必須項目です',
   admin: {
-    placeholder: 'Enter title...',
+    placeholder: 'タイトルを入力...',
     position: 'sidebar',
     condition: (data) => data.showTitle === true,
   },
 }
 ```
 
-### Rich Text (Lexical)
+### リッチテキスト（Lexical）
 
 ```typescript
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -90,10 +90,10 @@ import { HeadingFeature, LinkFeature } from '@payloadcms/richtext-lexical'
 }
 ```
 
-### Relationship
+### リレーション
 
 ```typescript
-// Single relationship
+// 単一リレーション
 {
   name: 'author',
   type: 'relationship',
@@ -102,7 +102,7 @@ import { HeadingFeature, LinkFeature } from '@payloadcms/richtext-lexical'
   maxDepth: 2,
 }
 
-// Multiple relationships (hasMany)
+// 複数リレーション（hasMany）
 {
   name: 'categories',
   type: 'relationship',
@@ -113,7 +113,7 @@ import { HeadingFeature, LinkFeature } from '@payloadcms/richtext-lexical'
   },
 }
 
-// Polymorphic relationship
+// ポリモーフィックリレーション（複数コレクション）
 {
   name: 'relatedContent',
   type: 'relationship',
@@ -122,7 +122,7 @@ import { HeadingFeature, LinkFeature } from '@payloadcms/richtext-lexical'
 }
 ```
 
-### Array
+### 配列（Array）
 
 ```typescript
 {
@@ -131,8 +131,8 @@ import { HeadingFeature, LinkFeature } from '@payloadcms/richtext-lexical'
   minRows: 2,
   maxRows: 10,
   labels: {
-    singular: 'Slide',
-    plural: 'Slides',
+    singular: 'スライド',
+    plural: 'スライド一覧',
   },
   fields: [
     {
@@ -152,7 +152,7 @@ import { HeadingFeature, LinkFeature } from '@payloadcms/richtext-lexical'
 }
 ```
 
-### Blocks
+### ブロック（Blocks）
 
 ```typescript
 import type { Block } from 'payload'
@@ -191,21 +191,21 @@ const ContentBlock: Block = {
 }
 ```
 
-### Select
+### セレクト（Select）
 
 ```typescript
 {
   name: 'status',
   type: 'select',
   options: [
-    { label: 'Draft', value: 'draft' },
-    { label: 'Published', value: 'published' },
+    { label: '下書き', value: 'draft' },
+    { label: '公開済み', value: 'published' },
   ],
   defaultValue: 'draft',
   required: true,
 }
 
-// Multiple select
+// 複数選択
 {
   name: 'tags',
   type: 'select',
@@ -214,7 +214,7 @@ const ContentBlock: Block = {
 }
 ```
 
-### Upload
+### アップロード（Upload）
 
 ```typescript
 {
@@ -228,50 +228,50 @@ const ContentBlock: Block = {
 }
 ```
 
-### Point (Geolocation)
+### ポイント（地理位置情報）
 
 ```typescript
 {
   name: 'location',
   type: 'point',
-  label: 'Location',
+  label: '位置情報',
   required: true,
 }
 
-// Query by distance
+// 距離でクエリ
 const nearbyLocations = await payload.find({
   collection: 'stores',
   where: {
     location: {
-      near: [10, 20], // [longitude, latitude]
-      maxDistance: 5000, // in meters
+      near: [10, 20], // [経度, 緯度]
+      maxDistance: 5000, // メートル単位
       minDistance: 1000,
     },
   },
 })
 ```
 
-### Join Fields (Reverse Relationships)
+### Join フィールド（逆リレーション）
 
 ```typescript
-// From Users collection - show user's orders
+// Users コレクションから - ユーザーの注文を表示
 {
   name: 'orders',
   type: 'join',
   collection: 'orders',
-  on: 'customer', // The field in 'orders' that references this user
+  on: 'customer', // orders コレクションでこのユーザーを参照しているフィールド
 }
 ```
 
-### Tabs & Groups
+### タブとグループ
 
 ```typescript
-// Tabs
+// タブ
 {
   type: 'tabs',
   tabs: [
     {
-      label: 'Content',
+      label: 'コンテンツ',
       fields: [
         { name: 'title', type: 'text' },
         { name: 'body', type: 'richText' },
@@ -287,7 +287,7 @@ const nearbyLocations = await payload.find({
   ],
 }
 
-// Group (named)
+// グループ（名前付き）
 {
   name: 'meta',
   type: 'group',
@@ -298,7 +298,7 @@ const nearbyLocations = await payload.find({
 }
 ```
 
-## Validation
+## バリデーション
 
 ```typescript
 {
@@ -306,10 +306,10 @@ const nearbyLocations = await payload.find({
   type: 'email',
   validate: (value, { operation, data, siblingData }) => {
     if (operation === 'create' && !value) {
-      return 'Email is required'
+      return 'メールアドレスは必須です'
     }
     if (value && !value.includes('@')) {
-      return 'Invalid email format'
+      return 'メールアドレスの形式が正しくありません'
     }
     return true
   },

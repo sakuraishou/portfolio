@@ -1,33 +1,33 @@
 ---
-title: Access Control - Advanced Patterns
-description: Context-aware, time-based, subscription-based access, factory functions, templates
+title: アクセス制御 - 高度なパターン
+description: コンテキスト対応・時間ベース・サブスクリプションベースのアクセス制御、ファクトリー関数、テンプレート
 tags: [payload, access-control, security, advanced, performance]
 priority: high
 ---
 
-# Advanced Access Control Patterns
+# 高度なアクセス制御パターン
 
-Advanced access control patterns including context-aware access, time-based restrictions, factory functions, and production templates.
+コンテキスト対応アクセス・時間ベースの制限・ファクトリー関数・本番テンプレートを含む高度なアクセス制御パターンです。
 
-## Context-Aware Access Patterns
+## コンテキスト対応アクセスパターン
 
-### Locale-Specific Access
+### ロケール別アクセス制御
 
 ```typescript
 import type { Access } from 'payload'
 
 export const localeSpecificAccess: Access = ({ req: { user, locale } }) => {
-  // Authenticated users can access all locales
+  // ログイン済みユーザーはすべてのロケールにアクセス可能
   if (user) return true
 
-  // Public users can only access English content
+  // 未ログインユーザーは英語コンテンツのみ
   if (locale === 'en') return true
 
   return false
 }
 ```
 
-### Device-Specific Access
+### デバイス別アクセス制御
 
 ```typescript
 export const mobileOnlyAccess: Access = ({ req: { headers } }) => {
@@ -41,7 +41,7 @@ export const desktopOnlyAccess: Access = ({ req: { headers } }) => {
 }
 ```
 
-### IP-Based Access
+### IP ベースのアクセス制御
 
 ```typescript
 export const restrictedIpAccess = (allowedIps: string[]): Access => {
@@ -51,7 +51,7 @@ export const restrictedIpAccess = (allowedIps: string[]): Access => {
   }
 }
 
-// Usage
+// 使い方
 const internalIps = ['192.168.1.0/24', '10.0.0.5']
 
 export const InternalDocs: CollectionConfig = {
@@ -62,9 +62,9 @@ export const InternalDocs: CollectionConfig = {
 }
 ```
 
-## Time-Based Access Patterns
+## 時間ベースのアクセスパターン
 
-### Today's Records Only
+### 当日のレコードのみ
 
 ```typescript
 export const todayOnlyAccess: Access = ({ req: { user } }) => {
@@ -83,7 +83,7 @@ export const todayOnlyAccess: Access = ({ req: { user } }) => {
 }
 ```
 
-### Recent Records (Last N Days)
+### 直近 N 日間のレコード
 
 ```typescript
 export const recentRecordsAccess = (days: number): Access => {
@@ -102,7 +102,7 @@ export const recentRecordsAccess = (days: number): Access => {
   }
 }
 
-// Usage: Users see only last 30 days, admins see all
+// 使い方: ユーザーは直近30日間のみ、管理者は全件
 export const Logs: CollectionConfig = {
   slug: 'logs',
   access: {
@@ -111,18 +111,18 @@ export const Logs: CollectionConfig = {
 }
 ```
 
-### Scheduled Content (Publish Date Range)
+### スケジュールコンテンツ（公開日時の範囲）
 
 ```typescript
 export const scheduledContentAccess: Access = ({ req: { user } }) => {
-  // Editors see all content
+  // 編集者・管理者はすべてのコンテンツを閲覧可能
   if (user?.roles?.includes('admin') || user?.roles?.includes('editor')) {
     return true
   }
 
   const now = new Date().toISOString()
 
-  // Public sees only content within publish window
+  // 一般ユーザーは公開ウィンドウ内のコンテンツのみ
   return {
     and: [
       { publishDate: { less_than_equal: now } },
@@ -134,9 +134,9 @@ export const scheduledContentAccess: Access = ({ req: { user } }) => {
 }
 ```
 
-## Subscription-Based Access
+## サブスクリプションベースのアクセス制御
 
-### Active Subscription Required
+### アクティブなサブスクリプションが必要
 
 ```typescript
 export const activeSubscriptionAccess: Access = async ({ req: { user } }) => {
@@ -156,7 +156,7 @@ export const activeSubscriptionAccess: Access = async ({ req: { user } }) => {
 }
 ```
 
-### Subscription Tier-Based Access
+### サブスクリプションティアベースのアクセス制御
 
 ```typescript
 export const tierBasedAccess = (requiredTier: string): Access => {
@@ -184,7 +184,7 @@ export const tierBasedAccess = (requiredTier: string): Access => {
   }
 }
 
-// Usage
+// 使い方
 export const EnterpriseFeatures: CollectionConfig = {
   slug: 'enterprise-features',
   access: {
@@ -193,7 +193,7 @@ export const EnterpriseFeatures: CollectionConfig = {
 }
 ```
 
-## Factory Functions
+## ファクトリー関数
 
 ### createRoleBasedAccess
 
@@ -205,7 +205,7 @@ export function createRoleBasedAccess(roles: string[]): Access {
   }
 }
 
-// Usage
+// 使い方
 const adminOrEditor = createRoleBasedAccess(['admin', 'editor'])
 const moderatorAccess = createRoleBasedAccess(['admin', 'moderator'])
 ```
@@ -224,9 +224,9 @@ export function createOrgScopedAccess(allowAdmin = true): Access {
   }
 }
 
-// Usage
-const orgScoped = createOrgScopedAccess() // Admins bypass
-const strictOrgScoped = createOrgScopedAccess(false) // Admins also scoped
+// 使い方
+const orgScoped = createOrgScopedAccess()        // 管理者はバイパス
+const strictOrgScoped = createOrgScopedAccess(false) // 管理者もスコープ内
 ```
 
 ### createTeamBasedAccess
@@ -264,31 +264,31 @@ export function createTimeLimitedAccess(daysAccess: number): Access {
 }
 ```
 
-## Configuration Templates
+## 設定テンプレート
 
-### Public + Authenticated Collection
+### 公開 + 認証コレクション
 
 ```typescript
 export const PublicAuthCollection: CollectionConfig = {
   slug: 'posts',
   access: {
-    // Only admins/editors can create
+    // 管理者・編集者のみ作成可能
     create: ({ req: { user } }) => {
       return user?.roles?.some((role) => ['admin', 'editor'].includes(role)) || false
     },
 
-    // Authenticated users see all, public sees only published
+    // ログイン済みは全件、未ログインは公開済みのみ
     read: ({ req: { user } }) => {
       if (user) return true
       return { _status: { equals: 'published' } }
     },
 
-    // Only admins/editors can update
+    // 管理者・編集者のみ更新可能
     update: ({ req: { user } }) => {
       return user?.roles?.some((role) => ['admin', 'editor'].includes(role)) || false
     },
 
-    // Only admins can delete
+    // 管理者のみ削除可能
     delete: ({ req: { user } }) => {
       return user?.roles?.includes('admin') || false
     },
@@ -304,27 +304,27 @@ export const PublicAuthCollection: CollectionConfig = {
 }
 ```
 
-### Self-Service Collection
+### セルフサービスコレクション
 
 ```typescript
 export const SelfServiceCollection: CollectionConfig = {
   slug: 'users',
   auth: true,
   access: {
-    // Admins can create users
+    // 管理者のみユーザーを作成できる
     create: ({ req: { user } }) => user?.roles?.includes('admin') || false,
 
-    // Anyone can read user profiles
+    // 誰でもユーザープロフィールを読める
     read: () => true,
 
-    // Users can update self, admins can update anyone
+    // ユーザーは自分自身、管理者は誰でも更新可能
     update: ({ req: { user }, id }) => {
       if (!user) return false
       if (user.roles?.includes('admin')) return true
       return user.id === id
     },
 
-    // Only admins can delete
+    // 管理者のみ削除可能
     delete: ({ req: { user } }) => user?.roles?.includes('admin') || false,
   },
   fields: [
@@ -336,7 +336,7 @@ export const SelfServiceCollection: CollectionConfig = {
       hasMany: true,
       options: ['admin', 'editor', 'user'],
       access: {
-        // Only admins can read/update roles
+        // 管理者のみロールを読み書き可能
         read: ({ req: { user } }) => user?.roles?.includes('admin') || false,
         update: ({ req: { user } }) => user?.roles?.includes('admin') || false,
       },
@@ -345,12 +345,12 @@ export const SelfServiceCollection: CollectionConfig = {
 }
 ```
 
-## Performance Considerations
+## パフォーマンスの考慮事項
 
-### Avoid Async Operations in Hot Paths
+### ホットパスでの非同期処理を避ける
 
 ```typescript
-// ❌ Slow: Multiple sequential async calls
+// ❌ 遅い: 複数の非同期呼び出しを直列で実行
 export const slowAccess: Access = async ({ req: { user } }) => {
   const org = await req.payload.findByID({ collection: 'orgs', id: user.orgId })
   const team = await req.payload.findByID({ collection: 'teams', id: user.teamId })
@@ -359,9 +359,9 @@ export const slowAccess: Access = async ({ req: { user } }) => {
   return org.active && team.active && subscription.active
 }
 
-// ✅ Fast: Use query constraints or cache in context
+// ✅ 速い: クエリ制約を使うか context にキャッシュする
 export const fastAccess: Access = ({ req: { user, context } }) => {
-  // Cache expensive lookups
+  // コストの高い処理をキャッシュ
   if (!context.orgStatus) {
     context.orgStatus = checkOrgStatus(user.orgId)
   }
@@ -370,25 +370,25 @@ export const fastAccess: Access = ({ req: { user, context } }) => {
 }
 ```
 
-### Query Constraint Optimization
+### クエリ制約の最適化
 
 ```typescript
-// ❌ Avoid: Non-indexed fields in constraints
+// ❌ 避ける: インデックスのないフィールドを制約に使う
 export const slowQuery: Access = () => ({
-  'metadata.internalCode': { equals: 'ABC123' }, // Slow if not indexed
+  'metadata.internalCode': { equals: 'ABC123' }, // インデックスがないと遅い
 })
 
-// ✅ Better: Use indexed fields
+// ✅ 良い: インデックス付きフィールドを使う
 export const fastQuery: Access = () => ({
-  status: { equals: 'active' }, // Indexed field
-  organizationId: { in: ['org1', 'org2'] }, // Indexed field
+  status: { equals: 'active' },           // インデックス付きフィールド
+  organizationId: { in: ['org1', 'org2'] }, // インデックス付きフィールド
 })
 ```
 
-### Field Access on Large Arrays
+### 大きな配列フィールドのアクセス制御
 
 ```typescript
-// ❌ Slow: Complex access on array fields
+// ❌ 遅い: 配列フィールドへの複雑なアクセス制御
 {
   name: 'items',
   type: 'array',
@@ -398,7 +398,7 @@ export const fastQuery: Access = () => ({
       type: 'text',
       access: {
         read: async ({ req }) => {
-          // Async call runs for EVERY array item
+          // 配列の各アイテムに対して非同期呼び出しが走る
           const result = await expensiveCheck()
           return result
         },
@@ -407,7 +407,7 @@ export const fastQuery: Access = () => ({
   ],
 }
 
-// ✅ Fast: Simple checks or cache result
+// ✅ 速い: シンプルなチェックか結果をキャッシュ
 {
   name: 'items',
   type: 'array',
@@ -417,7 +417,7 @@ export const fastQuery: Access = () => ({
       type: 'text',
       access: {
         read: ({ req: { user }, context }) => {
-          // Cache once, reuse for all items
+          // 一度だけチェックして全アイテムで再利用
           if (context.canReadSecret === undefined) {
             context.canReadSecret = user?.roles?.includes('admin')
           }
@@ -429,29 +429,29 @@ export const fastQuery: Access = () => ({
 }
 ```
 
-### Avoid N+1 Queries
+### N+1 クエリを避ける
 
 ```typescript
-// ❌ N+1 Problem: Query per access check
+// ❌ N+1 問題: アクセスチェックのたびにクエリが発生
 export const n1Access: Access = async ({ req, id }) => {
-  // Runs for EACH document in list
+  // 一覧の各ドキュメントに対して実行される
   const doc = await req.payload.findByID({ collection: 'docs', id })
   return doc.isPublic
 }
 
-// ✅ Better: Use query constraint to filter at DB level
+// ✅ 良い: DB レベルでフィルタリングするクエリ制約を使う
 export const efficientAccess: Access = () => {
   return { isPublic: { equals: true } }
 }
 ```
 
-## Debugging Tips
+## デバッグのヒント
 
-### Log Access Check Execution
+### アクセスチェックのログ出力
 
 ```typescript
 export const debugAccess: Access = ({ req: { user }, id }) => {
-  console.log('Access check:', {
+  console.log('アクセスチェック:', {
     userId: user?.id,
     userRoles: user?.roles,
     docId: id,
@@ -461,59 +461,59 @@ export const debugAccess: Access = ({ req: { user }, id }) => {
 }
 ```
 
-### Verify Arguments Availability
+### 引数の確認
 
 ```typescript
 export const checkArgsAccess: Access = (args) => {
-  console.log('Available arguments:', {
+  console.log('利用可能な引数:', {
     hasReq: 'req' in args,
-    hasUser: args.req?.user ? 'yes' : 'no',
-    hasId: args.id ? 'provided' : 'undefined',
-    hasData: args.data ? 'provided' : 'undefined',
+    hasUser: args.req?.user ? 'あり' : 'なし',
+    hasId: args.id ? '提供あり' : '未定義',
+    hasData: args.data ? '提供あり' : '未定義',
   })
   return true
 }
 ```
 
-### Test Access Without User
+### ユーザーなしのアクセステスト
 
 ```typescript
-// In test/development
+// テスト・開発時
 const testAccess = await payload.find({
   collection: 'posts',
-  overrideAccess: false, // Enforce access control
-  user: undefined, // Simulate no user
+  overrideAccess: false, // アクセス制御を強制
+  user: undefined,       // 未ログイン状態をシミュレート
 })
 
-console.log('Public access result:', testAccess.docs.length)
+console.log('公開アクセス結果:', testAccess.docs.length)
 ```
 
-## Best Practices
+## ベストプラクティス
 
-1. **Default Deny**: Start with restrictive access, gradually add permissions
-2. **Type Guards**: Use TypeScript for user type safety
-3. **Validate Data**: Never trust frontend-provided IDs or data
-4. **Async for Critical Checks**: Use async operations for important security decisions
-5. **Consistent Logic**: Apply same rules at field and collection levels
-6. **Test Edge Cases**: Test with no user, wrong user, admin user scenarios
-7. **Monitor Access**: Log failed access attempts for security review
-8. **Regular Audit**: Review access rules quarterly or after major changes
-9. **Cache Wisely**: Use `req.context` for expensive operations
-10. **Document Intent**: Add comments explaining complex access rules
-11. **Avoid Secrets in Client**: Never expose sensitive logic to client-side
-12. **Handle Errors Gracefully**: Access functions should return `false` on error, not throw
-13. **Test Local API**: Remember to set `overrideAccess: false` when testing
-14. **Consider Performance**: Measure impact of async operations
-15. **Principle of Least Privilege**: Grant minimum access required
+1. **デフォルト拒否**: 制限的なアクセスから始めて、段階的に権限を追加する
+2. **型ガード**: ユーザーの型安全性のために TypeScript を活用する
+3. **データの検証**: フロントエンドから提供された ID やデータを信頼しない
+4. **重要なチェックには非同期を使う**: 重要なセキュリティ判断には非同期処理を使う
+5. **ロジックの一貫性**: フィールドとコレクションで同じルールを適用する
+6. **エッジケースのテスト**: ユーザーなし・別ユーザー・管理者ユーザーでテストする
+7. **アクセスの監視**: セキュリティ確認のためアクセス失敗をログに記録する
+8. **定期的な監査**: 主要な変更後または四半期ごとにアクセスルールを見直す
+9. **賢くキャッシュする**: コストの高い処理には `req.context` を使う
+10. **意図を文書化する**: 複雑なアクセスルールにはコメントで説明を追加する
+11. **クライアントに秘密を公開しない**: 機密ロジックをクライアントサイドに露出させない
+12. **エラーを適切に処理する**: アクセス関数はエラー時に例外を投げず `false` を返す
+13. **Local API をテストする**: テスト時は `overrideAccess: false` を設定することを忘れない
+14. **パフォーマンスを考慮する**: 非同期処理の影響を計測する
+15. **最小権限の原則**: 必要最小限のアクセス権のみを付与する
 
-## Performance Summary
+## パフォーマンスまとめ
 
-**Minimize Async Operations**: Use query constraints over async lookups when possible
+**非同期処理を最小化する**: 可能な限り非同期ルックアップよりクエリ制約を使う
 
-**Cache Expensive Checks**: Store results in `req.context` for reuse
+**コストの高いチェックをキャッシュする**: 再利用のために `req.context` に結果を保存する
 
-**Index Query Fields**: Ensure fields in query constraints are indexed
+**クエリフィールドにインデックスを付ける**: クエリ制約で使うフィールドにはインデックスを付ける
 
-**Avoid Complex Logic in Array Fields**: Simple boolean checks preferred
+**配列フィールドの複雑なロジックを避ける**: シンプルな boolean チェックが望ましい
 
-**Use Query Constraints**: Let database filter rather than loading all records
+**クエリ制約を使う**: 全レコードを読み込むのではなくデータベースでフィルタリングする

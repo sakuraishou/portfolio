@@ -1,21 +1,21 @@
-# Custom Components in Payload CMS
+# Payload CMS カスタムコンポーネント
 
-Custom Components allow you to fully customize the Admin Panel by swapping in your own React components. You can replace nearly every part of the interface or add entirely new functionality.
+カスタムコンポーネントを使うと、独自の React コンポーネントに差し替えることで管理画面を完全にカスタマイズできます。インターフェースのほぼすべての部分を置き換えたり、まったく新しい機能を追加したりすることができます。
 
-## Component Types
+## コンポーネントの種類
 
-There are four main types of Custom Components:
+カスタムコンポーネントには4つの主要な種類があります。
 
-1. **Root Components** - Affect the Admin Panel globally (logo, nav, header)
-2. **Collection Components** - Specific to collection views
-3. **Global Components** - Specific to global document views
-4. **Field Components** - Custom field UI and cells
+1. **ルートコンポーネント** - 管理画面全体に影響（ロゴ・ナビ・ヘッダー）
+2. **コレクションコンポーネント** - コレクションビュー固有
+3. **グローバルコンポーネント** - グローバルドキュメントビュー固有
+4. **フィールドコンポーネント** - カスタムフィールドUIとセル
 
-## Defining Custom Components
+## カスタムコンポーネントの定義
 
-### Component Paths
+### コンポーネントパス
 
-Components are defined using file paths (not direct imports) to keep the config lightweight and Node.js compatible.
+コンポーネントは設定を軽量に保つため、直接インポートではなくファイルパスで定義します。
 
 ```typescript
 import { buildConfig } from 'payload'
@@ -24,24 +24,24 @@ export default buildConfig({
   admin: {
     components: {
       logout: {
-        Button: '/src/components/Logout#MyComponent', // Named export
+        Button: '/src/components/Logout#MyComponent', // 名前付きエクスポート
       },
-      Nav: '/src/components/Nav', // Default export
+      Nav: '/src/components/Nav', // デフォルトエクスポート
     },
   },
 })
 ```
 
-**Component Path Rules:**
+**コンポーネントパスのルール:**
 
-1. Paths are relative to project root (or `config.admin.importMap.baseDir`)
-2. For **named exports**: append `#ExportName` or use `exportName` property
-3. For **default exports**: no suffix needed
-4. File extensions can be omitted
+1. パスはプロジェクトルート（または `config.admin.importMap.baseDir`）からの相対パス
+2. **名前付きエクスポート**: `#ExportName` を追加するか `exportName` プロパティを使う
+3. **デフォルトエクスポート**: サフィックス不要
+4. ファイル拡張子は省略可能
 
-### Component Config Object
+### コンポーネント設定オブジェクト
 
-Instead of a string path, you can pass a config object:
+文字列パスの代わりに設定オブジェクトを渡すこともできます。
 
 ```typescript
 {
@@ -56,16 +56,16 @@ Instead of a string path, you can pass a config object:
 }
 ```
 
-**Config Properties:**
+**設定プロパティ:**
 
-| Property      | Description                                           |
-| ------------- | ----------------------------------------------------- |
-| `path`        | File path to component (named exports via `#`)        |
-| `exportName`  | Named export (alternative to `#` in path)             |
-| `clientProps` | Props for Client Components (must be serializable)    |
-| `serverProps` | Props for Server Components (can be non-serializable) |
+| プロパティ | 説明 |
+| --- | --- |
+| `path` | コンポーネントのファイルパス（名前付きエクスポートは `#` で指定） |
+| `exportName` | 名前付きエクスポート（パスの `#` の代替） |
+| `clientProps` | クライアントコンポーネント用のプロップ（シリアライズ可能である必要あり） |
+| `serverProps` | サーバーコンポーネント用のプロップ（シリアライズ不可でも可） |
 
-### Setting Base Directory
+### ベースディレクトリの設定
 
 ```typescript
 import path from 'path'
@@ -77,22 +77,22 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     importMap: {
-      baseDir: path.resolve(dirname, 'src'), // Set base directory
+      baseDir: path.resolve(dirname, 'src'), // ベースディレクトリを設定
     },
     components: {
-      Nav: '/components/Nav', // Now relative to src/
+      Nav: '/components/Nav', // src/ からの相対パスになる
     },
   },
 })
 ```
 
-## Server vs Client Components
+## サーバー vs クライアントコンポーネント
 
-**All components are React Server Components by default.**
+**すべてのコンポーネントはデフォルトで React サーバーコンポーネントです。**
 
-### Server Components (Default)
+### サーバーコンポーネント（デフォルト）
 
-Can use Local API directly, perform async operations, and access full Payload instance.
+Local API を直接使え、非同期処理も行え、Payload の完全なインスタンスにアクセスできます。
 
 ```tsx
 import React from 'react'
@@ -110,9 +110,9 @@ async function MyServerComponent({ payload }: { payload: Payload }) {
 export default MyServerComponent
 ```
 
-### Client Components
+### クライアントコンポーネント
 
-Use the `'use client'` directive for interactivity, hooks, state, etc.
+インタラクティブ性・フック・状態管理などに `'use client'` ディレクティブを使います。
 
 ```tsx
 'use client'
@@ -121,23 +121,23 @@ import React, { useState } from 'react'
 export function MyClientComponent() {
   const [count, setCount] = useState(0)
 
-  return <button onClick={() => setCount(count + 1)}>Clicked {count} times</button>
+  return <button onClick={() => setCount(count + 1)}>{count} 回クリックしました</button>
 }
 ```
 
-**Important:** Client Components cannot receive non-serializable props (functions, class instances, etc.). Payload automatically strips these when passing to client components.
+**注意:** クライアントコンポーネントはシリアライズできないプロップ（関数・クラスインスタンスなど）を受け取れません。Payload はクライアントコンポーネントに渡す際にこれらを自動的に除外します。
 
-## Default Props
+## デフォルトのプロップ
 
-All Custom Components receive these props by default:
+すべてのカスタムコンポーネントはデフォルトで以下のプロップを受け取ります。
 
-| Prop      | Description                              | Type      |
-| --------- | ---------------------------------------- | --------- |
-| `payload` | Payload instance (Local API access)      | `Payload` |
-| `i18n`    | Internationalization object              | `I18n`    |
-| `locale`  | Current locale (if localization enabled) | `string`  |
+| プロップ | 説明 | 型 |
+| --- | --- | --- |
+| `payload` | Payload インスタンス（Local API アクセス） | `Payload` |
+| `i18n` | 国際化オブジェクト | `I18n` |
+| `locale` | 現在のロケール（ローカライズが有効な場合） | `string` |
 
-**Server Component Example:**
+**サーバーコンポーネントの例:**
 
 ```tsx
 async function MyComponent({ payload, i18n, locale }) {
@@ -146,18 +146,18 @@ async function MyComponent({ payload, i18n, locale }) {
     locale,
   })
 
-  return <div>{data.docs.length} posts</div>
+  return <div>{data.docs.length} 件の投稿</div>
 }
 ```
 
-**Client Component Example:**
+**クライアントコンポーネントの例:**
 
 ```tsx
 'use client'
 import { usePayload, useLocale, useTranslation } from '@payloadcms/ui'
 
 export function MyComponent() {
-  // Access via hooks in client components
+  // クライアントコンポーネントではフックでアクセスする
   const { getLocal, getByID } = usePayload()
   const locale = useLocale()
   const { t, i18n } = useTranslation()
@@ -166,9 +166,9 @@ export function MyComponent() {
 }
 ```
 
-## Custom Props
+## カスタムプロップ
 
-Pass additional props using `clientProps` or `serverProps`:
+`clientProps` または `serverProps` を使って追加のプロップを渡します。
 
 ```typescript
 {
@@ -176,15 +176,15 @@ Pass additional props using `clientProps` or `serverProps`:
     Button: {
       path: '/components/Logout',
       clientProps: {
-        buttonText: 'Sign Out',
-        onLogout: () => console.log('Logged out'),
+        buttonText: 'ログアウト',
+        onLogout: () => console.log('ログアウトしました'),
       },
     },
   },
 }
 ```
 
-Receive in component:
+コンポーネントでの受け取り:
 
 ```tsx
 'use client'
@@ -193,31 +193,31 @@ export function Logout({ buttonText, onLogout }) {
 }
 ```
 
-## Root Components
+## ルートコンポーネント
 
-Root Components affect the entire Admin Panel.
+ルートコンポーネントは管理画面全体に影響します。
 
-### Available Root Components
+### 利用可能なルートコンポーネント
 
-| Component         | Description                      | Config Path                        |
-| ----------------- | -------------------------------- | ---------------------------------- |
-| `Nav`             | Entire navigation sidebar        | `admin.components.Nav`             |
-| `graphics.Icon`   | Small icon (used in nav)         | `admin.components.graphics.Icon`   |
-| `graphics.Logo`   | Full logo (used on login)        | `admin.components.graphics.Logo`   |
-| `logout.Button`   | Logout button                    | `admin.components.logout.Button`   |
-| `actions`         | Header actions (array)           | `admin.components.actions`         |
-| `header`          | Above header (array)             | `admin.components.header`          |
-| `beforeDashboard` | Before dashboard content (array) | `admin.components.beforeDashboard` |
-| `afterDashboard`  | After dashboard content (array)  | `admin.components.afterDashboard`  |
-| `beforeLogin`     | Before login form (array)        | `admin.components.beforeLogin`     |
-| `afterLogin`      | After login form (array)         | `admin.components.afterLogin`      |
-| `beforeNavLinks`  | Before nav links (array)         | `admin.components.beforeNavLinks`  |
-| `afterNavLinks`   | After nav links (array)          | `admin.components.afterNavLinks`   |
-| `settingsMenu`    | Settings menu items (array)      | `admin.components.settingsMenu`    |
-| `providers`       | Custom React Context providers   | `admin.components.providers`       |
-| `views`           | Custom views (dashboard, etc.)   | `admin.components.views`           |
+| コンポーネント | 説明 | 設定パス |
+| --- | --- | --- |
+| `Nav` | ナビゲーションサイドバー全体 | `admin.components.Nav` |
+| `graphics.Icon` | 小さいアイコン（ナビで使用） | `admin.components.graphics.Icon` |
+| `graphics.Logo` | フルロゴ（ログイン画面で使用） | `admin.components.graphics.Logo` |
+| `logout.Button` | ログアウトボタン | `admin.components.logout.Button` |
+| `actions` | ヘッダーのアクション（配列） | `admin.components.actions` |
+| `header` | ヘッダーの上（配列） | `admin.components.header` |
+| `beforeDashboard` | ダッシュボードコンテンツの前（配列） | `admin.components.beforeDashboard` |
+| `afterDashboard` | ダッシュボードコンテンツの後（配列） | `admin.components.afterDashboard` |
+| `beforeLogin` | ログインフォームの前（配列） | `admin.components.beforeLogin` |
+| `afterLogin` | ログインフォームの後（配列） | `admin.components.afterLogin` |
+| `beforeNavLinks` | ナビリンクの前（配列） | `admin.components.beforeNavLinks` |
+| `afterNavLinks` | ナビリンクの後（配列） | `admin.components.afterNavLinks` |
+| `settingsMenu` | 設定メニューのアイテム（配列） | `admin.components.settingsMenu` |
+| `providers` | カスタム React コンテキストプロバイダー | `admin.components.providers` |
+| `views` | カスタムビュー（ダッシュボードなど） | `admin.components.views` |
 
-### Example: Custom Logo
+### 例: カスタムロゴ
 
 ```typescript
 export default buildConfig({
@@ -235,11 +235,11 @@ export default buildConfig({
 ```tsx
 // components/Logo.tsx
 export default function Logo() {
-  return <img src="/logo.png" alt="My Brand" width={200} />
+  return <img src="/logo.png" alt="ブランドロゴ" width={200} />
 }
 ```
 
-### Example: Header Actions
+### 例: ヘッダーアクション
 
 ```typescript
 export default buildConfig({
@@ -259,18 +259,18 @@ export default function ClearCacheButton() {
     <button
       onClick={async () => {
         await fetch('/api/clear-cache', { method: 'POST' })
-        alert('Cache cleared!')
+        alert('キャッシュをクリアしました！')
       }}
     >
-      Clear Cache
+      キャッシュクリア
     </button>
   )
 }
 ```
 
-## Collection Components
+## コレクションコンポーネント
 
-Collection Components are specific to a collection's views.
+コレクションコンポーネントはコレクションのビューに固有です。
 
 ```typescript
 import type { CollectionConfig } from 'payload'
@@ -279,7 +279,7 @@ export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
     components: {
-      // Edit view components
+      // 編集ビューのコンポーネント
       edit: {
         PreviewButton: '/components/PostPreview',
         SaveButton: '/components/CustomSave',
@@ -287,7 +287,7 @@ export const Posts: CollectionConfig = {
         PublishButton: '/components/CustomPublish',
       },
 
-      // List view components
+      // 一覧ビューのコンポーネント
       list: {
         Header: '/components/PostsListHeader',
         beforeList: ['/components/ListFilters'],
@@ -301,9 +301,9 @@ export const Posts: CollectionConfig = {
 }
 ```
 
-## Global Components
+## グローバルコンポーネント
 
-Similar to Collection Components but for Global documents.
+コレクションコンポーネントと同様ですが、グローバルドキュメント用です。
 
 ```typescript
 import type { GlobalConfig } from 'payload'
@@ -324,11 +324,11 @@ export const Settings: GlobalConfig = {
 }
 ```
 
-## Field Components
+## フィールドコンポーネント
 
-Customize how fields render in Edit and List views.
+編集ビューと一覧ビューでのフィールドの表示をカスタマイズします。
 
-### Field Component (Edit View)
+### フィールドコンポーネント（編集ビュー）
 
 ```typescript
 {
@@ -367,7 +367,7 @@ export const StatusField: SelectFieldClientComponent = ({ path, field }) => {
 }
 ```
 
-### Cell Component (List View)
+### セルコンポーネント（一覧ビュー）
 
 ```typescript
 {
@@ -402,9 +402,9 @@ export const StatusCell: SelectFieldCellComponent = ({ data, cellData }) => {
 }
 ```
 
-### UI Field (Presentational Only)
+### UI フィールド（表示専用）
 
-Special field type for adding custom UI without affecting data:
+データに影響させずにカスタム UI を追加するための特殊なフィールド型です。
 
 ```typescript
 {
@@ -430,31 +430,31 @@ export default function RefundButton() {
     <button
       onClick={async () => {
         await fetch(`/api/orders/${id}/refund`, { method: 'POST' })
-        alert('Refund processed')
+        alert('返金処理が完了しました')
       }}
     >
-      Process Refund
+      返金処理
     </button>
   )
 }
 ```
 
-## Using Hooks
+## フックの使い方
 
-Payload provides many React hooks for Client Components:
+Payload はクライアントコンポーネント用に多くの React フックを提供しています。
 
 ```tsx
 'use client'
 import {
-  useAuth, // Current user
-  useConfig, // Payload config (client-safe)
-  useDocumentInfo, // Current document info (id, slug, etc.)
-  useField, // Field value and setValue
-  useForm, // Form state and dispatch
-  useFormFields, // Multiple field values (optimized)
-  useLocale, // Current locale
-  useTranslation, // i18n translations
-  usePayload, // Local API methods
+  useAuth,           // 現在のユーザー
+  useConfig,         // Payload 設定（クライアント安全）
+  useDocumentInfo,   // 現在のドキュメント情報（id・slug など）
+  useField,          // フィールドの値と setValue
+  useForm,           // フォームの状態とディスパッチ
+  useFormFields,     // 複数フィールドの値（最適化済み）
+  useLocale,         // 現在のロケール
+  useTranslation,    // i18n 翻訳
+  usePayload,        // Local API メソッド
 } from '@payloadcms/ui'
 
 export function MyComponent() {
@@ -464,15 +464,15 @@ export function MyComponent() {
   const locale = useLocale()
   const { t } = useTranslation()
 
-  return <div>Hello {user?.email}</div>
+  return <div>こんにちは {user?.email}</div>
 }
 ```
 
-**Important:** These hooks only work in Client Components within the Admin Panel context.
+**重要:** これらのフックは管理画面コンテキスト内のクライアントコンポーネントでのみ動作します。
 
-## Accessing Payload Config
+## Payload 設定へのアクセス
 
-**In Server Components:**
+**サーバーコンポーネントの場合:**
 
 ```tsx
 async function MyServerComponent({ payload }) {
@@ -481,47 +481,47 @@ async function MyServerComponent({ payload }) {
 }
 ```
 
-**In Client Components:**
+**クライアントコンポーネントの場合:**
 
 ```tsx
 'use client'
 import { useConfig } from '@payloadcms/ui'
 
 export function MyClientComponent() {
-  const { config } = useConfig() // Client-safe config
+  const { config } = useConfig() // クライアント安全な設定
   return <div>{config.serverURL}</div>
 }
 ```
 
-**Important:** Client Components receive a serializable version of the config (functions, validation, etc. are stripped).
+**重要:** クライアントコンポーネントはシリアライズ可能なバージョンの設定を受け取ります（関数・バリデーションなどは除外されます）。
 
-## Field Config Access
+## フィールド設定へのアクセス
 
-**Server Component:**
+**サーバーコンポーネント:**
 
 ```tsx
 import type { TextFieldServerComponent } from 'payload'
 
 export const MyFieldComponent: TextFieldServerComponent = ({ field }) => {
-  return <div>Field name: {field.name}</div>
+  return <div>フィールド名: {field.name}</div>
 }
 ```
 
-**Client Component:**
+**クライアントコンポーネント:**
 
 ```tsx
 'use client'
 import type { TextFieldClientComponent } from 'payload'
 
 export const MyFieldComponent: TextFieldClientComponent = ({ clientField }) => {
-  // clientField has non-serializable props removed
-  return <div>Field name: {clientField.name}</div>
+  // clientField はシリアライズできないプロップが除外されている
+  return <div>フィールド名: {clientField.name}</div>
 }
 ```
 
-## Translations (i18n)
+## 翻訳（i18n）
 
-**Server Component:**
+**サーバーコンポーネント:**
 
 ```tsx
 import { getTranslation } from '@payloadcms/translations'
@@ -532,7 +532,7 @@ async function MyServerComponent({ i18n }) {
 }
 ```
 
-**Client Component:**
+**クライアントコンポーネント:**
 
 ```tsx
 'use client'
@@ -544,21 +544,21 @@ export function MyClientComponent() {
   return (
     <div>
       <p>{t('namespace:key', { variable: 'value' })}</p>
-      <p>Language: {i18n.language}</p>
+      <p>言語: {i18n.language}</p>
     </div>
   )
 }
 ```
 
-## Styling Components
+## スタイリング
 
-### Using CSS Variables
+### CSS 変数の使い方
 
 ```tsx
 import './styles.scss'
 
 export function MyComponent() {
-  return <div className="my-component">Custom Component</div>
+  return <div className="my-component">カスタムコンポーネント</div>
 }
 ```
 
@@ -572,7 +572,7 @@ export function MyComponent() {
 }
 ```
 
-### Importing Payload SCSS
+### Payload の SCSS をインポート
 
 ```scss
 @import '~@payloadcms/ui/scss';
@@ -584,9 +584,9 @@ export function MyComponent() {
 }
 ```
 
-## Common Patterns
+## よく使うパターン
 
-### Conditional Field Visibility
+### 条件付きフィールドの表示
 
 ```tsx
 'use client'
@@ -602,7 +602,7 @@ export const ConditionalField: TextFieldClientComponent = ({ path }) => {
 }
 ```
 
-### Loading Data from API
+### API からのデータ取得
 
 ```tsx
 'use client'
@@ -621,7 +621,7 @@ export function DataLoader() {
 }
 ```
 
-### Using Local API in Server Components
+### サーバーコンポーネントでの Local API 使用
 
 ```tsx
 import type { Payload } from 'payload'
@@ -644,7 +644,7 @@ async function RelatedPosts({ payload, id }: { payload: Payload; id: string }) {
 
   return (
     <div>
-      <h3>Related Posts</h3>
+      <h3>関連投稿</h3>
       <ul>
         {related.docs.map((doc) => (
           <li key={doc.id}>{doc.title}</li>
@@ -657,81 +657,81 @@ async function RelatedPosts({ payload, id }: { payload: Payload; id: string }) {
 export default RelatedPosts
 ```
 
-## Performance Best Practices
+## パフォーマンスのベストプラクティス
 
-### 1. Minimize Client Bundle Size
+### 1. クライアントバンドルサイズを最小化する
 
 ```tsx
-// ❌ BAD: Imports entire package
+// ❌ 悪い例: パッケージ全体をインポート
 'use client'
 import { Button } from '@payloadcms/ui'
 
-// ✅ GOOD: Tree-shakeable import for frontend
+// ✅ 良い例: フロントエンドではツリーシェイク可能なインポート
 import { Button } from '@payloadcms/ui/elements/Button'
 ```
 
-**Rule:** In Admin Panel UI, import from `@payloadcms/ui`. In frontend code, use specific paths.
+**ルール:** 管理画面 UI では `@payloadcms/ui` からインポート。フロントエンドでは特定のパスを使う。
 
-### 2. Optimize Re-renders
+### 2. 再レンダリングを最適化する
 
 ```tsx
-// ❌ BAD: Re-renders on every form change
+// ❌ 悪い例: フォームのあらゆる変更で再レンダリング
 'use client'
 import { useForm } from '@payloadcms/ui'
 
 export function MyComponent() {
   const { fields } = useForm()
-  // Re-renders on ANY field change
+  // 任意のフィールド変更で再レンダリング
 }
 
-// ✅ GOOD: Only re-renders when specific field changes
+// ✅ 良い例: 特定フィールドの変更時のみ再レンダリング
 ;('use client')
 import { useFormFields } from '@payloadcms/ui'
 
 export function MyComponent({ path }) {
   const value = useFormFields(([fields]) => fields[path])
-  // Only re-renders when this field changes
+  // このフィールドの変更時のみ再レンダリング
 }
 ```
 
-### 3. Use Server Components When Possible
+### 3. できるだけサーバーコンポーネントを使う
 
 ```tsx
-// ✅ GOOD: No JavaScript sent to client
+// ✅ 良い例: クライアントに JavaScript が送られない
 async function PostCount({ payload }) {
   const { totalDocs } = await payload.find({
     collection: 'posts',
     limit: 0,
   })
 
-  return <p>{totalDocs} posts</p>
+  return <p>{totalDocs} 件の投稿</p>
 }
 
-// Only use client components when you need:
-// - State (useState, useReducer)
-// - Effects (useEffect)
-// - Event handlers (onClick, onChange)
-// - Browser APIs (localStorage, window)
+// クライアントコンポーネントが必要な場合:
+// - 状態管理（useState、useReducer）
+// - 副作用（useEffect）
+// - イベントハンドラ（onClick、onChange）
+// - ブラウザ API（localStorage、window）
 ```
 
-### 4. React Best Practices
+### 4. React のベストプラクティス
 
-- Use React.memo() for expensive components
-- Implement proper key props in lists
-- Avoid inline function definitions in renders
-- Use Suspense boundaries for async operations
+- コストの高いコンポーネントには React.memo() を使う
+- リストには適切な key プロップを実装する
+- レンダリング内でのインライン関数定義を避ける
+- 非同期処理には Suspense バウンダリを使う
 
-## Import Map
+## インポートマップ
 
-Payload generates an import map at `app/(payload)/admin/importMap.js` that resolves all component paths.
+Payload はすべてのコンポーネントパスを解決するインポートマップを `app/(payload)/admin/importMap.js` に生成します。
 
-**Regenerate manually:**
+**手動で再生成する:**
 
 ```bash
 payload generate:importmap
 ```
 
-**Override location:**
+**場所を変更する:**
 
 ```typescript
 export default buildConfig({
@@ -744,9 +744,9 @@ export default buildConfig({
 })
 ```
 
-## Type Safety
+## 型安全性
 
-Use Payload's TypeScript types for components:
+コンポーネントには Payload の TypeScript 型を使います。
 
 ```tsx
 import type {
@@ -756,17 +756,17 @@ import type {
 } from 'payload'
 
 export const MyFieldComponent: TextFieldServerComponent = (props) => {
-  // Fully typed props
+  // 完全に型付けされたプロップ
 }
 ```
 
-## Troubleshooting
+## トラブルシューティング
 
-### "useConfig is undefined" or similar hook errors
+### "useConfig is undefined" などのフックエラー
 
-**Cause:** Dependency version mismatch between Payload packages.
+**原因:** Payload パッケージ間のバージョンが合っていない。
 
-**Solution:** Pin all `@payloadcms/*` packages to the exact same version:
+**解決策:** すべての `@payloadcms/*` パッケージを同じバージョンに固定する:
 
 ```json
 {
@@ -778,17 +778,17 @@ export const MyFieldComponent: TextFieldServerComponent = (props) => {
 }
 ```
 
-### Component not loading
+### コンポーネントが読み込まれない
 
-1. Check file path is correct (relative to baseDir)
-2. Verify named export syntax: `/path/to/file#ExportName`
-3. Run `payload generate:importmap` to regenerate
-4. Check for TypeScript errors in component file
+1. ファイルパスが正しいか確認する（baseDir からの相対パス）
+2. 名前付きエクスポートの構文を確認する: `/path/to/file#ExportName`
+3. `payload generate:importmap` を実行して再生成する
+4. コンポーネントファイルの TypeScript エラーを確認する
 
-## Resources
+## 参考リンク
 
-- [Custom Components Docs](https://payloadcms.com/docs/custom-components/overview)
-- [Root Components](https://payloadcms.com/docs/custom-components/root-components)
-- [Custom Views](https://payloadcms.com/docs/custom-components/custom-views)
-- [React Hooks](https://payloadcms.com/docs/admin/react-hooks)
-- [Custom CSS](https://payloadcms.com/docs/admin/customizing-css)
+- [カスタムコンポーネントドキュメント](https://payloadcms.com/docs/custom-components/overview)
+- [ルートコンポーネント](https://payloadcms.com/docs/custom-components/root-components)
+- [カスタムビュー](https://payloadcms.com/docs/custom-components/custom-views)
+- [React フック](https://payloadcms.com/docs/admin/react-hooks)
+- [カスタム CSS](https://payloadcms.com/docs/admin/customizing-css)

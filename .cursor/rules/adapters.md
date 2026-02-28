@@ -1,12 +1,12 @@
 ---
-title: Database Adapters & Transactions
-description: Database adapters, storage, email, and transaction patterns
+title: データベースアダプターとトランザクション
+description: データベースアダプター・ストレージ・メール・トランザクションのパターン
 tags: [payload, database, mongodb, postgres, sqlite, transactions]
 ---
 
-# Payload CMS Adapters
+# Payload CMS アダプター
 
-## Database Adapters
+## データベースアダプター
 
 ### MongoDB
 
@@ -30,7 +30,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL,
     },
-    push: false, // Don't auto-push schema changes
+    push: false, // スキーマ変更を自動プッシュしない
     migrationDir: './migrations',
   }),
 })
@@ -46,46 +46,46 @@ export default buildConfig({
     client: {
       url: 'file:./payload.db',
     },
-    transactionOptions: {}, // Enable transactions (disabled by default)
+    transactionOptions: {}, // トランザクションを有効化（デフォルトは無効）
   }),
 })
 ```
 
-## Transactions
+## トランザクション
 
-Payload automatically uses transactions for all-or-nothing database operations.
+Payload はすべてのデータベース操作に対して自動的にトランザクションを使用します。
 
-### Threading req Through Operations
+### フックを通じて req を渡す
 
-**CRITICAL**: When performing nested operations in hooks, always pass `req` to maintain transaction context.
+**重要**: フック内でネスト操作を行う際は、トランザクションコンテキストを維持するために必ず `req` を渡してください。
 
 ```typescript
-// ✅ CORRECT: Thread req through nested operations
+// ✅ 正しい: ネスト操作に req を渡す
 const resaveChildren: CollectionAfterChangeHook = async ({ collection, doc, req }) => {
-  // Find children - pass req
+  // 子ドキュメントを検索 - req を渡す
   const children = await req.payload.find({
     collection: 'children',
     where: { parent: { equals: doc.id } },
-    req, // Maintains transaction context
+    req, // トランザクションコンテキストを維持
   })
 
-  // Update each child - pass req
+  // 各子ドキュメントを更新 - req を渡す
   for (const child of children.docs) {
     await req.payload.update({
       id: child.id,
       collection: 'children',
       data: { updatedField: 'value' },
-      req, // Same transaction as parent operation
+      req, // 親操作と同じトランザクション内で実行
     })
   }
 }
 
-// ❌ WRONG: Missing req breaks transaction
+// ❌ 間違い: req がないとトランザクションが壊れる
 const brokenHook: CollectionAfterChangeHook = async ({ collection, doc, req }) => {
   const children = await req.payload.find({
     collection: 'children',
     where: { parent: { equals: doc.id } },
-    // Missing req - separate transaction or no transaction
+    // req がない → 別トランザクションまたはトランザクションなし
   })
 
   for (const child of children.docs) {
@@ -93,20 +93,20 @@ const brokenHook: CollectionAfterChangeHook = async ({ collection, doc, req }) =
       id: child.id,
       collection: 'children',
       data: { updatedField: 'value' },
-      // Missing req - if parent operation fails, these updates persist
+      // req がない → 親操作が失敗してもこの更新は残ってしまう
     })
   }
 }
 ```
 
-**Why This Matters:**
+**なぜ重要か:**
 
-- **MongoDB (with replica sets)**: Creates atomic session across operations
-- **PostgreSQL**: All operations use same Drizzle transaction
-- **SQLite (with transactions enabled)**: Ensures rollback on errors
-- **Without req**: Each operation runs independently, breaking atomicity
+- **MongoDB（レプリカセット使用時）**: 操作間でアトミックなセッションを作る
+- **PostgreSQL**: 全操作が同じ Drizzle トランザクションを使う
+- **SQLite（トランザクション有効時）**: エラー時のロールバックを保証する
+- **req なしの場合**: 各操作が独立して実行され、アトミック性が壊れる
 
-### Manual Transaction Control
+### 手動トランザクション制御
 
 ```typescript
 const transactionID = await payload.db.beginTransaction()
@@ -129,9 +129,9 @@ try {
 }
 ```
 
-## Storage Adapters
+## ストレージアダプター
 
-Available storage adapters:
+利用可能なストレージアダプター:
 
 - **@payloadcms/storage-s3** - AWS S3
 - **@payloadcms/storage-azure** - Azure Blob Storage
@@ -164,9 +164,9 @@ export default buildConfig({
 })
 ```
 
-## Email Adapters
+## メールアダプター
 
-### Nodemailer (SMTP)
+### Nodemailer（SMTP）
 
 ```typescript
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
@@ -174,7 +174,7 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 export default buildConfig({
   email: nodemailerAdapter({
     defaultFromAddress: 'noreply@example.com',
-    defaultFromName: 'My App',
+    defaultFromName: 'マイアプリ',
     transportOptions: {
       host: process.env.SMTP_HOST,
       port: 587,
@@ -195,15 +195,15 @@ import { resendAdapter } from '@payloadcms/email-resend'
 export default buildConfig({
   email: resendAdapter({
     defaultFromAddress: 'noreply@example.com',
-    defaultFromName: 'My App',
+    defaultFromName: 'マイアプリ',
     apiKey: process.env.RESEND_API_KEY,
   }),
 })
 ```
 
-## Important Notes
+## 重要な注意点
 
-1. **MongoDB Transactions**: Require replica set configuration
-2. **SQLite Transactions**: Disabled by default, enable with `transactionOptions: {}`
-3. **Pass req**: Always pass `req` to nested operations in hooks for transaction safety
-4. **Point Fields**: Not supported in SQLite
+1. **MongoDB のトランザクション**: レプリカセット設定が必要
+2. **SQLite のトランザクション**: デフォルト無効、`transactionOptions: {}` で有効化
+3. **req を渡す**: フック内のネスト操作には必ず `req` を渡してトランザクション安全性を確保
+4. **Point フィールド**: SQLite では非対応

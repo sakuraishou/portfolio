@@ -1,37 +1,37 @@
 ---
-title: Payload CMS Overview
-description: Core principles and quick reference for Payload CMS development
+title: Payload CMS 概要
+description: Payload CMS 開発の基本原則とクイックリファレンス
 tags: [payload, overview, quickstart]
 ---
 
-# Payload CMS Development Rules
+# Payload CMS 開発ルール
 
-You are an expert Payload CMS developer. When working with Payload projects, follow these rules:
+あなたは Payload CMS の専門家です。Payload プロジェクトで作業する際は、以下のルールに従ってください。
 
-## Core Principles
+## 基本方針
 
-1. **TypeScript-First**: Always use TypeScript with proper types from Payload
-2. **Security-Critical**: Follow all security patterns, especially access control
-3. **Type Generation**: Run `generate:types` script after schema changes
-4. **Transaction Safety**: Always pass `req` to nested operations in hooks
-5. **Access Control**: Understand Local API bypasses access control by default
+1. **TypeScript 優先**: Payload の型を使って常に TypeScript で書く
+2. **セキュリティ最優先**: セキュリティパターン、特にアクセス制御を必ず守る
+3. **型の再生成**: スキーマ変更後は `generate:types` スクリプトを実行する
+4. **トランザクション安全性**: フック内のネスト操作には必ず `req` を渡す
+5. **アクセス制御**: Local API はデフォルトでアクセス制御をスキップすることを理解する
 
-## Project Structure
+## プロジェクト構成
 
 ```
 src/
 ├── app/
-│   ├── (frontend)/          # Frontend routes
-│   └── (payload)/           # Payload admin routes
-├── collections/             # Collection configs
-├── globals/                 # Global configs
-├── components/              # Custom React components
-├── hooks/                   # Hook functions
-├── access/                  # Access control functions
-└── payload.config.ts        # Main config
+│   ├── (frontend)/          # フロントエンドのルート
+│   └── (payload)/           # Payload 管理画面のルート
+├── collections/             # コレクション設定
+├── globals/                 # グローバル設定
+├── components/              # カスタム React コンポーネント
+├── hooks/                   # フック関数
+├── access/                  # アクセス制御関数
+└── payload.config.ts        # メイン設定ファイル
 ```
 
-## Minimal Config Pattern
+## 最小設定パターン
 
 ```typescript
 import { buildConfig } from 'payload'
@@ -62,10 +62,10 @@ export default buildConfig({
 })
 ```
 
-## Getting Payload Instance
+## Payload インスタンスの取得
 
 ```typescript
-// In API routes (Next.js)
+// API ルート（Next.js）
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
@@ -79,7 +79,7 @@ export async function GET() {
   return Response.json(posts)
 }
 
-// In Server Components
+// サーバーコンポーネント
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
@@ -91,36 +91,36 @@ export default async function Page() {
 }
 ```
 
-## Quick Reference
+## クイックリファレンス
 
-| Task                  | Solution                           |
-| --------------------- | ---------------------------------- |
-| Auto-generate slugs   | `slugField()`                      |
-| Restrict by user      | Access control with query          |
-| Local API user ops    | `user` + `overrideAccess: false`   |
-| Draft/publish         | `versions: { drafts: true }`       |
-| Computed fields       | `virtual: true` with afterRead     |
-| Conditional fields    | `admin.condition`                  |
-| Custom validation     | `validate` function                |
-| Filter relationships  | `filterOptions` on field           |
-| Select fields         | `select` parameter                 |
-| Auto-set dates        | beforeChange hook                  |
-| Prevent loops         | `req.context` check                |
-| Cascading deletes     | beforeDelete hook                  |
-| Geospatial queries    | `point` field with `near`/`within` |
-| Reverse relationships | `join` field type                  |
-| Query relationships   | Nested property syntax             |
-| Complex queries       | AND/OR logic                       |
-| Transactions          | Pass `req` to operations           |
-| Background jobs       | Jobs queue with tasks              |
-| Custom routes         | Collection custom endpoints        |
-| Cloud storage         | Storage adapter plugins            |
-| Multi-language        | `localization` + `localized: true` |
+| やりたいこと | 解決策 |
+| --- | --- |
+| スラグの自動生成 | `slugField()` |
+| ユーザーでデータを絞り込む | アクセス制御 + クエリ制約 |
+| Local API ユーザー操作 | `user` + `overrideAccess: false` |
+| 下書き・公開 | `versions: { drafts: true }` |
+| 計算フィールド | `virtual: true` + afterRead |
+| 条件付きフィールド | `admin.condition` |
+| カスタムバリデーション | `validate` 関数 |
+| リレーションのフィルタリング | フィールドの `filterOptions` |
+| 返却フィールドを絞る | `select` パラメータ |
+| 日付の自動セット | beforeChange フック |
+| ループ防止 | `req.context` チェック |
+| カスケード削除 | beforeDelete フック |
+| 地理空間クエリ | `point` フィールド + `near`/`within` |
+| 逆リレーション | `join` フィールド型 |
+| リレーションのクエリ | ネストプロパティ構文 |
+| 複雑なクエリ | AND/OR ロジック |
+| トランザクション | `req` を操作に渡す |
+| バックグラウンドジョブ | ジョブキュー + タスク |
+| カスタムルート | コレクションのカスタムエンドポイント |
+| クラウドストレージ | ストレージアダプタープラグイン |
+| 多言語対応 | `localization` + `localized: true` |
 
-## Resources
+## 参考リンク
 
-- Docs: https://payloadcms.com/docs
-- LLM Context: https://payloadcms.com/llms-full.txt
+- ドキュメント: https://payloadcms.com/docs
+- LLM コンテキスト: https://payloadcms.com/llms-full.txt
 - GitHub: https://github.com/payloadcms/payload
-- Examples: https://github.com/payloadcms/payload/tree/main/examples
-- Templates: https://github.com/payloadcms/payload/tree/main/templates
+- サンプル: https://github.com/payloadcms/payload/tree/main/examples
+- テンプレート: https://github.com/payloadcms/payload/tree/main/templates

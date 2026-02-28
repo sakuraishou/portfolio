@@ -1,18 +1,18 @@
 ---
-title: Field Type Guards
-description: Runtime field type checking and safe type narrowing
+title: フィールドタイプガード
+description: ランタイムのフィールド型チェックと安全な型の絞り込み
 tags: [payload, typescript, type-guards, fields]
 ---
 
-# Payload Field Type Guards
+# Payload フィールドタイプガード
 
-Type guards for runtime field type checking and safe type narrowing.
+ランタイムのフィールド型チェックと安全な型の絞り込みのためのタイプガードです。
 
-## Most Common Guards
+## よく使うガード
 
 ### fieldAffectsData
 
-**Most commonly used guard.** Checks if field stores data (has name and is not UI-only).
+**最もよく使うガード。** フィールドがデータを保持するか（名前を持ち、UI専用でないか）を確認します。
 
 ```typescript
 import { fieldAffectsData } from 'payload'
@@ -20,19 +20,19 @@ import { fieldAffectsData } from 'payload'
 function generateSchema(fields: Field[]) {
   fields.forEach((field) => {
     if (fieldAffectsData(field)) {
-      // Safe to access field.name
+      // field.name に安全にアクセスできる
       schema[field.name] = getFieldType(field)
     }
   })
 }
 
-// Filter data fields
+// データフィールドをフィルタリング
 const dataFields = fields.filter(fieldAffectsData)
 ```
 
 ### fieldHasSubFields
 
-Checks if field contains nested fields (group, array, row, or collapsible).
+フィールドがネストフィールドを持つか（group・array・row・collapsible）を確認します。
 
 ```typescript
 import { fieldHasSubFields } from 'payload'
@@ -40,7 +40,7 @@ import { fieldHasSubFields } from 'payload'
 function traverseFields(fields: Field[]): void {
   fields.forEach((field) => {
     if (fieldHasSubFields(field)) {
-      // Safe to access field.fields
+      // field.fields に安全にアクセスできる
       traverseFields(field.fields)
     }
   })
@@ -49,65 +49,65 @@ function traverseFields(fields: Field[]): void {
 
 ### fieldIsArrayType
 
-Checks if field type is `'array'`.
+フィールド型が `'array'` かどうかを確認します。
 
 ```typescript
 import { fieldIsArrayType } from 'payload'
 
 if (fieldIsArrayType(field)) {
   // field.type === 'array'
-  console.log(`Min rows: ${field.minRows}`)
-  console.log(`Max rows: ${field.maxRows}`)
+  console.log(`最小行数: ${field.minRows}`)
+  console.log(`最大行数: ${field.maxRows}`)
 }
 ```
 
-## Capability Guards
+## 機能チェック用ガード
 
 ### fieldSupportsMany
 
-Checks if field can have multiple values (select, relationship, or upload with `hasMany`).
+フィールドが複数の値を持てるか（select・relationship・upload で `hasMany` を持つ）を確認します。
 
 ```typescript
 import { fieldSupportsMany } from 'payload'
 
 if (fieldSupportsMany(field)) {
-  // field.type is 'select' | 'relationship' | 'upload'
+  // field.type は 'select' | 'relationship' | 'upload'
   if (field.hasMany) {
-    console.log('Field accepts multiple values')
+    console.log('複数の値を受け付けるフィールドです')
   }
 }
 ```
 
 ### fieldHasMaxDepth
 
-Checks if field is relationship/upload/join with numeric `maxDepth` property.
+フィールドが数値の `maxDepth` プロパティを持つ relationship/upload/join かどうかを確認します。
 
 ```typescript
 import { fieldHasMaxDepth } from 'payload'
 
 if (fieldHasMaxDepth(field)) {
-  // field.type is 'upload' | 'relationship' | 'join'
-  // AND field.maxDepth is number
+  // field.type は 'upload' | 'relationship' | 'join'
+  // かつ field.maxDepth は number
   const remainingDepth = field.maxDepth - currentDepth
 }
 ```
 
 ### fieldIsVirtual
 
-Checks if field is virtual (computed or virtual relationship).
+フィールドが仮想フィールド（計算値または仮想リレーション）かどうかを確認します。
 
 ```typescript
 import { fieldIsVirtual } from 'payload'
 
 if (fieldIsVirtual(field)) {
-  // field.virtual is truthy
+  // field.virtual が truthy
   if (typeof field.virtual === 'string') {
-    console.log(`Virtual path: ${field.virtual}`)
+    console.log(`仮想パス: ${field.virtual}`)
   }
 }
 ```
 
-## Type Checking Guards
+## 型チェック用ガード
 
 ### fieldIsBlockType
 
@@ -117,7 +117,7 @@ import { fieldIsBlockType } from 'payload'
 if (fieldIsBlockType(field)) {
   // field.type === 'blocks'
   field.blocks.forEach((block) => {
-    console.log(`Block: ${block.slug}`)
+    console.log(`ブロック: ${block.slug}`)
   })
 }
 ```
@@ -129,7 +129,7 @@ import { fieldIsGroupType } from 'payload'
 
 if (fieldIsGroupType(field)) {
   // field.type === 'group'
-  console.log(`Interface: ${field.interfaceName}`)
+  console.log(`インターフェース名: ${field.interfaceName}`)
 }
 ```
 
@@ -140,14 +140,14 @@ import { fieldIsPresentationalOnly } from 'payload'
 
 if (fieldIsPresentationalOnly(field)) {
   // field.type === 'ui'
-  // Skip in data operations, GraphQL schema, etc.
+  // データ操作・GraphQL スキーマなどでスキップする
   return
 }
 ```
 
-## Common Patterns
+## よく使うパターン
 
-### Recursive Field Traversal
+### フィールドの再帰探索
 
 ```typescript
 import { fieldAffectsData, fieldHasSubFields } from 'payload'
@@ -165,7 +165,7 @@ function traverseFields(fields: Field[], callback: (field: Field) => void) {
 }
 ```
 
-### Filter Data-Bearing Fields
+### データを持つフィールドのフィルタリング
 
 ```typescript
 import { fieldAffectsData, fieldIsPresentationalOnly, fieldIsHiddenOrDisabled } from 'payload'
@@ -176,55 +176,55 @@ const dataFields = fields.filter(
 )
 ```
 
-### Container Type Switching
+### コンテナ型の分岐処理
 
 ```typescript
 import { fieldIsArrayType, fieldIsBlockType, fieldHasSubFields } from 'payload'
 
 if (fieldIsArrayType(field)) {
-  // Handle array-specific logic
+  // 配列固有の処理
 } else if (fieldIsBlockType(field)) {
-  // Handle blocks-specific logic
+  // ブロック固有の処理
 } else if (fieldHasSubFields(field)) {
-  // Handle group/row/collapsible
+  // group/row/collapsible の処理
 }
 ```
 
-### Safe Property Access
+### 安全なプロパティアクセス
 
 ```typescript
 import { fieldSupportsMany, fieldHasMaxDepth } from 'payload'
 
-// With guard - safe access
+// ガード付き - 安全にアクセスできる
 if (fieldSupportsMany(field) && field.hasMany) {
-  console.log('Multiple values supported')
+  console.log('複数値をサポートしています')
 }
 
 if (fieldHasMaxDepth(field)) {
-  const depth = field.maxDepth // TypeScript knows this is number
+  const depth = field.maxDepth // TypeScript がこれを number と認識する
 }
 ```
 
-## All Available Guards
+## 利用可能なガード一覧
 
-| Type Guard                  | Checks For                        | Use When                                 |
-| --------------------------- | --------------------------------- | ---------------------------------------- |
-| `fieldAffectsData`          | Field stores data (has name)      | Need to access field data or name        |
-| `fieldHasSubFields`         | Field contains nested fields      | Recursively traverse fields              |
-| `fieldIsArrayType`          | Field is array type               | Distinguish arrays from other containers |
-| `fieldIsBlockType`          | Field is blocks type              | Handle blocks-specific logic             |
-| `fieldIsGroupType`          | Field is group type               | Handle group-specific logic              |
-| `fieldSupportsMany`         | Field can have multiple values    | Check for `hasMany` support              |
-| `fieldHasMaxDepth`          | Field supports depth control      | Control relationship/upload/join depth   |
-| `fieldIsPresentationalOnly` | Field is UI-only                  | Exclude from data operations             |
-| `fieldIsSidebar`            | Field positioned in sidebar       | Separate sidebar rendering               |
-| `fieldIsID`                 | Field name is 'id'                | Special ID field handling                |
-| `fieldIsHiddenOrDisabled`   | Field is hidden or disabled       | Filter from UI operations                |
-| `fieldShouldBeLocalized`    | Field needs localization          | Proper locale table checks               |
-| `fieldIsVirtual`            | Field is virtual                  | Skip in database transforms              |
-| `tabHasName`                | Tab is named (stores data)        | Distinguish named vs unnamed tabs        |
-| `groupHasName`              | Group is named (stores data)      | Distinguish named vs unnamed groups      |
-| `optionIsObject`            | Option is `{label, value}`        | Access option properties safely          |
-| `optionsAreObjects`         | All options are objects           | Batch option processing                  |
-| `optionIsValue`             | Option is string value            | Handle string options                    |
-| `valueIsValueWithRelation`  | Value is polymorphic relationship | Handle polymorphic relationships         |
+| タイプガード | チェック内容 | 使いどき |
+| --- | --- | --- |
+| `fieldAffectsData` | フィールドがデータを持つ（名前あり） | フィールドのデータや名前にアクセスする時 |
+| `fieldHasSubFields` | フィールドがネストフィールドを持つ | フィールドを再帰的に探索する時 |
+| `fieldIsArrayType` | フィールドが配列型 | 配列と他のコンテナを区別する時 |
+| `fieldIsBlockType` | フィールドがブロック型 | ブロック固有の処理をする時 |
+| `fieldIsGroupType` | フィールドがグループ型 | グループ固有の処理をする時 |
+| `fieldSupportsMany` | フィールドが複数値を持てる | `hasMany` のサポートを確認する時 |
+| `fieldHasMaxDepth` | フィールドが深さ制御をサポート | relationship/upload/join の深さを制御する時 |
+| `fieldIsPresentationalOnly` | フィールドが UI 専用 | データ操作から除外する時 |
+| `fieldIsSidebar` | フィールドがサイドバーに配置 | サイドバーのレンダリングを分ける時 |
+| `fieldIsID` | フィールド名が 'id' | ID フィールドの特別処理をする時 |
+| `fieldIsHiddenOrDisabled` | フィールドが非表示または無効 | UI 操作からフィルタリングする時 |
+| `fieldShouldBeLocalized` | フィールドがローカライズを必要とする | ロケールテーブルのチェックをする時 |
+| `fieldIsVirtual` | フィールドが仮想フィールド | データベース変換でスキップする時 |
+| `tabHasName` | タブに名前がある（データを持つ） | 名前あり・なしのタブを区別する時 |
+| `groupHasName` | グループに名前がある（データを持つ） | 名前あり・なしのグループを区別する時 |
+| `optionIsObject` | オプションが `{label, value}` 形式 | オプションのプロパティに安全にアクセスする時 |
+| `optionsAreObjects` | 全オプションがオブジェクト形式 | オプションをまとめて処理する時 |
+| `optionIsValue` | オプションが文字列値 | 文字列オプションを処理する時 |
+| `valueIsValueWithRelation` | 値がポリモーフィックリレーション | ポリモーフィックリレーションを処理する時 |

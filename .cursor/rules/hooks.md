@@ -1,18 +1,18 @@
 ---
-title: Hooks
-description: Collection hooks, field hooks, and context patterns
+title: フック
+description: コレクションフック・フィールドフック・コンテキストパターン
 tags: [payload, hooks, lifecycle, context]
 ---
 
-# Payload CMS Hooks
+# Payload CMS フック
 
-## Collection Hooks
+## コレクションフック
 
 ```typescript
 export const Posts: CollectionConfig = {
   slug: 'posts',
   hooks: {
-    // Before validation - format data
+    // バリデーション前 - データ整形
     beforeValidate: [
       async ({ data, operation }) => {
         if (operation === 'create') {
@@ -22,7 +22,7 @@ export const Posts: CollectionConfig = {
       },
     ],
 
-    // Before save - business logic
+    // 保存前 - ビジネスロジック
     beforeChange: [
       async ({ data, req, operation, originalDoc }) => {
         if (operation === 'update' && data.status === 'published') {
@@ -32,10 +32,10 @@ export const Posts: CollectionConfig = {
       },
     ],
 
-    // After save - side effects
+    // 保存後 - 副作用
     afterChange: [
       async ({ doc, req, operation, previousDoc, context }) => {
-        // Check context to prevent loops
+        // ループ防止のための context チェック
         if (context.skipNotification) return
 
         if (operation === 'create') {
@@ -45,7 +45,7 @@ export const Posts: CollectionConfig = {
       },
     ],
 
-    // After read - computed fields
+    // 読み取り後 - 計算フィールド
     afterRead: [
       async ({ doc, req }) => {
         doc.viewCount = await getViewCount(doc.id)
@@ -53,13 +53,13 @@ export const Posts: CollectionConfig = {
       },
     ],
 
-    // Before delete - cascading deletes
+    // 削除前 - カスケード削除
     beforeDelete: [
       async ({ req, id }) => {
         await req.payload.delete({
           collection: 'comments',
           where: { post: { equals: id } },
-          req, // Important for transaction
+          req, // トランザクション維持のため重要
         })
       },
     ],
@@ -67,7 +67,7 @@ export const Posts: CollectionConfig = {
 }
 ```
 
-## Field Hooks
+## フィールドフック
 
 ```typescript
 import type { FieldHook } from 'payload'
@@ -77,7 +77,7 @@ const beforeValidateHook: FieldHook = ({ value }) => {
 }
 
 const afterReadHook: FieldHook = ({ value, req }) => {
-  // Hide email from non-admins
+  // 管理者以外にはメールアドレスをマスクする
   if (!req.user?.roles?.includes('admin')) {
     return value.replace(/(.{2})(.*)(@.*)/, '$1***$3')
   }
@@ -94,9 +94,9 @@ const afterReadHook: FieldHook = ({ value, req }) => {
 }
 ```
 
-## Hook Context
+## フックコンテキスト
 
-Share data between hooks or control hook behavior using request context:
+フック間でデータを共有したり、フックの動作を制御するためにリクエストコンテキストを使います。
 
 ```typescript
 export const Posts: CollectionConfig = {
@@ -109,7 +109,7 @@ export const Posts: CollectionConfig = {
     ],
     afterChange: [
       async ({ context, doc }) => {
-        // Reuse from previous hook
+        // 前のフックから再利用する
         await processData(doc, context.expensiveData)
       },
     ],
@@ -117,7 +117,7 @@ export const Posts: CollectionConfig = {
 }
 ```
 
-## Next.js Revalidation Pattern
+## Next.js キャッシュ再検証パターン
 
 ```typescript
 import type { CollectionAfterChangeHook } from 'payload'
@@ -131,11 +131,11 @@ export const revalidatePage: CollectionAfterChangeHook = ({
   if (!context.disableRevalidate) {
     if (doc._status === 'published') {
       const path = doc.slug === 'home' ? '/' : `/${doc.slug}`
-      payload.logger.info(`Revalidating page at path: ${path}`)
+      payload.logger.info(`ページを再検証: ${path}`)
       revalidatePath(path)
     }
 
-    // Revalidate old path if unpublished
+    // 非公開にした場合は古いパスを再検証
     if (previousDoc?._status === 'published' && doc._status !== 'published') {
       const oldPath = previousDoc.slug === 'home' ? '/' : `/${previousDoc.slug}`
       revalidatePath(oldPath)
@@ -145,7 +145,7 @@ export const revalidatePage: CollectionAfterChangeHook = ({
 }
 ```
 
-## Date Field Auto-Set
+## 日付フィールドの自動セット
 
 ```typescript
 {
@@ -164,12 +164,12 @@ export const revalidatePage: CollectionAfterChangeHook = ({
 }
 ```
 
-## Best Practices
+## ベストプラクティス
 
-- Use `beforeValidate` for data formatting
-- Use `beforeChange` for business logic
-- Use `afterChange` for side effects
-- Use `afterRead` for computed fields
-- Store expensive operations in `context`
-- Pass `req` to nested operations for transaction safety
-- Use context flags to prevent infinite loops
+- `beforeValidate` はデータ整形に使う
+- `beforeChange` はビジネスロジックに使う
+- `afterChange` は副作用（通知・キャッシュ更新など）に使う
+- `afterRead` は計算フィールドに使う
+- コストの高い処理は `context` にキャッシュする
+- トランザクション安全性のためネスト操作には `req` を渡す
+- 無限ループ防止には context フラグを使う

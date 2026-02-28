@@ -1,14 +1,14 @@
 ---
-title: Custom Endpoints
-description: Custom REST API endpoints with authentication and helpers
+title: カスタムエンドポイント
+description: 認証付きカスタム REST API エンドポイントとヘルパー
 tags: [payload, endpoints, api, routes, webhooks]
 ---
 
-# Payload Custom Endpoints
+# Payload カスタムエンドポイント
 
-## Basic Endpoint Pattern
+## 基本的なエンドポイントパターン
 
-Custom endpoints are **not authenticated by default**. Always check `req.user`.
+カスタムエンドポイントは**デフォルトで認証されていません**。必ず `req.user` を確認してください。
 
 ```typescript
 import { APIError } from 'payload'
@@ -22,7 +22,7 @@ export const protectedEndpoint: Endpoint = {
       throw new APIError('Unauthorized', 401)
     }
 
-    // Use req.payload for database operations
+    // データベース操作には req.payload を使う
     const data = await req.payload.find({
       collection: 'posts',
       where: { author: { equals: req.user.id } },
@@ -33,7 +33,7 @@ export const protectedEndpoint: Endpoint = {
 }
 ```
 
-## Route Parameters
+## ルートパラメータ
 
 ```typescript
 export const trackingEndpoint: Endpoint = {
@@ -53,10 +53,10 @@ export const trackingEndpoint: Endpoint = {
 }
 ```
 
-## Request Body Handling
+## リクエストボディの処理
 
 ```typescript
-// Manual JSON parsing
+// JSON を手動でパース
 export const createEndpoint: Endpoint = {
   path: '/create',
   method: 'post',
@@ -72,7 +72,7 @@ export const createEndpoint: Endpoint = {
   },
 }
 
-// Using helper (handles JSON + files)
+// ヘルパーを使う（JSON + ファイルを処理）
 import { addDataAndFileToRequest } from 'payload'
 
 export const uploadEndpoint: Endpoint = {
@@ -81,8 +81,8 @@ export const uploadEndpoint: Endpoint = {
   handler: async (req) => {
     await addDataAndFileToRequest(req)
 
-    // req.data contains parsed body
-    // req.file contains uploaded file (if multipart)
+    // req.data にパース済みのボディが入る
+    // req.file にアップロードされたファイルが入る（マルチパートの場合）
 
     const result = await req.payload.create({
       collection: 'media',
@@ -95,7 +95,7 @@ export const uploadEndpoint: Endpoint = {
 }
 ```
 
-## Query Parameters
+## クエリパラメータ
 
 ```typescript
 export const searchEndpoint: Endpoint = {
@@ -121,7 +121,7 @@ export const searchEndpoint: Endpoint = {
 }
 ```
 
-## CORS Headers
+## CORS ヘッダー
 
 ```typescript
 import { headersWithCors } from 'payload'
@@ -142,7 +142,7 @@ export const corsEndpoint: Endpoint = {
 }
 ```
 
-## Error Handling
+## エラーハンドリング
 
 ```typescript
 import { APIError } from 'payload'
@@ -154,7 +154,7 @@ export const validateEndpoint: Endpoint = {
     const data = await req.json()
 
     if (!data.email) {
-      throw new APIError('Email is required', 400)
+      throw new APIError('メールアドレスは必須です', 400)
     }
 
     return Response.json({ valid: true })
@@ -162,11 +162,11 @@ export const validateEndpoint: Endpoint = {
 }
 ```
 
-## Endpoint Placement
+## エンドポイントの配置場所
 
-### Collection Endpoints
+### コレクションエンドポイント
 
-Mounted at `/api/{collection-slug}/{path}`.
+`/api/{collection-slug}/{path}` にマウントされます。
 
 ```typescript
 export const Orders: CollectionConfig = {
@@ -176,7 +176,7 @@ export const Orders: CollectionConfig = {
       path: '/:id/tracking',
       method: 'get',
       handler: async (req) => {
-        // Available at: /api/orders/:id/tracking
+        // /api/orders/:id/tracking でアクセス可能
         const orderId = req.routeParams.id
         return Response.json({ orderId })
       },
@@ -185,9 +185,9 @@ export const Orders: CollectionConfig = {
 }
 ```
 
-### Global Endpoints
+### グローバルエンドポイント
 
-Mounted at `/api/globals/{global-slug}/{path}`.
+`/api/globals/{global-slug}/{path}` にマウントされます。
 
 ```typescript
 export const Settings: GlobalConfig = {
@@ -197,18 +197,18 @@ export const Settings: GlobalConfig = {
       path: '/clear-cache',
       method: 'post',
       handler: async (req) => {
-        // Available at: /api/globals/settings/clear-cache
+        // /api/globals/settings/clear-cache でアクセス可能
         await clearCache()
-        return Response.json({ message: 'Cache cleared' })
+        return Response.json({ message: 'キャッシュをクリアしました' })
       },
     },
   ],
 }
 ```
 
-### Root Endpoints
+### ルートエンドポイント
 
-Mounted at `/api/{path}`.
+`/api/{path}` にマウントされます。
 
 ```typescript
 export default buildConfig({
@@ -217,20 +217,20 @@ export default buildConfig({
       path: '/hello',
       method: 'get',
       handler: () => {
-        // Available at: /api/hello
-        return Response.json({ message: 'Hello!' })
+        // /api/hello でアクセス可能
+        return Response.json({ message: 'こんにちは！' })
       },
     },
   ],
 })
 ```
 
-## Best Practices
+## ベストプラクティス
 
-1. **Always check authentication** - Custom endpoints are not authenticated by default
-2. **Use `req.payload` for operations** - Ensures access control and hooks execute
-3. **Use helpers for common tasks** - `addDataAndFileToRequest`, `headersWithCors`
-4. **Throw `APIError` for errors** - Provides consistent error responses
-5. **Return Web API `Response`** - Use `Response.json()` for consistent responses
-6. **Validate input** - Check required fields, validate types
-7. **Log errors** - Use `req.payload.logger` for debugging
+1. **必ず認証を確認する** - カスタムエンドポイントはデフォルトで認証されていない
+2. **操作には `req.payload` を使う** - アクセス制御とフックが正しく実行される
+3. **共通処理にはヘルパーを使う** - `addDataAndFileToRequest`・`headersWithCors`
+4. **エラーには `APIError` を投げる** - 一貫したエラーレスポンスが得られる
+5. **Web API の `Response` を返す** - `Response.json()` で一貫したレスポンスにする
+6. **入力を検証する** - 必須フィールドのチェック・型の検証を行う
+7. **エラーをログに記録する** - デバッグには `req.payload.logger` を使う

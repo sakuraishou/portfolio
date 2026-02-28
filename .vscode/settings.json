@@ -1,4 +1,6 @@
 {
+  "prettier.configPath": ".prettierrc.json",
+  "prettier.requireConfig": true,
   "npm.packageManager": "pnpm",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {

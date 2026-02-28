@@ -1,14 +1,14 @@
 ---
-title: Plugin Development
-description: Creating Payload CMS plugins with TypeScript patterns
+title: プラグイン開発
+description: TypeScript パターンを使った Payload CMS プラグインの作り方
 tags: [payload, plugins, architecture, patterns]
 ---
 
-# Payload Plugin Development
+# Payload プラグイン開発
 
-## Plugin Architecture
+## プラグインのアーキテクチャ
 
-Plugins are functions that receive configuration options and return a function that transforms the Payload config:
+プラグインはオプションを受け取り、Payload 設定を変換する関数を返す関数です。
 
 ```typescript
 import type { Config, Plugin } from 'payload'
@@ -22,16 +22,16 @@ export const myPlugin =
   (options: MyPluginConfig): Plugin =>
   (config: Config): Config => ({
     ...config,
-    // Transform config here
+    // ここで設定を変換する
   })
 ```
 
-**Key Pattern:** Double arrow function (currying)
+**基本パターン**: 二重アロー関数（カリー化）
 
-- First function: Accepts plugin options, returns plugin function
-- Second function: Accepts Payload config, returns modified config
+- 1つ目の関数: プラグインオプションを受け取り、プラグイン関数を返す
+- 2つ目の関数: Payload 設定を受け取り、変更した設定を返す
 
-## Adding Fields to Collections
+## コレクションへのフィールド追加
 
 ```typescript
 export const seoPlugin =
@@ -63,7 +63,7 @@ export const seoPlugin =
   }
 ```
 
-## Adding New Collections
+## 新しいコレクションの追加
 
 ```typescript
 export const redirectsPlugin =
@@ -86,7 +86,7 @@ export const redirectsPlugin =
   }
 ```
 
-## Adding Hooks
+## フックの追加
 
 ```typescript
 const resaveChildrenHook: CollectionAfterChangeHook = async ({ doc, req, operation }) => {
@@ -126,7 +126,7 @@ export const nestedDocsPlugin =
   })
 ```
 
-## Adding Root-Level Endpoints
+## ルートレベルエンドポイントの追加
 
 ```typescript
 export const seoPlugin =
@@ -149,7 +149,7 @@ export const seoPlugin =
   }
 ```
 
-## Field Overrides with Defaults
+## フィールドのデフォルトオーバーライド
 
 ```typescript
 type FieldsOverride = (args: { defaultFields: Field[] }) => Field[]
@@ -187,7 +187,7 @@ export const myPlugin =
   }
 ```
 
-## Disable Plugin Pattern
+## 無効化パターン
 
 ```typescript
 interface PluginConfig {
@@ -198,7 +198,7 @@ interface PluginConfig {
 export const myPlugin =
   (options: PluginConfig): Plugin =>
   (config: Config): Config => {
-    // Always add collections/fields for database schema consistency
+    // データベーススキーマの一貫性のためコレクション・フィールドは常に追加する
     if (!config.collections) {
       config.collections = []
     }
@@ -208,18 +208,18 @@ export const myPlugin =
       fields: [{ name: 'title', type: 'text' }],
     })
 
-    // If disabled, return early but keep schema changes
+    // 無効化されている場合はスキーマ変更だけ適用して早期リターン
     if (options.disabled) {
       return config
     }
 
-    // Add endpoints, hooks, components only when enabled
+    // 有効な場合のみエンドポイント・フック・コンポーネントを追加
     config.endpoints = [
       ...(config.endpoints ?? []),
       {
         path: '/my-endpoint',
         method: 'get',
-        handler: async () => Response.json({ message: 'Hello' }),
+        handler: async () => Response.json({ message: 'こんにちは' }),
       },
     ]
 
@@ -227,7 +227,7 @@ export const myPlugin =
   }
 ```
 
-## Admin Components
+## 管理画面コンポーネント
 
 ```typescript
 export const myPlugin =
@@ -239,17 +239,17 @@ export const myPlugin =
       config.admin.components.beforeDashboard = []
     }
 
-    // Add client component
+    // クライアントコンポーネントを追加
     config.admin.components.beforeDashboard.push('my-plugin-name/client#BeforeDashboardClient')
 
-    // Add server component (RSC)
+    // サーバーコンポーネント（RSC）を追加
     config.admin.components.beforeDashboard.push('my-plugin-name/rsc#BeforeDashboardServer')
 
     return config
   }
 ```
 
-## onInit Hook
+## onInit フック
 
 ```typescript
 export const myPlugin =
@@ -258,13 +258,13 @@ export const myPlugin =
     const incomingOnInit = config.onInit
 
     config.onInit = async (payload) => {
-      // IMPORTANT: Call existing onInit first
+      // 重要: 既存の onInit を最初に呼ぶ
       if (incomingOnInit) await incomingOnInit(payload)
 
-      // Plugin initialization
-      payload.logger.info('Plugin initialized')
+      // プラグインの初期化処理
+      payload.logger.info('プラグインが初期化されました')
 
-      // Example: Seed data
+      // 例: データのシード
       const { totalDocs } = await payload.count({
         collection: 'plugin-collection',
         where: { id: { equals: 'seeded-by-plugin' } },
@@ -282,29 +282,29 @@ export const myPlugin =
   }
 ```
 
-## Best Practices
+## ベストプラクティス
 
-### Preserve Existing Config
+### 既存の設定を保持する
 
 ```typescript
-// ✅ Good
+// ✅ 良い例
 collections: [...(config.collections || []), newCollection]
 
-// ❌ Bad
+// ❌ 悪い例
 collections: [newCollection]
 ```
 
-### Respect User Overrides
+### ユーザーのオーバーライドを尊重する
 
 ```typescript
 const collection: CollectionConfig = {
   slug: 'redirects',
   fields: defaultFields,
-  ...options.overrides, // User overrides last
+  ...options.overrides, // ユーザーのオーバーライドを最後に適用
 }
 ```
 
-### Hook Composition
+### フックの合成
 
 ```typescript
 hooks: {
@@ -316,7 +316,7 @@ hooks: {
 }
 ```
 
-### Type Safety
+### 型安全性
 
 ```typescript
 import type { Config, Plugin, CollectionConfig, Field } from 'payload'

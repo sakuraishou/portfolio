@@ -1,12 +1,12 @@
 ---
-title: Collections
-description: Collection configurations and patterns
+title: コレクション
+description: コレクションの設定とパターン
 tags: [payload, collections, auth, upload, drafts]
 ---
 
-# Payload CMS Collections
+# Payload CMS コレクション
 
-## Basic Collection
+## 基本コレクション
 
 ```typescript
 import type { CollectionConfig } from 'payload'
@@ -27,7 +27,7 @@ export const Posts: CollectionConfig = {
 }
 ```
 
-## Auth Collection with RBAC
+## RBAC（ロールベースアクセス制御）付き認証コレクション
 
 ```typescript
 export const Users: CollectionConfig = {
@@ -41,7 +41,7 @@ export const Users: CollectionConfig = {
       options: ['admin', 'editor', 'user'],
       defaultValue: ['user'],
       required: true,
-      saveToJWT: true, // Include in JWT for fast access checks
+      saveToJWT: true, // JWT に含めることで高速なアクセスチェックが可能
       access: {
         update: ({ req: { user } }) => user?.roles?.includes('admin'),
       },
@@ -50,7 +50,7 @@ export const Users: CollectionConfig = {
 }
 ```
 
-## Upload Collection
+## アップロードコレクション
 
 ```typescript
 export const Media: CollectionConfig = {
@@ -88,7 +88,7 @@ export const Media: CollectionConfig = {
 }
 ```
 
-## Versioning & Drafts
+## バージョン管理・下書き
 
 ```typescript
 export const Pages: CollectionConfig = {
@@ -97,51 +97,51 @@ export const Pages: CollectionConfig = {
     drafts: {
       autosave: true,
       schedulePublish: true,
-      validate: false, // Don't validate drafts
+      validate: false, // 下書きはバリデーションしない
     },
     maxPerDoc: 100,
   },
   access: {
     read: ({ req: { user } }) => {
-      // Public sees only published
+      // 未ログインは公開済みのみ
       if (!user) return { _status: { equals: 'published' } }
-      // Authenticated sees all
+      // ログイン済みは全件
       return true
     },
   },
 }
 ```
 
-### Draft API Usage
+### 下書き API の使い方
 
 ```typescript
-// Create draft
+// 下書きを作成
 await payload.create({
   collection: 'posts',
-  data: { title: 'Draft Post' },
-  draft: true, // Skips required field validation
+  data: { title: '下書き投稿' },
+  draft: true, // 必須フィールドのバリデーションをスキップ
 })
 
-// Read with drafts
+// 下書きを読み取る
 const page = await payload.findByID({
   collection: 'pages',
   id: '123',
-  draft: true, // Returns draft version if exists
+  draft: true, // 下書きバージョンがあれば返す
 })
 ```
 
-## Globals
+## グローバル
 
-Globals are single-instance documents (not collections).
+グローバルは単一インスタンスのドキュメントです（コレクションとは異なる）。
 
 ```typescript
 import type { GlobalConfig } from 'payload'
 
 export const Header: GlobalConfig = {
   slug: 'header',
-  label: 'Header',
+  label: 'ヘッダー',
   admin: {
-    group: 'Settings',
+    group: '設定',
   },
   fields: [
     {

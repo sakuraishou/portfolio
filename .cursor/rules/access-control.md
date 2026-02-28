@@ -1,18 +1,18 @@
 ---
-title: Access Control
-description: Collection, field, and global access control patterns
+title: アクセス制御
+description: コレクション・フィールド・グローバルのアクセス制御パターン
 tags: [payload, access-control, security, permissions, rbac]
 ---
 
-# Payload CMS Access Control
+# Payload CMS アクセス制御
 
-## Access Control Layers
+## アクセス制御の階層
 
-1. **Collection-Level**: Controls operations on entire documents (create, read, update, delete, admin)
-2. **Field-Level**: Controls access to individual fields (create, read, update)
-3. **Global-Level**: Controls access to global documents (read, update)
+1. **コレクションレベル**: ドキュメント全体の操作を制御（create・read・update・delete・admin）
+2. **フィールドレベル**: 個別フィールドへのアクセスを制御（create・read・update）
+3. **グローバルレベル**: グローバルドキュメントへのアクセスを制御（read・update）
 
-## Collection Access Control
+## コレクションのアクセス制御
 
 ```typescript
 import type { Access } from 'payload'
@@ -20,22 +20,22 @@ import type { Access } from 'payload'
 export const Posts: CollectionConfig = {
   slug: 'posts',
   access: {
-    // Boolean: Only authenticated users can create
+    // boolean: ログイン済みユーザーのみ作成可能
     create: ({ req: { user } }) => Boolean(user),
 
-    // Query constraint: Public sees published, users see all
+    // クエリ制約: 未ログインは公開済みのみ、ログイン済みは全件
     read: ({ req: { user } }) => {
       if (user) return true
       return { status: { equals: 'published' } }
     },
 
-    // User-specific: Admins or document owner
+    // ユーザー固有: 管理者またはドキュメントのオーナー
     update: ({ req: { user }, id }) => {
       if (user?.roles?.includes('admin')) return true
       return { author: { equals: user?.id } }
     },
 
-    // Async: Check related data
+    // 非同期: 関連データを確認
     delete: async ({ req, id }) => {
       const hasComments = await req.payload.count({
         collection: 'comments',
@@ -47,41 +47,41 @@ export const Posts: CollectionConfig = {
 }
 ```
 
-## Common Access Patterns
+## よく使うアクセスパターン
 
 ```typescript
-// Anyone
+// 誰でも OK
 export const anyone: Access = () => true
 
-// Authenticated only
+// ログイン済みのみ
 export const authenticated: Access = ({ req: { user } }) => Boolean(user)
 
-// Admin only
+// 管理者のみ
 export const adminOnly: Access = ({ req: { user } }) => {
   return user?.roles?.includes('admin')
 }
 
-// Admin or self
+// 管理者または自分自身
 export const adminOrSelf: Access = ({ req: { user } }) => {
   if (user?.roles?.includes('admin')) return true
   return { id: { equals: user?.id } }
 }
 
-// Published or authenticated
+// 公開済みまたはログイン済み
 export const authenticatedOrPublished: Access = ({ req: { user } }) => {
   if (user) return true
   return { _status: { equals: 'published' } }
 }
 ```
 
-## Row-Level Security
+## 行レベルセキュリティ（Row-Level Security）
 
 ```typescript
-// Organization-scoped access
+// 組織スコープのアクセス制御
 export const organizationScoped: Access = ({ req: { user } }) => {
   if (user?.roles?.includes('admin')) return true
 
-  // Users see only their organization's data
+  // ユーザーは自分の組織のデータのみ見える
   return {
     organization: {
       equals: user?.organization,
@@ -89,7 +89,7 @@ export const organizationScoped: Access = ({ req: { user } }) => {
   }
 }
 
-// Team-based access
+// チームベースのアクセス制御
 export const teamMemberAccess: Access = ({ req: { user } }) => {
   if (!user) return false
   if (user.roles?.includes('admin')) return true
@@ -102,9 +102,9 @@ export const teamMemberAccess: Access = ({ req: { user } }) => {
 }
 ```
 
-## Field Access Control
+## フィールドのアクセス制御
 
-**Field access ONLY returns boolean** (no query constraints).
+**フィールドアクセスは boolean のみ返します**（クエリ制約は使えません）。
 
 ```typescript
 {
@@ -112,22 +112,22 @@ export const teamMemberAccess: Access = ({ req: { user } }) => {
   type: 'number',
   access: {
     read: ({ req: { user }, doc }) => {
-      // Self can read own salary
+      // 自分自身は自分の給与を読める
       if (user?.id === doc?.id) return true
-      // Admin can read all
+      // 管理者は全員読める
       return user?.roles?.includes('admin')
     },
     update: ({ req: { user } }) => {
-      // Only admins can update
+      // 管理者のみ更新可能
       return user?.roles?.includes('admin')
     },
   },
 }
 ```
 
-## RBAC Pattern
+## RBAC パターン
 
-Payload does NOT provide a roles system by default. Add a `roles` field to your auth collection:
+Payload はデフォルトでロールシステムを提供しません。認証コレクションに `roles` フィールドを追加してください。
 
 ```typescript
 export const Users: CollectionConfig = {
@@ -141,7 +141,7 @@ export const Users: CollectionConfig = {
       options: ['admin', 'editor', 'user'],
       defaultValue: ['user'],
       required: true,
-      saveToJWT: true, // Include in JWT for fast access checks
+      saveToJWT: true, // JWT に含めることで高速なアクセスチェックが可能
       access: {
         update: ({ req: { user } }) => user?.roles?.includes('admin'),
       },
@@ -150,7 +150,7 @@ export const Users: CollectionConfig = {
 }
 ```
 
-## Multi-Tenant Access Control
+## マルチテナントのアクセス制御
 
 ```typescript
 interface User {
@@ -201,25 +201,25 @@ export const Posts: CollectionConfig = {
 }
 ```
 
-## Important Notes
+## 重要な注意点
 
-1. **Local API Default**: Access control is **skipped by default** in Local API (`overrideAccess: true`). When passing a `user` parameter, you must set `overrideAccess: false`:
+1. **Local API のデフォルト**: Local API ではアクセス制御がデフォルトで**スキップされます**（`overrideAccess: true`）。`user` パラメータを渡す場合は必ず `overrideAccess: false` を設定してください:
 
 ```typescript
-// ❌ WRONG: Passes user but bypasses access control
+// ❌ 間違い: user を渡してもアクセス制御がスキップされる
 await payload.find({
   collection: 'posts',
   user: someUser,
 })
 
-// ✅ CORRECT: Respects the user's permissions
+// ✅ 正しい: ユーザーの権限を正しく適用する
 await payload.find({
   collection: 'posts',
   user: someUser,
-  overrideAccess: false, // Required to enforce access control
+  overrideAccess: false, // アクセス制御の強制に必須
 })
 ```
 
-2. **Field Access Limitations**: Field-level access does NOT support query constraints - only boolean returns.
+2. **フィールドアクセスの制限**: フィールドレベルのアクセス制御はクエリ制約をサポートしません。boolean のみ返します。
 
-3. **Admin Panel Visibility**: The `admin` access control determines if a collection appears in the admin panel for a user.
+3. **管理画面の表示**: `admin` アクセス制御はコレクションが管理画面に表示されるかを制御します。

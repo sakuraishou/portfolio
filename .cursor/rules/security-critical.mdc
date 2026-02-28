@@ -1,93 +1,93 @@
 ---
-title: Critical Security Patterns
-description: The three most important security patterns in Payload CMS
+title: 重要セキュリティパターン
+description: Payload CMS における最重要セキュリティパターン3つ
 tags: [payload, security, critical, access-control, transactions, hooks]
 priority: high
 ---
 
-# CRITICAL SECURITY PATTERNS
+# 重要セキュリティパターン
 
-These are the three most critical security patterns that MUST be followed in every Payload CMS project.
+Payload CMS のすべてのプロジェクトで必ず守らなければならない、最重要セキュリティパターン3つです。
 
-## 1. Local API Access Control (MOST IMPORTANT)
+## 1. Local API のアクセス制御（最重要）
 
-**By default, Local API operations bypass ALL access control**, even when passing a user.
+**Local API の操作はデフォルトでアクセス制御をすべてスキップします。** user を渡していても同様です。
 
 ```typescript
-// ❌ SECURITY BUG: Passes user but ignores their permissions
+// ❌ セキュリティバグ: user を渡してもその権限は無視される
 await payload.find({
   collection: 'posts',
-  user: someUser, // Access control is BYPASSED!
+  user: someUser, // アクセス制御がスキップされる！
 })
 
-// ✅ SECURE: Actually enforces the user's permissions
+// ✅ 安全: ユーザーの権限を正しく強制する
 await payload.find({
   collection: 'posts',
   user: someUser,
-  overrideAccess: false, // REQUIRED for access control
+  overrideAccess: false, // アクセス制御に必須
 })
 
-// ✅ Administrative operation (intentional bypass)
+// ✅ 管理操作（意図的なバイパス）
 await payload.find({
   collection: 'posts',
-  // No user, overrideAccess defaults to true
+  // user なし、overrideAccess はデフォルトで true
 })
 ```
 
-**When to use each:**
+**使い分け:**
 
-- `overrideAccess: true` (default) - Server-side operations you trust (cron jobs, system tasks)
-- `overrideAccess: false` - When operating on behalf of a user (API routes, webhooks)
+- `overrideAccess: true`（デフォルト）— 信頼できるサーバーサイド操作（cronジョブ・システムタスク）
+- `overrideAccess: false` — ユーザーの代わりに操作する場合（APIルート・Webhook）
 
-**Rule**: When passing `user` to Local API, ALWAYS set `overrideAccess: false`
+**ルール**: Local API に `user` を渡す場合は、必ず `overrideAccess: false` を設定する
 
-## 2. Transaction Safety in Hooks
+## 2. フック内のトランザクション安全性
 
-**Nested operations in hooks without `req` break transaction atomicity.**
+**フック内で `req` なしにネスト操作を行うと、トランザクションのアトミック性が壊れます。**
 
 ```typescript
-// ❌ DATA CORRUPTION RISK: Separate transaction
+// ❌ データ破損リスク: 別トランザクションになる
 hooks: {
   afterChange: [
     async ({ doc, req }) => {
       await req.payload.create({
         collection: 'audit-log',
         data: { docId: doc.id },
-        // Missing req - runs in separate transaction!
+        // req がない → 別トランザクションで実行される！
       })
     },
   ]
 }
 
-// ✅ ATOMIC: Same transaction
+// ✅ アトミック: 同じトランザクション内で実行
 hooks: {
   afterChange: [
     async ({ doc, req }) => {
       await req.payload.create({
         collection: 'audit-log',
         data: { docId: doc.id },
-        req, // Maintains atomicity
+        req, // アトミック性を維持
       })
     },
   ]
 }
 ```
 
-**Why This Matters:**
+**なぜ重要か:**
 
-- **MongoDB (with replica sets)**: Creates atomic session across operations
-- **PostgreSQL**: All operations use same Drizzle transaction
-- **SQLite (with transactions enabled)**: Ensures rollback on errors
-- **Without req**: Each operation runs independently, breaking atomicity
+- **MongoDB（レプリカセット使用時）**: 操作間でアトミックなセッションを作る
+- **PostgreSQL**: 全操作が同じ Drizzle トランザクションを使う
+- **SQLite（トランザクション有効時）**: エラー時のロールバックを保証する
+- **req なしの場合**: 各操作が独立して実行され、アトミック性が壊れる
 
-**Rule**: ALWAYS pass `req` to nested operations in hooks
+**ルール**: フック内のネスト操作には必ず `req` を渡す
 
-## 3. Prevent Infinite Hook Loops
+## 3. フックの無限ループ防止
 
-**Hooks triggering operations that trigger the same hooks create infinite loops.**
+**フックが同じフックをトリガーする操作を呼ぶと、無限ループが発生します。**
 
 ```typescript
-// ❌ INFINITE LOOP
+// ❌ 無限ループ
 hooks: {
   afterChange: [
     async ({ doc, req }) => {
@@ -96,12 +96,12 @@ hooks: {
         id: doc.id,
         data: { views: doc.views + 1 },
         req,
-      }) // Triggers afterChange again!
+      }) // 再び afterChange が呼ばれる！
     },
   ]
 }
 
-// ✅ SAFE: Use context flag
+// ✅ 安全: context フラグを使う
 hooks: {
   afterChange: [
     async ({ doc, req, context }) => {
@@ -119,4 +119,4 @@ hooks: {
 }
 ```
 
-**Rule**: Use `req.context` flags to prevent hook loops
+**ルール**: フックのループ防止には `req.context` フラグを使う
