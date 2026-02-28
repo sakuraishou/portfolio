@@ -1,0 +1,19 @@
+@use 'ress';
+
+html {
+  font-size: 10px;
+}
+
+body {
+  font-family: $font-main;
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}

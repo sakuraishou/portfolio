@@ -1,0 +1,52 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  // border-bottom: 1px solid $color-border;
+
+  &__inner {
+    // @include page-container;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // height: $header-height;
+  }
+
+  &__logo {
+    font-size: 18px;
+    font-weight: bold;
+    // color: $color-text;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+
+    // @include sm {
+    //   gap: 20px;
+    // }
+
+    a {
+      font-size: 14px;
+      // color: $color-text-muted;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s ease;
+
+      &:hover {
+        // color: $color-text;
+      }
+    }
+  }
+}

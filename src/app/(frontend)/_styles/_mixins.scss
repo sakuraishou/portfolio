@@ -1,0 +1,18 @@
+$breakpoint-sp: 768px;
+
+@mixin sp {
+  @media screen and (max-width: #{$breakpoint-sp}) {
+    @content;
+  }
+}
+
+@mixin center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin hidden {
+  opacity: 0;
+  visibility: hidden;
+}

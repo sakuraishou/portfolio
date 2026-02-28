@@ -1,0 +1,12 @@
+$main: #f78c00; // メインカラー
+$bg: #ffeedf;
+$bg2: #ffeedf;
+$baseColor: #ffeedf;
+
+// フォント（layout.tsxで定義した変数と紐付け）
+$font-main: var(--font-zen-kaku), sans-serif;
+
+//dancing
+$font-sub-script: var(--font-dancing), cursive;
+//quicksand
+$font-sub-modern: var(--font-quicksand), sans-serif;
