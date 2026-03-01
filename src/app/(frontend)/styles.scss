@@ -4,10 +4,105 @@ html {
   font-size: 10px;
 }
 
+html {
+  font-size: pxtovw(10);
+  height: -webkit-fill-available;
+
+  @include responsive(md) {
+    font-size: 10px;
+  }
+}
+
 body {
-  font-family: $font-main;
+  width: 100%;
   font-size: 1.6rem;
+  font-feature-settings: 'palt' 1;
   line-height: 1.5;
+  font-family: $font-main;
+  color: $fontBase;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-style: normal;
+  font-feature-settings: 'palt' 1;
+
+  @include responsive(md) {
+  }
+}
+
+img {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  vertical-align: bottom;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+dt {
+  font-weight: normal;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+iframe {
+  vertical-align: bottom;
+}
+
+picture {
+  display: block;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.sp {
+  display: block;
+  @include responsive(md) {
+    display: none;
+  }
+
+  &-inline {
+    display: inline;
+    @include responsive(md) {
+      display: none;
+    }
+  }
+
+  &-flax {
+    display: none;
+    @include responsive(md) {
+      display: flex;
+    }
+  }
+}
+
+.pc {
+  display: none;
+  @include responsive(md) {
+    display: block;
+  }
+
+  &-inline {
+    display: none;
+    @include responsive(md) {
+      display: inline;
+    }
+  }
+  &-flax {
+    display: none;
+    @include responsive(md) {
+      display: flex;
+    }
+  }
 }
 
 input,
