@@ -1,0 +1,77 @@
+.hamburger {
+  @include center;
+  flex-direction: column;
+  width: 5.8rem;
+  height: 5.8rem;
+  background-color: $main;
+  border-radius: 99.9rem;
+  cursor: pointer;
+  position: relative;
+  z-index: 100;
+  transition: background-color 0.3s ease;
+
+  @include responsive(md) {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  &__line {
+    display: block;
+    width: 2.6rem;
+    height: 0.2rem;
+    background: #fff;
+    border-radius: 99.9rem;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease,
+      background-color 0.3s ease;
+    transform-origin: center;
+
+    @include responsive(md) {
+      width: 3rem;
+      height: 0.3rem;
+    }
+
+    &:nth-child(1),
+    &:nth-child(3) {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+
+    &:nth-child(1) {
+      transform: translateX(-50%) translateY(-0.9rem) rotate(0);
+
+      @include responsive(md) {
+        transform: translateX(-50%) translateY(-1.1rem) rotate(0);
+      }
+    }
+
+    &:nth-child(3) {
+      transform: translateX(-50%) translateY(0.7rem) rotate(0);
+
+      @include responsive(md) {
+        transform: translateX(-50%) translateY(0.8rem) rotate(0);
+      }
+    }
+  }
+
+  &--open {
+    background-color: #fff;
+    .hamburger__line {
+      background-color: $main;
+      &:nth-child(1) {
+        transform: translateX(-50%) translateY(-50%) rotate(45deg);
+      }
+
+      &:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+
+      &:nth-child(3) {
+        transform: translateX(-50%) translateY(-50%) rotate(-45deg);
+      }
+    }
+  }
+}
