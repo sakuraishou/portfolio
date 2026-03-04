@@ -1,11 +1,10 @@
 'use client'
 
-import './styles.scss'
-import './HamburgerButton/styles.scss'
+import styles from './Header.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
-import HamburgerButton from './HamburgerButton'
+import HamburgerButton from './Hamburger'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -18,12 +17,12 @@ export default function Header() {
   ]
 
   return (
-    <header className="header">
-      <Link className="header__logo" href="/">
+    <header className={styles.header}>
+      <Link className={styles.logo} href="/">
         <Image src="/assets/header/logo.png" alt="Logo" width={100} height={100} />
       </Link>
       <HamburgerButton isOpen={isMenuOpen} onClick={() => setIsMenuOpen((prev) => !prev)} />
-      <nav className={`header__nav${isMenuOpen ? ' header__nav--open' : ''}`}>
+      <nav className={`${styles.nav} ${isMenuOpen ? styles.open : ''}`}>
         {NAV_ITEMS.map((item) => (
           <Link
             key={item.href}

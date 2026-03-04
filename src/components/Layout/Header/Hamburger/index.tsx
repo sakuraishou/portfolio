@@ -1,4 +1,5 @@
 'use client'
+import styles from './Hamburger.module.scss'
 
 type Props = {
   isOpen: boolean
@@ -8,14 +9,14 @@ type Props = {
 export default function HamburgerButton({ isOpen, onClick }: Props) {
   return (
     <button
-      className={`hamburger${isOpen ? ' hamburger--open' : ''}`}
+      className={`${styles.hamburger} ${isOpen ? styles.open : ''}`}
       onClick={onClick}
       aria-label={isOpen ? 'メニューを閉じる' : 'メニューを開く'}
       aria-expanded={isOpen}
     >
-      <span className="hamburger__line" />
-      <span className="hamburger__line" />
-      <span className="hamburger__line" />
+      <span className={styles.line} />
+      <span className={styles.line} />
+      <span className={styles.line} />
     </button>
   )
 }

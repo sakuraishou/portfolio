@@ -1,7 +1,7 @@
 import { headers as getHeaders } from 'next/headers.js'
-import gsap from 'gsap'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
+import FirstView from '@/components/Sections/FirstView'
 import './styles.scss'
 
 export default async function HomePage() {
@@ -12,7 +12,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <section>ポートフォリオ</section>
+      <FirstView />
       <section>ポートフォリオ１</section>
       <section>ポートフォリオ２</section>
       <section>ポートフォリオ３</section>

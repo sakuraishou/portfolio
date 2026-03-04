@@ -1,25 +1,55 @@
 'use client'
 import { useEffect } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function Scroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
     const mm = gsap.matchMedia()
 
     mm.add('(min-width: 992px)', () => {
-      gsap.to(gsap.utils.toArray('section'), {
-        xPercent: -100 * (gsap.utils.toArray('section').length - 1),
-        ease: 'none',
-        scrollTrigger: { trigger: 'main', pin: true, scrub: 1, end: '+=3000' },
-      })
+      let st: ScrollTrigger | null = null
+
+      const init = () => {
+        const sections = gsap.utils.toArray<HTMLElement>('main > section')
+        if (sections.length === 0) return false
+
+        const scrollDistance = (sections.length - 1) * window.innerWidth
+
+        const tl = gsap.to(sections, {
+          xPercent: -100 * (sections.length - 1),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: 'main',
+            pin: true,
+            scrub: 1,
+            start: 'top top',
+            end: () => `+=${scrollDistance}`,
+            invalidateOnRefresh: true,
+          },
+        })
+        st = tl.scrollTrigger ?? null
+        ScrollTrigger.refresh()
+        return true
+      }
+
+      if (!init()) {
+        const id = setTimeout(() => {
+          init()
+          ScrollTrigger.refresh()
+        }, 300)
+        return () => {
+          clearTimeout(id)
+          st?.kill()
+        }
+      }
+      return () => st?.kill()
     })
-    return () => {
-      mm.revert()
-      ScrollTrigger.getAll().forEach((t) => t.kill())
-    }
+
+    return () => mm.revert()
   }, [])
 
-  return <div className="pc-side-scroll">{children}123</div>
+  return <main>{children}</main>
 }

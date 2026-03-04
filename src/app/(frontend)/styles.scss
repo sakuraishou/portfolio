@@ -112,3 +112,22 @@ select {
   font-family: inherit;
   font-size: inherit;
 }
+
+.wrap {
+}
+
+/* PC横スクロールレイアウト（992px以上） */
+@include responsive(lg) {
+  main {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+
+    > section {
+      flex: 0 0 100vw;
+      width: 100vw;
+      min-width: 100vw;
+      min-height: 100vh;
+    }
+  }
+}

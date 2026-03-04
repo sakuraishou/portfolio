@@ -87,7 +87,11 @@
   right: 0;
   z-index: 90;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transform: scale(0);
+  transform-origin: top right;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
 
   @include responsive(md) {
     width: 8rem;
@@ -188,6 +192,7 @@
   &.open {
     opacity: 1;
     pointer-events: auto;
+    transform: scale(1);
 
     @include responsive(md) {
       width: 42rem;
