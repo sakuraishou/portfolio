@@ -14,14 +14,14 @@ const zenKaku = Zen_Kaku_Gothic_New({
 // サブ1
 const dancingScript = Dancing_Script({
   subsets: ['latin'],
-  weight: ['400', '700'],
+  weight: ['500'],
   variable: '--font-dancing',
 })
 
 // サブ2
 const quicksand = Quicksand({
   subsets: ['latin'],
-  weight: ['400', '700'],
+  weight: ['500'],
   variable: '--font-quicksand',
 })
 

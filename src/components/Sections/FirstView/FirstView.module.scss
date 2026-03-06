@@ -1,0 +1,91 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+
+.firstView {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+
+  @include responsive(lg) {
+    width: 100vw;
+    overflow: visible;
+    overflow-y: hidden;
+  }
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+  }
+
+  &::before {
+    width: 100%;
+    height: 100%;
+    background-color: $main;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  &::after {
+    width: 165rem;
+    height: 165rem;
+    background-color: $accent;
+    border-radius: 50%;
+    top: 50%;
+    left: 16.5rem;
+    transform: translateY(-50%);
+    z-index: -1;
+
+    @include responsive(lg) {
+      left: 50%;
+    }
+  }
+}
+
+.wrap {
+  @include center();
+  min-height: 100svh;
+}
+
+.inner {
+  width: fit-content;
+}
+
+.title,
+.sub {
+  color: #fff;
+
+  @include responsive(lg) {
+    color: $fontBase;
+  }
+}
+
+.title {
+  font-size: 4rem;
+  line-height: 1.1;
+  font-family: $font-sub-script;
+  font-weight: 500;
+
+  @include responsive(lg) {
+    font-size: 9rem;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .big {
+    font-size: 6.4rem;
+
+    @include responsive(lg) {
+      font-size: 9rem;
+    }
+  }
+}
+
+.sub {
+  font-size: 2rem;
+  margin: 2rem 0 0;
+
+  @include responsive(lg) {
+    margin: 4rem 0 0;
+  }
+}
