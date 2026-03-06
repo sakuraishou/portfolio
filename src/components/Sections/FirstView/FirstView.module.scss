@@ -9,7 +9,8 @@
   @include responsive(lg) {
     width: 100vw;
     overflow: visible;
-    overflow-y: hidden;
+    // overflow: visible;
+    // overflow-y: hidden;
   }
 
   &::before,
