@@ -6,7 +6,7 @@ import './styles.scss'
 
 const zenKaku = Zen_Kaku_Gothic_New({
   subsets: ['latin'],
-  weight: ['500', '700'],
+  weight: ['400', '500', '700'],
   variable: '--font-zen-kaku',
   display: 'swap',
 })

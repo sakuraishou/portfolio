@@ -25,10 +25,9 @@
     z-index: -1;
     bottom: 0.8rem;
     left: 2rem;
-  }
 
-  @include responsive(md) {
-    font-size: 3.2rem;
-    margin-bottom: 4rem;
+    @include responsive(lg) {
+      font-size: 6rem;
+    }
   }
 }

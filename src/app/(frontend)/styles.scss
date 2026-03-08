@@ -15,10 +15,10 @@ body {
   font-feature-settings: 'palt' 1;
   line-height: 1.5;
   font-family: $font-main;
-  font-weight: 500;
+  font-weight: 400;
   color: $fontBase;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
   font-style: normal;
 
   @include responsive(md) {
@@ -113,7 +113,14 @@ select {
   padding: 8rem 3.6rem;
 
   @include responsive(lg) {
+    height: 64rem;
     padding: 0;
+    margin: auto 0;
+  }
+
+  &.flex {
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -129,6 +136,7 @@ select {
       width: 100vw;
       min-width: 100vw;
       min-height: 100vh;
+      @include center;
     }
   }
 }

@@ -1,11 +1,14 @@
 services:
   app:
     image: node:22-alpine
+    stdin_open: true   # プロンプトに入力できるようにする
+    tty: true
     ports:
       - '3000:3000'
     volumes:
       - .:/app
       - /app/node_modules
+      - /app/.next  # ビルドキャッシュをコンテナ内に隔離（Turbopack の ENOENT 対策）
     working_dir: /app
     # 大事な情報は .env ファイルから読み込むように戻します
     env_file:
