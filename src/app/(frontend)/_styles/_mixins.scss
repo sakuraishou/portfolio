@@ -2,6 +2,7 @@
 @use 'sass:map';
 @use 'sass:meta';
 @use 'sass:string';
+@use '@/app/(frontend)/_styles/_variables' as *;
 
 $breakpoint-sp: 768px;
 
@@ -14,6 +15,18 @@ $breakpoint-sp: 768px;
 @mixin hidden {
   opacity: 0;
   visibility: hidden;
+}
+
+@mixin dancing {
+  font-family: $font-sub-script;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+@mixin quicksand {
+  font-family: $font-sub-modern;
+  letter-spacing: 0.05em;
+  font-weight: 500;
 }
 
 /* vwの設定

@@ -110,6 +110,11 @@ select {
 }
 
 .wrap {
+  padding: 8rem 3.6rem;
+
+  @include responsive(lg) {
+    padding: 0;
+  }
 }
 
 /* PC横スクロールレイアウト（992px以上） */
