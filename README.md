@@ -9,12 +9,7 @@ Next.js + Payload CMS で構築したポートフォリオサイトです。
 - **言語**: TypeScript
 - **リッチテキスト**: Lexical Editor
 
-## ローカル開発
-
-### 前提条件
-
-- Node.js 22 以上
-- npm または pnpm
+## ローカル開発（Docker）
 
 ### セットアップ
 
@@ -33,20 +28,7 @@ cp .env.example .env
 
 `.env` を開いて各値を設定してください。
 
-3. 依存パッケージをインストールして開発サーバーを起動
-
-```bash
-npm install
-npm run dev
-```
-
-4. ブラウザで `http://localhost:3000` を開く
-
-初回アクセス時に管理者ユーザーの作成画面が表示されます。
-
-### Docker を使う場合
-
-Docker を使って開発環境を起動できます。
+3. 開発サーバーを起動
 
 ```bash
 docker-compose up
@@ -54,17 +36,19 @@ docker-compose up
 
 `-d` オプションを付けるとバックグラウンドで起動します。
 
-## 主なコマンド
+4. ブラウザで `http://localhost:3000` を開く
+
+初回アクセス時に管理者ユーザーの作成画面が表示されます。
+
+### 主なコマンド（コンテナ内で実行）
 
 | コマンド | 説明 |
 |---|---|
-| `npm run dev` | 開発サーバーを起動 |
-| `npm run devsafe` | `.next` キャッシュを削除してから起動 |
-| `npm run build` | 本番用ビルド |
-| `npm run start` | 本番サーバーを起動 |
-| `npm run generate:types` | Payload の型定義を生成 |
-| `npm run generate:importmap` | Payload の ImportMap を生成 |
-| `npm run lint` | ESLint でコードチェック |
+| `docker-compose exec app npm run generate:types` | Payload の型定義を生成 |
+| `docker-compose exec app npm run generate:importmap` | Payload の ImportMap を生成 |
+| `docker-compose exec app npm run lint` | ESLint でコードチェック |
+
+※ コンテナが起動していない場合は `docker-compose run --rm app npm run <script>` で実行できます。
 
 ## ディレクトリ構成
 

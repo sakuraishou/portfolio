@@ -137,6 +137,8 @@ select {
       min-width: 100vw;
       min-height: 100vh;
       @include center;
+      position: relative;
+      z-index: 4;
     }
   }
 }

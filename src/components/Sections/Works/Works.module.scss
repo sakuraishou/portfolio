@@ -1,0 +1,99 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
+.works {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  padding: 6rem 0;
+
+  @include responsive(md) {
+    padding: 8rem 0;
+  }
+}
+
+.worksTitle {
+  margin-bottom: 3rem;
+
+  @include responsive(md) {
+    margin-bottom: 5rem;
+  }
+}
+
+.worksList {
+  display: grid;
+  gap: 3rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  @include responsive(md) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4rem;
+  }
+
+  @include responsive(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &__item {
+    background-color: $bg;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+}
+
+.workImage {
+  aspect-ratio: 16 / 10;
+  position: relative;
+  overflow: hidden;
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.workBody {
+  padding: 2rem;
+}
+
+.workTitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: $fontBase;
+  margin: 0 0 1rem;
+
+  @include responsive(md) {
+    font-size: 1.8rem;
+  }
+}
+
+.workDescription {
+  font-size: 1.4rem;
+  line-height: 1.7;
+  color: $fontBase;
+  margin: 0 0 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.workLink {
+  font-size: 1.4rem;
+  color: $main;
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.empty {
+  color: $fontBase;
+  font-size: 1.4rem;
+  text-align: center;
+}

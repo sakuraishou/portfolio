@@ -3,6 +3,8 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import FirstView from '@/components/Sections/FirstView'
 import About from '@/components/Sections/About'
+import Skills from '@/components/Sections/Skills'
+import Works from '@/components/Sections/Works'
 import './styles.scss'
 
 export default async function HomePage() {
@@ -15,8 +17,8 @@ export default async function HomePage() {
     <>
       <FirstView />
       <About />
-      <section>ポートフォリオ２</section>
-      <section>ポートフォリオ３</section>
+      <Skills />
+      <Works />
       <section>ポートフォリオ４</section>
     </>
   )

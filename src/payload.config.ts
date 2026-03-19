@@ -8,6 +8,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Projects } from './collections/Projects'
+import { SkillCategories } from './collections/SkillCategories'
 import { Skills } from './collections/Skills'
 import { Tags } from './collections/Tags'
 import { ja } from '@payloadcms/translations/languages/ja'
@@ -25,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Projects, Skills, Tags],
+  collections: [Users, Media, Projects, SkillCategories, Skills, Tags],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
