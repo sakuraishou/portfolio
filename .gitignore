@@ -1,50 +1,69 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+#
+# pnpm-lock.yaml はコミットする（再現可能なインストール・Docker build に必要）。
+# package-lock.json / yarn.lock はこのプロジェクトでは使わないので誤生成時用に除外。
 
 # dependencies
-/node_modules
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+
+# npm / yarn のロック（pnpm 専用プロジェクト）
+package-lock.json
+yarn.lock
+
 /.pnp
 .pnp.js
 .yarn/install-state.gz
 
+# JetBrains
 /.idea/*
 !/.idea/runConfigurations
 
 # testing
-/coverage
+coverage/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
+
+# Turbo（next dev --turbo など）
+.turbo/
 
 # production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files
-.env*.local
+build/
+dist/
 
 # vercel
 .vercel
+
+# env & secrets
+.env
+.env*.local
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
-.env
+# tooling caches
+.eslintcache
+.prettiercache
 
+# misc
+.DS_Store
+Thumbs.db
+*.pem
+
+# debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# uploads（Payload のローカルメディア）
 /media
-
-# Playwright
-node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/

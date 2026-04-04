@@ -1,4 +1,14 @@
 {
+  "files.exclude": {
+    "**/.next": true,
+    "**/.pnpm-store": true,
+    "**/node_modules": true
+  },
+  "search.exclude": {
+    "**/.next": true,
+    "**/.pnpm-store": true,
+    "**/node_modules": true
+  },
   "prettier.configPath": ".prettierrc.json",
   "prettier.requireConfig": true,
   "npm.packageManager": "pnpm",
@@ -38,5 +48,6 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
     }
-  }
+  },
+  "git.ignoreLimitWarning": true
 }

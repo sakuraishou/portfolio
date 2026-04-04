@@ -1,0 +1,5 @@
+# ローカル開発用（docker compose）。起動のたびに Corepack が pnpm を取りに行かないようにビルド時に有効化する。
+# package.json の packageManager とバージョンを揃えてください。
+FROM node:24-alpine
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable && corepack prepare pnpm@10.33.0 --activate

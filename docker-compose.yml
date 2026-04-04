@@ -1,12 +1,41 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: payload
+      POSTGRES_PASSWORD: payload
+      POSTGRES_DB: payload
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U payload -d payload']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   app:
-    image: node:22-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      # Corepack の対話プロンプトでコンテナが止まって見えるのを防ぐ（フォールバック）
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
+    depends_on:
+      postgres:
+        condition: service_healthy
     stdin_open: true   # プロンプトに入力できるようにする
     tty: true
     ports:
       - '3000:3000'
     volumes:
-      - .:/app
+      # macOS Docker: delegated で VirtioFS まわりの open/stat 不具合を緩和しやすい
+      - type: bind
+        source: .
+        target: /app
+        consistency: delegated
       - /app/node_modules
       - /app/.next  # ビルドキャッシュをコンテナ内に隔離（Turbopack の ENOENT 対策）
     working_dir: /app
@@ -16,4 +45,8 @@ services:
     # 今回のトラブル対策として DNS 設定は残しておくと安心です
     dns:
       - 8.8.8.8
-    command: sh -c "npm install && npm run dev"
+    # Turbopack はバインドマウントと相性が悪く next-env.d.ts の open で errno -35 になることがあるため webpack + ポーリング
+    command: sh -c "chmod 644 next-env.d.ts 2>/dev/null || true; pnpm install && pnpm run dev:docker"
+
+volumes:
+  pgdata:
