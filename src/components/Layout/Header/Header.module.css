@@ -19,7 +19,7 @@
   position: relative;
   z-index: 100;
 
-  @include responsive(md) {
+  @media (--md) {
     width: 6rem;
     height: 6rem;
   }
@@ -35,7 +35,7 @@
     z-index: 1;
     animation: spin 30s linear infinite;
 
-    @include responsive(md) {
+    @media (--md) {
       width: 7.2rem;
       height: 7.2rem;
       animation: spin 40s linear infinite;
@@ -55,11 +55,11 @@
     content: '';
     width: 5.8rem;
     height: 5.8rem;
-    background-color: $main;
+    background-color: var(--color-main);
     border-radius: 99.9rem;
     z-index: -1;
 
-    @include responsive(md) {
+    @media (--md) {
       width: 8rem;
       height: 8rem;
     }
@@ -92,7 +92,7 @@
     transform 0.3s ease,
     opacity 0.3s ease;
 
-  @include responsive(md) {
+  @media (--md) {
     width: 8rem;
     height: 8rem;
     gap: 4.8rem;
@@ -105,7 +105,7 @@
     content: '';
     width: 65.6rem;
     height: 65.6rem;
-    background-color: $main;
+    background-color: var(--color-main);
     border-radius: 99.9rem;
     position: absolute;
     bottom: 0;
@@ -115,18 +115,11 @@
     transition: transform 0.3s ease;
     transition-delay: 0.2s;
 
-    @include responsive(md) {
+    @media (--md) {
       bottom: 0;
       left: 0;
     }
   }
-
-  // opacity: 0;
-  // pointer-events: none;
-  // transform: translateY(-10px);
-  // transition:
-  //   opacity 0.3s ease,
-  //   transform 0.3s ease;
 
   a {
     display: block;
@@ -143,15 +136,15 @@
       opacity 1s ease,
       transform 1s ease;
 
-    @include responsive(md) {
+    @media (--md) {
       font-size: 2rem;
     }
 
     &:hover {
-      color: $fontBase;
+      color: var(--color-font);
 
       &::after {
-        color: $fontBase;
+        color: var(--color-font);
         letter-spacing: 0.07em;
       }
     }
@@ -167,7 +160,7 @@
     }
 
     &::after {
-      @include quicksand;
+      @mixin quicksand;
       content: attr(data-en);
       font-size: 3.8rem;
       line-height: 0.8;
@@ -180,7 +173,7 @@
         color 0.3s ease,
         letter-spacing 0.8s ease;
 
-      @include responsive(md) {
+      @media (--md) {
         font-size: 4rem;
       }
     }
@@ -191,7 +184,7 @@
     pointer-events: auto;
     transform: scale(1);
 
-    @include responsive(md) {
+    @media (--md) {
       width: 42rem;
       height: 42rem;
       top: 0;

@@ -1,0 +1,9 @@
+/* 全 CSS 入力に global-data で注入され、postcss-custom-media が展開する */
+@custom-media --sp (max-width: 767px);
+@custom-media --md (min-width: 768px);
+@custom-media --lg (min-width: 992px);
+@custom-media --w1080 (min-width: 1080px);
+@custom-media --w1200 (min-width: 1200px);
+@custom-media --xl (min-width: 1200px);
+@custom-media --xxl (min-width: 1400px);
+@custom-media --yoko (orientation: landscape);

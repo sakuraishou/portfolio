@@ -2,7 +2,7 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import Image from 'next/image'
 import Title from '@/components/UI/Title'
-import styles from './Skills.module.scss'
+import styles from './Skills.module.css'
 import type { Media, Skill } from '@/payload-types'
 
 function getMediaUrl(icon: number | Media): string | null {

@@ -2,7 +2,7 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import Image from 'next/image'
 import Title from '@/components/UI/Title'
-import styles from './About.module.scss'
+import styles from './About.module.css'
 
 export default async function About() {
   const payloadConfig = await config

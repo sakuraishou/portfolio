@@ -1,0 +1,22 @@
+/* postcss-mixins（mixinsFiles 経由で全スタイルに読み込まれる） */
+@define-mixin center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@define-mixin hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@define-mixin dancing {
+  font-family: var(--font-dancing), cursive;
+  font-weight: 500;
+}
+
+@define-mixin quicksand {
+  font-family: var(--font-quicksand), sans-serif;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}

@@ -5,7 +5,6 @@ import FirstView from '@/components/Sections/FirstView'
 import About from '@/components/Sections/About'
 import Skills from '@/components/Sections/Skills'
 import Works from '@/components/Sections/Works'
-import './styles.scss'
 
 export default async function HomePage() {
   const headers = await getHeaders()

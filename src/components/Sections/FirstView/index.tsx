@@ -1,4 +1,4 @@
-import styles from './FirstView.module.scss'
+import styles from './FirstView.module.css'
 
 export default function FirstView() {
   return (

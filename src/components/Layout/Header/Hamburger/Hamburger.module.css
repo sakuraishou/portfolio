@@ -1,16 +1,16 @@
 .hamburger {
-  @include center;
+  @mixin center;
   flex-direction: column;
   width: 5.8rem;
   height: 5.8rem;
-  background-color: $main;
+  background-color: var(--color-main);
   border-radius: 99.9rem;
   cursor: pointer;
   position: relative;
   z-index: 100;
   transition: background-color 0.3s ease;
 
-  @include responsive(md) {
+  @media (--md) {
     width: 8rem;
     height: 8rem;
   }
@@ -19,7 +19,7 @@
     background-color: #fff;
 
     .line {
-      background-color: $main;
+      background-color: var(--color-main);
       &:nth-child(1) {
         transform: translateX(-50%) translateY(-50%) rotate(45deg);
       }
@@ -48,7 +48,7 @@
     background-color 0.3s ease;
   transform-origin: center;
 
-  @include responsive(md) {
+  @media (--md) {
     width: 3rem;
     height: 0.3rem;
   }
@@ -63,7 +63,7 @@
   &:nth-child(1) {
     transform: translateX(-50%) translateY(-0.9rem) rotate(0);
 
-    @include responsive(md) {
+    @media (--md) {
       transform: translateX(-50%) translateY(-1.1rem) rotate(0);
     }
   }
@@ -71,7 +71,7 @@
   &:nth-child(3) {
     transform: translateX(-50%) translateY(0.7rem) rotate(0);
 
-    @include responsive(md) {
+    @media (--md) {
       transform: translateX(-50%) translateY(0.8rem) rotate(0);
     }
   }

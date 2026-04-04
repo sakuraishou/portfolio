@@ -1,5 +1,5 @@
 'use client'
-import styles from './Hamburger.module.scss'
+import styles from './Hamburger.module.css'
 
 type Props = {
   isOpen: boolean

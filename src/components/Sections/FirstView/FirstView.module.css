@@ -1,5 +1,3 @@
-@use '@/app/(frontend)/_styles/variables' as *;
-
 .firstView {
   width: 100%;
   height: 100svh;
@@ -7,7 +5,7 @@
   z-index: 1;
   overflow: hidden;
 
-  @include responsive(lg) {
+  @media (--lg) {
     margin: 0 -0.1rem;
   }
 
@@ -20,7 +18,7 @@
   &::before {
     width: 100%;
     height: 100%;
-    background-color: $bg;
+    background-color: var(--color-bg);
     top: 0;
     left: 0;
     z-index: -2;
@@ -29,13 +27,13 @@
   &::after {
     width: 260rem;
     aspect-ratio: 1;
-    background-color: $accent;
+    background-color: var(--color-accent);
     border-radius: 50%;
     top: -25rem;
     left: -10rem;
     z-index: -1;
 
-    @include responsive(lg) {
+    @media (--lg) {
       width: 165rem;
       top: 50%;
       left: 50%;
@@ -45,28 +43,26 @@
 
   &__wrap {
     height: 100%;
-    @include center;
+    @mixin center;
     flex-direction: column;
   }
 }
 
 .inner {
-  @include responsive(lg) {
-  }
 }
 
 .title,
 .sub {
-  color: $fontBase;
+  color: var(--color-font);
 }
 
 .title {
   font-size: 4rem;
   line-height: 1.1;
-  font-family: $font-sub-script;
+  font-family: var(--font-sub-script);
   font-weight: 500;
 
-  @include responsive(lg) {
+  @media (--lg) {
     font-size: 9rem;
     line-height: 1;
     text-align: center;
@@ -75,7 +71,7 @@
   .big {
     font-size: 6.4rem;
 
-    @include responsive(lg) {
+    @media (--lg) {
       font-size: 9rem;
     }
   }
@@ -85,7 +81,7 @@
   font-size: 2rem;
   margin: 2rem 0 0;
 
-  @include responsive(lg) {
+  @media (--lg) {
     margin: 4rem 0 0;
   }
 }

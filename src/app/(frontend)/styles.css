@@ -1,10 +1,21 @@
-@use 'ress';
+@import 'ress';
+
+:root {
+  --color-main: #f78c00;
+  --color-bg: #ffeedf;
+  --color-bg2: #e4e2e1;
+  --color-font: #5e3100;
+  --color-accent: #ffa836;
+  --font-main: var(--font-zen-kaku), sans-serif;
+  --font-sub-script: var(--font-dancing), cursive;
+  --font-sub-modern: var(--font-quicksand), sans-serif;
+}
 
 html {
-  font-size: pxtovw(10);
+  font-size: calc(1vw * 10 / 375 * 100);
   height: -webkit-fill-available;
 
-  @include responsive(md) {
+  @media (--md) {
     font-size: 10px;
   }
 }
@@ -14,15 +25,10 @@ body {
   font-size: 1.6rem;
   font-feature-settings: 'palt' 1;
   line-height: 1.5;
-  font-family: $font-main;
+  font-family: var(--font-main);
   font-weight: 400;
-  color: $fontBase;
-  // -webkit-font-smoothing: antialiased;
-  // -moz-osx-font-smoothing: grayscale;
+  color: var(--color-font);
   font-style: normal;
-
-  @include responsive(md) {
-  }
 }
 
 img {
@@ -62,20 +68,20 @@ picture {
 
 .sp {
   display: block;
-  @include responsive(md) {
+  @media (--md) {
     display: none;
   }
 
   &-inline {
     display: inline;
-    @include responsive(md) {
+    @media (--md) {
       display: none;
     }
   }
 
   &-flax {
     display: none;
-    @include responsive(md) {
+    @media (--md) {
       display: flex;
     }
   }
@@ -83,19 +89,19 @@ picture {
 
 .pc {
   display: none;
-  @include responsive(md) {
+  @media (--md) {
     display: block;
   }
 
   &-inline {
     display: none;
-    @include responsive(md) {
+    @media (--md) {
       display: inline;
     }
   }
   &-flax {
     display: none;
-    @include responsive(md) {
+    @media (--md) {
       display: flex;
     }
   }
@@ -112,7 +118,7 @@ select {
 .wrap {
   padding: 8rem 3.6rem;
 
-  @include responsive(lg) {
+  @media (--lg) {
     height: 64rem;
     padding: 0;
     margin: auto 0;
@@ -121,24 +127,5 @@ select {
   &.flex {
     display: flex;
     flex-direction: column;
-  }
-}
-
-/* PC横スクロールレイアウト（992px以上） */
-@include responsive(lg) {
-  main {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow: hidden;
-
-    > section {
-      flex: 0 0 100vw;
-      width: 100vw;
-      min-width: 100vw;
-      min-height: 100vh;
-      @include center;
-      position: relative;
-      z-index: 4;
-    }
   }
 }

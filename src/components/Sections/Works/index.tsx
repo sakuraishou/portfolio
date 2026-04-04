@@ -2,7 +2,7 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import Image from 'next/image'
 import Title from '@/components/UI/Title'
-import styles from './Works.module.scss'
+import styles from './Works.module.css'
 import type { Media } from '@/payload-types'
 
 function getMediaUrl(media: (number | null) | Media): string | null {
