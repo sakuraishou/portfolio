@@ -1,7 +1,6 @@
 import { Zen_Kaku_Gothic_New, Dancing_Script, Quicksand } from 'next/font/google'
 import './styles.scss'
 import Header from '@/components/Layout/Header'
-import Scroll from '@/components/Layout/Scroll'
 import './styles.scss'
 
 const zenKaku = Zen_Kaku_Gothic_New({
@@ -40,7 +39,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     >
       <body>
         <Header />
-        <Scroll>{children}</Scroll>
+        {children}
       </body>
     </html>
   )

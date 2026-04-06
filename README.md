@@ -68,3 +68,27 @@ src/
 ## 管理画面
 
 `http://localhost:3000/admin` から Payload の管理画面にアクセスできます。
+
+## 詰まった時の対処（Docker / npm）
+
+`sharp` のロード失敗や `npm warn tar TAR_ENTRY_ERROR ENOENT` が出るときは、依存展開が壊れている可能性が高いです。以下を順に実行してください。
+
+```bash
+docker compose down -v --remove-orphans
+docker volume prune -f
+docker builder prune -f
+rm -rf node_modules .next
+docker compose up --build
+```
+
+### よくある症状
+
+- `Failed to load external module sharp`
+- `TAR_ENTRY_ERROR ENOENT`
+- `Cannot find module '../server/lib/start-server'`
+- `Next.js package not found`
+
+### 補足
+
+- コンテナイメージは `bookworm-slim`（glibc）を使うと `sharp` で詰まりにくいです。
+- 依存導入は `npm ci` ベースで行うと再現性が高くなります。

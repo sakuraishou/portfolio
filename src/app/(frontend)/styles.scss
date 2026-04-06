@@ -126,10 +126,13 @@ select {
 
 /* PC横スクロールレイアウト（992px以上） */
 @include responsive(lg) {
-  main {
+  .scroll-root {
     display: flex;
     flex-wrap: nowrap;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
 
     > section {
       flex: 0 0 100vw;
@@ -139,6 +142,7 @@ select {
       @include center;
       position: relative;
       z-index: 4;
+      scroll-snap-align: start;
     }
   }
 }

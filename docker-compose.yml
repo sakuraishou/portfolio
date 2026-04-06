@@ -1,6 +1,7 @@
 services:
   app:
-    image: node:22-alpine
+    # Alpine (musl) では sharp のネイティブバイナリが合わず落ちることがあるため glibc 系を使う
+    image: node:24-bookworm-slim
     stdin_open: true   # プロンプトに入力できるようにする
     tty: true
     ports:
@@ -16,4 +17,4 @@ services:
     # 今回のトラブル対策として DNS 設定は残しておくと安心です
     dns:
       - 8.8.8.8
-    command: sh -c "npm install && npm run dev"
+    command: sh -c "npm cache clean --force && npx -y npm@11.12.1 ci --include=optional --no-audit && npm run dev"
