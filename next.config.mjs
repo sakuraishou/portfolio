@@ -4,6 +4,10 @@ import { withPayload } from '@payloadcms/next/withPayload'
 const nextConfig = {
   // Your Next.js config here
   output: 'standalone',
+  /* Payload / db-postgres が参照する fast-copy の dist が standalone に取りこぼされる場合の保険 */
+  outputFileTracingIncludes: {
+    '**/*': ['./node_modules/fast-copy/**/*'],
+  },
 
   //全SCSS ファイルの先頭に自動で追加するコード
   sassOptions: {

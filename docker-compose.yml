@@ -6,6 +6,8 @@ services:
     tty: true
     ports:
       - '3000:3000'
+    # node_modules は匿名ボリュームのため、壊れた依存が残ると `fast-copy/dist` 不足で Payload が 500 になる。
+    # そのときは: docker compose down -v してボリュームを捨ててから再度起動する。
     volumes:
       - .:/app
       - /app/node_modules

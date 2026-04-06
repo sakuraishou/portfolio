@@ -1,22 +1,27 @@
 .hamburger {
   @include center;
   flex-direction: column;
-  width: 5.8rem;
-  height: 5.8rem;
-  background-color: $main;
-  border-radius: 99.9rem;
+  width: 3.5rem;
+  height: 4.4rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.8rem;
   cursor: pointer;
+  pointer-events: auto;
   position: relative;
   z-index: 100;
-  transition: background-color 0.3s ease;
+  transition: transform 0.2s ease;
 
   @include responsive(md) {
-    width: 8rem;
-    height: 8rem;
+    display: none;
+  }
+
+  &:active {
+    transform: scale(0.97);
   }
 
   &.open {
-    background-color: #fff;
+    background: transparent;
 
     .line {
       background-color: $main;
@@ -38,20 +43,15 @@
 
 .line {
   display: block;
-  width: 2.6rem;
-  height: 0.2rem;
-  background: #fff;
+  width: 100%;
+  height: 0.3rem;
+  background: $main;
   border-radius: 99.9rem;
   transition:
     transform 0.3s ease,
     opacity 0.3s ease,
     background-color 0.3s ease;
   transform-origin: center;
-
-  @include responsive(md) {
-    width: 3rem;
-    height: 0.3rem;
-  }
 
   &:nth-child(1),
   &:nth-child(3) {
@@ -61,18 +61,10 @@
   }
 
   &:nth-child(1) {
-    transform: translateX(-50%) translateY(-0.9rem) rotate(0);
-
-    @include responsive(md) {
-      transform: translateX(-50%) translateY(-1.1rem) rotate(0);
-    }
+    transform: translateX(-50%) translateY(-1.3rem) rotate(0);
   }
 
   &:nth-child(3) {
-    transform: translateX(-50%) translateY(0.7rem) rotate(0);
-
-    @include responsive(md) {
-      transform: translateX(-50%) translateY(0.8rem) rotate(0);
-    }
+    transform: translateX(-50%) translateY(1rem) rotate(0);
   }
 }

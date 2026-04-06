@@ -20,6 +20,12 @@ export default function FirstView() {
             大切に実装するエンジニア
           </p>
         </div>
+        <a href="#about" className={styles.scrollCue} aria-label="Aboutセクションへスクロール">
+          <span className={styles.scrollText}>SCROLL</span>
+          <span className={styles.scrollMouse} aria-hidden>
+            <span className={styles.scrollDot} />
+          </span>
+        </a>
       </div>
     </section>
   )

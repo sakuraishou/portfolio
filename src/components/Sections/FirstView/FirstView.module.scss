@@ -2,44 +2,32 @@
 
 .firstView {
   width: 100%;
-  height: 100svh;
+  height: 100dvh;
+  padding: 0;
   position: relative;
   z-index: 1;
   overflow: hidden;
-
-  @include responsive(lg) {
-    margin: 0 -0.1rem;
-  }
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-  }
+  background: linear-gradient(180deg, #fffbf6 0%, #fff7ee 100%);
 
   &::before {
-    width: 100%;
-    height: 100%;
-    background-color: $bg;
-    top: 0;
-    left: 0;
-    z-index: -2;
-  }
+    content: '';
+    position: absolute;
+    z-index: 0;
+    width: min(70vmin, 42rem);
+    height: min(64vmin, 38rem);
+    top: 50%;
+    left: 50%;
+    border: 0.12rem solid rgba(255, 255, 255, 0.35);
+    box-shadow:
+      0 1.2rem 3.2rem rgba(94, 49, 0, 0.18),
+      inset 0 0 0 0.1rem rgba(255, 255, 255, 0.12);
+    background: linear-gradient(152deg, $main 0%, $accent 100%);
+    pointer-events: none;
+    animation: edgeMorph 30s ease-in-out infinite alternate;
 
-  &::after {
-    width: 260rem;
-    aspect-ratio: 1;
-    background-color: $accent;
-    border-radius: 50%;
-    top: -25rem;
-    left: -10rem;
-    z-index: -1;
-
-    @include responsive(lg) {
-      width: 165rem;
-      top: 50%;
-      left: 50%;
-      transform: translateY(-50%);
+    @include responsive(md) {
+      width: min(58vmin, 50rem);
+      height: min(52vmin, 46rem);
     }
   }
 
@@ -47,11 +35,19 @@
     height: 100%;
     @include center;
     flex-direction: column;
+    position: relative;
+    z-index: 1;
   }
 }
 
 .inner {
-  @include responsive(lg) {
+  position: relative;
+  padding: 2.4rem 2rem;
+  animation: fadeUp 0.9s ease-out both;
+  border-radius: 1.6rem;
+
+  @include responsive(md) {
+    padding: 4rem 5rem;
   }
 }
 
@@ -66,7 +62,7 @@
   font-family: $font-sub-script;
   font-weight: 500;
 
-  @include responsive(lg) {
+  @include responsive(md) {
     font-size: 9rem;
     line-height: 1;
     text-align: center;
@@ -75,7 +71,7 @@
   .big {
     font-size: 6.4rem;
 
-    @include responsive(lg) {
+    @include responsive(md) {
       font-size: 9rem;
     }
   }
@@ -84,8 +80,109 @@
 .sub {
   font-size: 2rem;
   margin: 2rem 0 0;
+  position: relative;
 
-  @include responsive(lg) {
+  @include responsive(md) {
     margin: 4rem 0 0;
+  }
+}
+
+.scrollCue {
+  @include quicksand;
+  position: absolute;
+  left: 50%;
+  bottom: 2.4rem;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  color: $main;
+  letter-spacing: 0.14em;
+  pointer-events: auto;
+}
+
+.scrollText {
+  font-size: 1rem;
+
+  @include responsive(md) {
+    font-size: 1.4rem;
+  }
+}
+
+.scrollMouse {
+  width: 2rem;
+  height: 3.2rem;
+  border: 0.14rem solid $main;
+  border-radius: 99.9rem;
+  position: relative;
+}
+
+.scrollDot {
+  width: 0.4rem;
+  height: 0.7rem;
+  border-radius: 99.9rem;
+  background-color: $main;
+  position: absolute;
+  left: 50%;
+  top: 0.6rem;
+  transform: translateX(-50%);
+  animation: scrollDot 1.8s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(1.2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes edgeMorph {
+  0% {
+    border-radius: 58% 42% 38% 62% / 62% 38% 58% 42%;
+    transform: translate3d(-50%, -50%, 0) translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  18% {
+    border-radius: 40% 60% 55% 45% / 48% 42% 58% 52%;
+    transform: translate3d(-50%, -50%, 0) translate3d(2.4rem, -1.8rem, 0) scale(1.12) rotate(0.9deg);
+  }
+  38% {
+    border-radius: 62% 38% 44% 56% / 54% 58% 42% 46%;
+    transform: translate3d(-50%, -50%, 0) translate3d(-2.2rem, 1.6rem, 0) scale(0.86)
+      rotate(-0.75deg);
+  }
+  58% {
+    border-radius: 46% 54% 62% 38% / 40% 52% 48% 60%;
+    transform: translate3d(-50%, -50%, 0) translate3d(1.6rem, 2rem, 0) scale(1.08) rotate(0.65deg);
+  }
+  78% {
+    border-radius: 54% 46% 48% 52% / 62% 44% 56% 38%;
+    transform: translate3d(-50%, -50%, 0) translate3d(-1.8rem, -1.2rem, 0) scale(0.9)
+      rotate(-0.55deg);
+  }
+  100% {
+    border-radius: 52% 48% 48% 52% / 48% 52% 52% 48%;
+    transform: translate3d(-50%, -50%, 0) translate3d(0.4rem, 0.2rem, 0) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes scrollDot {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(1.1rem);
   }
 }

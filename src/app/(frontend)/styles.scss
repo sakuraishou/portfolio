@@ -20,9 +20,6 @@ body {
   // -webkit-font-smoothing: antialiased;
   // -moz-osx-font-smoothing: grayscale;
   font-style: normal;
-
-  @include responsive(md) {
-  }
 }
 
 img {
@@ -110,39 +107,20 @@ select {
 }
 
 .wrap {
-  padding: 8rem 3.6rem;
+  width: 100%;
+  max-width: 120rem;
+  padding: 0 3.6rem;
+  margin: 0 auto;
 
-  @include responsive(lg) {
-    height: 64rem;
+  @include responsive(md) {
     padding: 0;
-    margin: auto 0;
-  }
-
-  &.flex {
-    display: flex;
-    flex-direction: column;
   }
 }
 
-/* PC横スクロールレイアウト（992px以上） */
-@include responsive(lg) {
-  .scroll-root {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
+section {
+  padding: 8rem 0;
 
-    > section {
-      flex: 0 0 100vw;
-      width: 100vw;
-      min-width: 100vw;
-      min-height: 100vh;
-      @include center;
-      position: relative;
-      z-index: 4;
-      scroll-snap-align: start;
-    }
+  @include responsive(md) {
+    padding: 16rem 0;
   }
 }

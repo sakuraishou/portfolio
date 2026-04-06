@@ -3,7 +3,7 @@
 import styles from './Header.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { type CSSProperties, useState } from 'react'
 import HamburgerButton from './Hamburger'
 
 export default function Header() {
@@ -21,16 +21,26 @@ export default function Header() {
       <Link className={styles.logo} href="/">
         <Image src="/assets/header/logo.png" alt="Logo" width={100} height={100} />
       </Link>
-      <HamburgerButton isOpen={isMenuOpen} onClick={() => setIsMenuOpen((prev) => !prev)} />
-      <nav className={`${styles.nav} ${isMenuOpen ? styles.open : ''}`}>
-        {NAV_ITEMS.map((item) => (
+      <HamburgerButton
+        isOpen={isMenuOpen}
+        onClick={() => setIsMenuOpen((prev) => !prev)}
+        controlsId="global-navigation"
+      />
+      <nav className={`${styles.nav} ${isMenuOpen ? styles.open : ''}`} id="global-navigation">
+        {NAV_ITEMS.map((item, index) => (
           <Link
             key={item.href}
             href={item.href}
             data-en={item.en}
+            className={styles.navLink}
+            style={{ '--delay': `${index * 80}ms` } as CSSProperties}
             onClick={() => setIsMenuOpen(false)}
           >
-            {item.label}
+            <span className={styles.navIndex}>{String(index + 1).padStart(2, '0')}</span>
+            <span className={styles.navText}>
+              <span className={styles.navLabel}>{item.label}</span>
+              <span className={styles.navEn}>{item.en}</span>
+            </span>
           </Link>
         ))}
       </nav>

@@ -1,7 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@/payload.config'
-import Image from 'next/image'
 import Title from '@/components/UI/Title'
+import SkillListItem from './SkillListItem'
 import styles from './Skills.module.scss'
 import type { Media, Skill } from '@/payload-types'
 
@@ -29,23 +29,18 @@ type CategoryWithSkills = { categoryId: number | 'none'; categoryName: string; s
 
 function SkillItem({ skill }: { skill: Skill }) {
   const iconUrl = getMediaUrl(skill.icon)
+  const isStudying = Boolean(skill.studying)
+  const iconAlt =
+    typeof skill.icon === 'object' ? (skill.icon.alt ?? skill.name) : skill.name
+
   return (
-    <li className={styles.skillsList__item}>
-      {iconUrl && (
-        <div className={styles.skillIcon}>
-          <Image
-            src={iconUrl}
-            alt={typeof skill.icon === 'object' ? skill.icon.alt : skill.name}
-            width={64}
-            height={64}
-          />
-        </div>
-      )}
-      <div className={styles.skillMeta}>
-        <span className={styles.skillName}>{skill.name}</span>
-        {skill.description && <p className={styles.skillDescription}>{skill.description}</p>}
-      </div>
-    </li>
+    <SkillListItem
+      iconUrl={iconUrl}
+      iconAlt={iconAlt}
+      isStudying={isStudying}
+      name={skill.name}
+      description={skill.description}
+    />
   )
 }
 
