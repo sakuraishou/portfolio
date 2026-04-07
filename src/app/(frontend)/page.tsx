@@ -5,6 +5,7 @@ import FirstView from '@/components/Sections/FirstView'
 import About from '@/components/Sections/About'
 import Skills from '@/components/Sections/Skills'
 import Works from '@/components/Sections/Works'
+import Contact from '@/components/Sections/Contact'
 import './styles.scss'
 
 export default async function HomePage() {
@@ -19,7 +20,7 @@ export default async function HomePage() {
       <About />
       <Skills />
       <Works />
-      <section>ポートフォリオ４</section>
+      <Contact />
     </>
   )
 }

@@ -1,7 +1,7 @@
 services:
   app:
     # Alpine (musl) では sharp のネイティブバイナリが合わず落ちることがあるため glibc 系を使う
-    image: node:24-bookworm-slim
+    image: node:22-bookworm-slim
     stdin_open: true   # プロンプトに入力できるようにする
     tty: true
     ports:
@@ -10,8 +10,11 @@ services:
     # そのときは: docker compose down -v してボリュームを捨ててから再度起動する。
     volumes:
       - .:/app
+      # Upload 実ファイルをホストへ永続化（DB の media レコードと実体の不一致を防ぐ）
+      - ./media:/app/media
       - /app/node_modules
-      # `devsafe` は rm -rf .next を行うため、.next を volume にすると削除できず詰まる
+      # .next を匿名 volume へ分離して、ホストFS同期起因の壊れたキャッシュを回避
+      - /app/.next
     working_dir: /app
     # 大事な情報は .env ファイルから読み込むように戻します
     env_file:
@@ -19,7 +22,5 @@ services:
     # 今回のトラブル対策として DNS 設定は残しておくと安心です
     dns:
       - 8.8.8.8
-    # 開発時は「別マシン/別CPUでも毎回最初に動く」ことを優先する。
-    # - package-lock.json は OS/CPU の差で内容が揺れやすく、交互に作業すると sharp 等のネイティブ依存でコケやすい
-    # - Turbopack + next/font/google も環境によって落ちることがある（まずは非turboで安定化）
-    command: sh -c "npm cache clean --force && npx -y npm@11.12.1 install --include=optional --no-audit --no-fund --package-lock=false && npm run devsafe"
+    # まず Turbopack で起動し、失敗した場合のみ non-turbo へフォールバック
+    command: sh -c "npm cache clean --force && npx -y npm@11.12.1 ci --include=optional --no-audit && (npm run dev || npm run devsafe)"

@@ -39,7 +39,7 @@ $breakpoint-sp: 768px;
   @return calc(1vw * $num / $width * 100);
 }
 
-@function pc-pxtovw($num, $width: 1200) {
+@function pc-pxtovw($num, $width: 1300) {
   @return calc(1vw * $num / $width * 100);
 }
 
@@ -65,7 +65,7 @@ $breakpoints: (
     min-width: 1200px,
   ),
   'xl': (
-    min-width: 1200px,
+    min-width: 1300px,
   ),
   'xxl': (
     min-width: 1400px,

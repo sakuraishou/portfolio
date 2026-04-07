@@ -5,6 +5,9 @@ html {
   height: -webkit-fill-available;
 
   @include responsive(md) {
+    font-size: pc-pxtovw(10);
+  }
+  @include responsive(xl) {
     font-size: 10px;
   }
 }

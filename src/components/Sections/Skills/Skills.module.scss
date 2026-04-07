@@ -41,23 +41,27 @@
 }
 
 .skillsList {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
   list-style: none;
   margin: 2.4rem 0 0;
 
   @include responsive(md) {
-    grid-template-columns: repeat(20, 1fr);
-    gap: 3.2rem;
+    gap: 3rem;
     margin: 2rem 0 0;
   }
 
   &__item {
     @include center;
+    width: calc((100% - 4rem) / 3);
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
+
+    @include responsive(md) {
+      width: calc((100% - (3rem * 9)) / 10);
+    }
   }
 }
 
@@ -67,11 +71,6 @@
   @include responsive(md) {
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-
-    .skillName {
-      border-bottom: 0.1rem dashed rgba(94, 49, 0, 0.35);
-      padding-bottom: 0.1rem;
-    }
   }
 }
 
@@ -141,7 +140,6 @@
 
   @include responsive(md) {
     font-size: 1.6rem;
-    margin: -0.4rem 0 0;
   }
 }
 
@@ -173,7 +171,7 @@
     display: block;
     position: absolute;
     left: 50%;
-    top: calc(100% - 0.2rem);
+    top: calc(100% + 1rem);
     z-index: 20;
     width: min(24rem, 85vw);
     padding: 1rem 1.2rem;

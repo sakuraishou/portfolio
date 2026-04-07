@@ -1,11 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useId, useState } from 'react'
-import type {
-  KeyboardEvent as ReactKeyboardEvent,
-  MouseEvent,
-  SyntheticEvent,
-} from 'react'
+import type { KeyboardEvent as ReactKeyboardEvent, MouseEvent, SyntheticEvent } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import styles from './Skills.module.scss'

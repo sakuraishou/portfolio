@@ -3,12 +3,12 @@
 
 .footer {
   width: 100%;
-  padding: 5.6rem 0 3.2rem;
+  padding: 4.8rem 0 4rem;
   background: linear-gradient(180deg, rgba(255, 251, 246, 0) 0%, rgba(255, 247, 238, 1) 100%);
   border-top: 0.1rem solid rgba($fontBase, 0.12);
 
   @include responsive(md) {
-    padding: 7.2rem 0 3.2rem;
+    padding: 7.2rem 0 5.4rem;
   }
 }
 
@@ -22,7 +22,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 3.2rem;
+    flex-wrap: wrap;
+    gap: 2rem 3.2rem;
   }
 }
 
@@ -111,16 +112,16 @@
 
 .navList {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.2rem 2.4rem;
   margin: 0;
   padding: 0;
 
   @include responsive(md) {
-    display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
     gap: 1.6rem 2.4rem;
   }
 }
@@ -132,23 +133,45 @@
 .navLink {
   @include quicksand;
   display: inline-flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
-  flex-direction: column;
-  gap: 0.2rem;
-  width: 100%;
-  min-height: 4.4rem;
-  padding: 0.8rem 1.2rem;
-  border-radius: 1.2rem;
-  background-color: rgba($bg, 0.55);
+  flex-direction: row;
+  gap: 1rem;
+  width: auto;
+  min-height: 0;
+  padding: 0.55rem 0.3rem;
+  border-radius: 0.8rem;
+  background-color: transparent;
   color: $fontBase;
   text-decoration: none;
-  border: 0.1rem solid rgba($fontBase, 0.08);
+  border: none;
+  position: relative;
   transition:
     transform 0.2s ease,
     background-color 0.2s ease,
-    border-color 0.2s ease,
     box-shadow 0.2s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0.2rem;
+    right: 0.2rem;
+    bottom: -0.2rem;
+    height: 0.2rem;
+    border-radius: 99.9rem;
+    background: linear-gradient(
+      90deg,
+      rgba($main, 0) 0%,
+      rgba($main, 0.75) 50%,
+      rgba($main, 0) 100%
+    );
+    transform: scaleX(0.35);
+    transform-origin: center;
+    opacity: 0;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
 
   @include responsive(md) {
     width: auto;
@@ -160,14 +183,17 @@
     flex-wrap: nowrap;
     white-space: nowrap;
     background-color: transparent;
-    border-color: transparent;
   }
 
   &:hover {
     transform: translateY(-0.1rem);
-    background-color: rgba($bg, 0.95);
-    border-color: rgba($main, 0.3);
-    box-shadow: 0 1rem 2.4rem rgba($fontBase, 0.12);
+    background-color: rgba($bg, 0.38);
+    box-shadow: 0 0.8rem 1.8rem rgba($fontBase, 0.08);
+
+    &::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
 
     @include responsive(md) {
       background-color: rgba($bg, 0.7);
@@ -182,15 +208,19 @@
 
 .navJa {
   display: inline-block;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   line-height: 1.2;
+
+  @include responsive(md) {
+    font-size: 1.6rem;
+  }
 }
 
 .navEn {
   display: inline-block;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   letter-spacing: 0.14em;
   color: rgba($fontBase, 0.7);
   line-height: 1.1;
@@ -208,10 +238,9 @@
   font-size: 1.2rem;
   color: rgba($fontBase, 0.85);
   letter-spacing: 0.06em;
+  white-space: nowrap;
 
   @include responsive(md) {
-    width: auto;
-    text-align: right;
+    text-align: center;
   }
 }
-

@@ -22,8 +22,7 @@ export default function Footer() {
               <Image src="/assets/header/logo.png" alt="" width={60} height={60} priority={false} />
             </span>
             <span className={styles.siteName}>
-              桜井 翔
-              <span className={styles.siteSub}>Sho Sakurai Portfolio</span>
+              桜井 翔<span className={styles.siteSub}>Sho Sakurai Portfolio</span>
             </span>
           </Link>
         </div>
@@ -48,4 +47,3 @@ export default function Footer() {
     </footer>
   )
 }
-
