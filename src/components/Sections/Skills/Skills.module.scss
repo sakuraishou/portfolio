@@ -102,16 +102,15 @@
 }
 
 .skillLearning {
+  width: 4rem;
   position: absolute;
   right: -0.5rem;
   top: -0.5rem;
-  width: 4rem;
 
   @include responsive(md) {
-    width: 3.6rem;
-    height: 3.6rem;
-    right: -0.4rem;
-    bottom: -0.4rem;
+    width: 4.8rem;
+    bottom: 0;
+    right: -1.4rem;
   }
 
   img {

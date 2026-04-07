@@ -177,8 +177,18 @@ export interface Project {
   id: number;
   title: string;
   mainImage?: (number | null) | Media;
+  mobileImage?: (number | null) | Media;
   url?: string | null;
   description?: string | null;
+  scope?: ('design' | 'development' | 'cms' | 'maintenance')[] | null;
+  techStack?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  productionDate?: string | null;
+  productionEndDate?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -365,8 +375,18 @@ export interface MediaSelect<T extends boolean = true> {
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   mainImage?: T;
+  mobileImage?: T;
   url?: T;
   description?: T;
+  scope?: T;
+  techStack?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  productionDate?: T;
+  productionEndDate?: T;
   updatedAt?: T;
   createdAt?: T;
 }
