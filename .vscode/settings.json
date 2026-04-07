@@ -1,7 +1,7 @@
 {
   "prettier.configPath": ".prettierrc.json",
   "prettier.requireConfig": true,
-  "npm.packageManager": "pnpm",
+  "npm.packageManager": "npm",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -33,6 +33,9 @@
     "editor.formatOnSave": true
   },
   "editor.formatOnSaveMode": "file",
+  "files.exclude": {
+    "**/.next": true
+  },
   "typescript.tsdk": "node_modules/typescript/lib",
   "[javascript][typescript][typescriptreact]": {
     "editor.codeActionsOnSave": {
