@@ -1,7 +1,7 @@
 import { Zen_Kaku_Gothic_New, Dancing_Script, Quicksand } from 'next/font/google'
 import './styles.scss'
 import Header from '@/components/Layout/Header'
-import './styles.scss'
+import Footer from '@/components/Layout/Footer'
 
 const zenKaku = Zen_Kaku_Gothic_New({
   subsets: ['latin'],
@@ -39,7 +39,8 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     >
       <body>
         <Header />
-        {children}
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   )

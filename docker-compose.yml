@@ -11,7 +11,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-      - /app/.next  # ビルドキャッシュをコンテナ内に隔離（Turbopack の ENOENT 対策）
+      # `devsafe` は rm -rf .next を行うため、.next を volume にすると削除できず詰まる
     working_dir: /app
     # 大事な情報は .env ファイルから読み込むように戻します
     env_file:
@@ -19,4 +19,7 @@ services:
     # 今回のトラブル対策として DNS 設定は残しておくと安心です
     dns:
       - 8.8.8.8
-    command: sh -c "npm cache clean --force && npx -y npm@11.12.1 ci --include=optional --no-audit && npm run dev"
+    # 開発時は「別マシン/別CPUでも毎回最初に動く」ことを優先する。
+    # - package-lock.json は OS/CPU の差で内容が揺れやすく、交互に作業すると sharp 等のネイティブ依存でコケやすい
+    # - Turbopack + next/font/google も環境によって落ちることがある（まずは非turboで安定化）
+    command: sh -c "npm cache clean --force && npx -y npm@11.12.1 install --include=optional --no-audit --no-fund --package-lock=false && npm run devsafe"
