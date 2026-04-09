@@ -1,0 +1,14 @@
+services:
+  app:
+    # Dockerfileを使って本番用の軽量ビルドを行う
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      # Uploadした画像などの実ファイルだけはホスト（VPS側）と同期して消えないようにする
+      - ./media:/app/media
+    env_file:
+      - .env
+    restart: always
