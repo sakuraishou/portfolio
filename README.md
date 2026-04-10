@@ -40,6 +40,24 @@ docker-compose up
 
 初回アクセス時に管理者ユーザーの作成画面が表示されます。
 
+### media ディレクトリを VPS から同期する
+
+`docker-compose.yml` には、VPS 上の `media` を同期する `sync-media` サービスを追加しています。
+必要なときだけ `profile` を有効にして実行してください。
+
+```bash
+# media だけ同期
+docker compose --profile sync run --rm sync-media
+
+# 通常起動（同期なし）
+docker compose up --build
+```
+
+補足:
+
+- `vps` は `~/.ssh/config` に定義した Host 名を使います。
+- SSH 鍵は `${HOME}/.ssh` をコンテナへ read-only でマウントしています。
+
 ### 主なコマンド（コンテナ内で実行）
 
 | コマンド | 説明 |
