@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    'project-scopes': ProjectScope;
     projects: Project;
     'skill-categories': SkillCategory;
     skills: Skill;
@@ -82,6 +83,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'project-scopes': ProjectScopesSelect<false> | ProjectScopesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     'skill-categories': SkillCategoriesSelect<false> | SkillCategoriesSelect<true>;
     skills: SkillsSelect<false> | SkillsSelect<true>;
@@ -171,6 +173,20 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "project-scopes".
+ */
+export interface ProjectScope {
+  id: number;
+  name: string;
+  /**
+   * 数値が小さいほど前に表示されます
+   */
+  sort_order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
@@ -180,7 +196,10 @@ export interface Project {
   mobileImage?: (number | null) | Media;
   url?: string | null;
   description?: string | null;
-  scope?: ('design' | 'development' | 'cms' | 'maintenance')[] | null;
+  /**
+   * 管理画面「Project Scopes」で選択肢の数と並び順を管理できます
+   */
+  scope?: (number | ProjectScope)[] | null;
   techStack?:
     | {
         name: string;
@@ -269,6 +288,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'project-scopes';
+        value: number | ProjectScope;
       } | null)
     | ({
         relationTo: 'projects';
@@ -367,6 +390,16 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "project-scopes_select".
+ */
+export interface ProjectScopesSelect<T extends boolean = true> {
+  name?: T;
+  sort_order?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

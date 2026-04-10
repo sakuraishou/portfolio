@@ -8,6 +8,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Projects } from './collections/Projects'
+import { ProjectScopes } from './collections/ProjectScopes'
 import { SkillCategories } from './collections/SkillCategories'
 import { Skills } from './collections/Skills'
 import { Tags } from './collections/Tags'
@@ -26,7 +27,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Projects, SkillCategories, Skills, Tags],
+  collections: [Users, Media, ProjectScopes, Projects, SkillCategories, Skills, Tags],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

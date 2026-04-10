@@ -7,6 +7,7 @@ export default function FirstView() {
         <div className={styles.inner}>
           <h1 className={styles.title}>
             <span className={styles.big}>Code</span>
+            <span className={styles.pc}> </span>
             <br className="sp" />
             With Heart.
           </h1>

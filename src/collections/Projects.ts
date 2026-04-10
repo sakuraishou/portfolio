@@ -38,15 +38,13 @@ export const Projects: CollectionConfig = {
     },
     {
       name: 'scope',
-      type: 'select',
+      type: 'relationship',
+      relationTo: 'project-scopes',
       hasMany: true,
       label: '担当範囲',
-      options: [
-        { label: 'デザイン', value: 'design' },
-        { label: '実装', value: 'development' },
-        { label: 'CMS構築', value: 'cms' },
-        { label: '運用・保守', value: 'maintenance' },
-      ],
+      admin: {
+        description: '管理画面「Project Scopes」で選択肢の数と並び順を管理できます',
+      },
     },
     {
       name: 'techStack',

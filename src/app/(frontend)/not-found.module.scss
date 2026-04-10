@@ -1,0 +1,93 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
+.notFound {
+  min-height: calc(100vh - 20rem);
+  display: grid;
+  place-items: center;
+  padding: 6rem 0;
+  background: linear-gradient(180deg, $bg 0%, rgba(255, 238, 223, 0.6) 100%);
+}
+
+.inner {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 3.2rem 2.4rem;
+  text-align: center;
+  background-color: #fff;
+  border: 0.1rem solid rgba(94, 49, 0, 0.12);
+  border-radius: 1.2rem;
+  box-shadow: 0 0.8rem 2.4rem rgba(94, 49, 0, 0.12);
+
+  @include responsive(md) {
+    padding: 4.8rem 4rem;
+  }
+}
+
+.code {
+  margin: 0;
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: $main;
+
+  @include responsive(md) {
+    font-size: 5.6rem;
+  }
+}
+
+.title {
+  margin: 1.2rem 0 0;
+  font-size: 2.2rem;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 3rem;
+  }
+}
+
+.description {
+  margin: 1.6rem 0 0;
+  font-size: 1.5rem;
+  line-height: 1.8;
+  color: rgba($fontBase, 0.9);
+
+  @include responsive(md) {
+    font-size: 1.6rem;
+  }
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4.8rem;
+  margin: 2.4rem auto 0;
+  padding: 0 2rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: $main;
+  border-radius: 0.8rem;
+  box-shadow: 0 0.2rem 0.8rem rgba(94, 49, 0, 0.2);
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+
+  @include responsive(md) {
+    width: 30rem;
+  }
+
+  &:hover {
+    background-color: #dc7d00;
+    box-shadow: 0 0.35rem 1rem rgba(94, 49, 0, 0.25);
+    transform: translateY(-0.05rem);
+  }
+
+  &:focus-visible {
+    outline: 0.2rem solid rgba(247, 140, 0, 0.75);
+    outline-offset: 0.2rem;
+  }
+}

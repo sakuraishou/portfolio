@@ -57,8 +57,8 @@
 }
 
 .title {
-  font-size: 4rem;
-  line-height: 1.1;
+  font-size: 5.2rem;
+  line-height: 1.15;
   font-family: $font-sub-script;
   font-weight: 500;
 
@@ -69,11 +69,7 @@
   }
 
   .big {
-    font-size: 6.4rem;
-
-    @include responsive(md) {
-      font-size: 9rem;
-    }
+    font-size: 9rem;
   }
 }
 
@@ -84,6 +80,19 @@
 
   @include responsive(md) {
     margin: 4rem 0 0;
+
+    :global(.pc) {
+      display: inline-block;
+    }
+  }
+}
+
+.pc {
+  display: none;
+
+  @include responsive(md) {
+    display: inline-block;
+    width: 2rem;
   }
 }
 

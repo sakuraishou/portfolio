@@ -6,11 +6,10 @@ services:
     volumes:
       - .:/work
       - ${HOME}/.ssh:/root/.ssh:ro
-    entrypoint: ['/bin/sh', '-lc']
-    command: >
-      apk add --no-cache rsync openssh &&
-      rsync -avz -e "ssh -o StrictHostKeyChecking=accept-new"
-      vps:/var/www/my-apps/portfolio/media/ /work/media/
+    command:
+      - /bin/sh
+      - -lc
+      - apk add --no-cache rsync openssh && rsync -avz -e "ssh -o IgnoreUnknown=UseKeychain -o StrictHostKeyChecking=accept-new" vps:/var/www/my-apps/portfolio/media/ /work/media/
 
   app:
     # Alpine (musl) では sharp のネイティブバイナリが合わず落ちることがあるため glibc 系を使う

@@ -19,10 +19,7 @@ function formatYearMonth(dateString?: string | null): string | null {
   return `${y}.${m}`
 }
 
-function formatProductionPeriod(
-  startDate?: string | null,
-  endDate?: string | null,
-): string | null {
+function formatProductionPeriod(startDate?: string | null, endDate?: string | null): string | null {
   const start = formatYearMonth(startDate)
   const end = formatYearMonth(endDate)
 
@@ -31,19 +28,10 @@ function formatProductionPeriod(
   return null
 }
 
-function scopeLabel(value: string): string {
-  switch (value) {
-    case 'design':
-      return 'デザイン'
-    case 'development':
-      return '実装'
-    case 'cms':
-      return 'CMS構築'
-    case 'maintenance':
-      return '運用・保守'
-    default:
-      return value
-  }
+function getScopeName(scope: unknown): string | null {
+  if (!scope || typeof scope !== 'object') return null
+  const name = (scope as { name?: unknown }).name
+  return typeof name === 'string' && name.trim().length > 0 ? name : null
 }
 
 export default async function Works() {
@@ -75,7 +63,7 @@ export default async function Works() {
               )
               const scopeText =
                 project.scope && project.scope.length > 0
-                  ? project.scope.map((v) => scopeLabel(v)).join(' / ')
+                  ? project.scope.map((v) => getScopeName(v)).filter(Boolean).join(' / ')
                   : null
               const techText =
                 project.techStack && project.techStack.length > 0
@@ -161,7 +149,7 @@ export default async function Works() {
                         rel="noopener noreferrer"
                         className={styles.workLink}
                       >
-                        サイトを見る →
+                        サイトを見る
                       </a>
                     )}
                   </div>

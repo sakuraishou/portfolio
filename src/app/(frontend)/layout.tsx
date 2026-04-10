@@ -1,4 +1,5 @@
 import { Zen_Kaku_Gothic_New, Dancing_Script, Quicksand } from 'next/font/google'
+import type { Metadata } from 'next'
 import './styles.scss'
 import Header from '@/components/Layout/Header'
 import Footer from '@/components/Layout/Footer'
@@ -24,9 +25,12 @@ const quicksand = Quicksand({
   variable: '--font-quicksand',
 })
 
-export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+export const metadata: Metadata = {
+  title: {
+    default: 'sakuraishou Portfolio',
+    template: '%s | sakuraishou Portfolio',
+  },
+  description: 'Web制作の実績・スキル・お問い合わせを掲載したポートフォリオサイトです。',
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
