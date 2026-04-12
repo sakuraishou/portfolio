@@ -79,6 +79,12 @@
   flex-direction: column;
   gap: 0.6rem;
   width: 100%;
+  height: 2.3rem;
+  position: relative;
+
+  @include responsive(md) {
+    height: 2.4rem;
+  }
 }
 
 .skillIconWrap {
@@ -136,6 +142,10 @@
   font-weight: 500;
   white-space: nowrap;
   color: $fontBase;
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
 
   @include responsive(md) {
     font-size: 1.6rem;

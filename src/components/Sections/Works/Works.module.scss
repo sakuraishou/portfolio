@@ -114,6 +114,7 @@
     border: 0.3rem solid rgba($main, 0.8);
     border-radius: 0.6rem;
     box-shadow: 0 0.6rem 1.2rem rgba($main, 0.2);
+    overflow: hidden;
 
     @include responsive(md) {
       border: 0.4rem solid rgba($main, 0.8);
