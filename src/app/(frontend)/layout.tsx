@@ -27,8 +27,8 @@ const quicksand = Quicksand({
 
 export const metadata: Metadata = {
   title: {
-    default: 'sakuraishou Portfolio',
-    template: '%s | sakuraishou Portfolio',
+    default: 'Sho Sakurai Portfolio',
+    template: '%s | Sho Sakurai Portfolio',
   },
   description: 'Web制作の実績・スキル・お問い合わせを掲載したポートフォリオサイトです。',
 }
