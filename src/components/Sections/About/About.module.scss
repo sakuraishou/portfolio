@@ -60,6 +60,11 @@
     left: 50%;
     transform: translateX(-50%) translateY(40%);
     z-index: 1;
+    text-shadow:
+      0.3rem 0.3rem 0.6rem $main,
+      -0.3rem -0.3rem 0.6rem $main,
+      0.3rem -0.3rem 0.6rem $main,
+      -0.3rem 0.3rem 0.6rem $main;
 
     @include responsive(lg) {
       font-size: 6rem;
