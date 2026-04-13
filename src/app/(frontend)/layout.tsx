@@ -13,6 +13,11 @@ export const metadata: Metadata = {
     template: '%s | Sho Sakurai Portfolio',
   },
   description: 'Web制作の実績・スキル・お問い合わせを掲載したポートフォリオサイトです。',
+  icons: {
+    icon: '/assets/header/logo.png',
+    shortcut: '/assets/header/logo.png',
+    apple: '/assets/header/logo.png',
+  },
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
