@@ -50,7 +50,8 @@
   margin: 1.6rem 0 0;
 
   @include responsive(md) {
-    gap: 6rem;
+    width: 90rem;
+    justify-content: space-between;
     margin: 2.4rem auto 0;
   }
 }
@@ -135,7 +136,7 @@
   margin: 1.6rem 0 0;
 
   @include responsive(md) {
-    width: 70rem;
+    width: 90rem;
     margin: 2.4rem auto 0;
   }
 }
@@ -160,7 +161,7 @@
   @include responsive(md) {
     width: fit-content;
     gap: 0.8rem;
-    margin: 1.2rem auto 0;
+    margin: 2.4rem auto 0;
   }
 
   &__row {
