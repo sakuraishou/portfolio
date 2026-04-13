@@ -10,6 +10,8 @@ const NAV_ITEMS = [
   { href: '/#contact', ja: 'お問い合わせ', en: 'CONTACT' },
 ] as const
 
+const GITHUB_URL = 'https://github.com/sakuraishou'
+
 export default function Footer() {
   const year = new Date().getFullYear()
 
@@ -41,6 +43,21 @@ export default function Footer() {
             ))}
           </ul>
         </nav>
+
+        <div className={styles.social}>
+          <a
+            className={styles.githubLink}
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub（新しいタブで開く）"
+          >
+            <span className={styles.githubLabel}>GitHub</span>
+            <span className={styles.githubId} aria-hidden>
+              @sakuraishou
+            </span>
+          </a>
+        </div>
 
         <small className={styles.copy}>© {year} Sho Sakurai</small>
       </div>
