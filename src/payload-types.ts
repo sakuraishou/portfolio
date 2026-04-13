@@ -192,6 +192,10 @@ export interface ProjectScope {
 export interface Project {
   id: number;
   title: string;
+  /**
+   * 数値が小さいほど前に表示されます
+   */
+  sort_order?: number | null;
   mainImage?: (number | null) | Media;
   mobileImage?: (number | null) | Media;
   url?: string | null;
@@ -407,6 +411,7 @@ export interface ProjectScopesSelect<T extends boolean = true> {
  */
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
+  sort_order?: T;
   mainImage?: T;
   mobileImage?: T;
   url?: T;

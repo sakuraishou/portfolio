@@ -4,6 +4,7 @@ export const Projects: CollectionConfig = {
   slug: 'projects',
   admin: {
     useAsTitle: 'title', // 管理画面でタイトルを表示
+    defaultSort: 'sort_order',
   },
   fields: [
     {
@@ -11,6 +12,12 @@ export const Projects: CollectionConfig = {
       type: 'text',
       required: true,
       label: '実績名',
+    },
+    {
+      name: 'sort_order',
+      type: 'number',
+      label: '並び順',
+      admin: { description: '数値が小さいほど前に表示されます' },
     },
     {
       name: 'mainImage',

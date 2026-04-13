@@ -34,15 +34,24 @@ function getScopeName(scope: unknown): string | null {
   return typeof name === 'string' && name.trim().length > 0 ? name : null
 }
 
+function sortByOrder<T extends { sort_order?: number | null }>(items: T[]): T[] {
+  return [...items].sort((a, b) => {
+    const orderA = a.sort_order ?? 999
+    const orderB = b.sort_order ?? 999
+    return orderA - orderB
+  })
+}
+
 export default async function Works() {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
-  const { docs: projects } = await payload.find({
+  const { docs: rawProjects } = await payload.find({
     collection: 'projects',
     depth: 1,
     limit: 100,
-    sort: '-createdAt',
+    sort: 'sort_order',
   })
+  const projects = sortByOrder(rawProjects)
 
   return (
     <section id="works" className={styles.works}>
