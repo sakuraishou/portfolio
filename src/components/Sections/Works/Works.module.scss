@@ -47,7 +47,7 @@
 
 .workVisual {
   @include center;
-  margin: 1rem 0 0;
+  margin: 1.6rem 0 0;
 
   @include responsive(md) {
     gap: 6rem;
@@ -87,22 +87,22 @@
   &__img {
     width: 100%;
     height: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 3 / 2;
     object-fit: cover;
   }
 }
 
 .workDeviceMobile {
-  width: 8rem;
-  min-width: 8rem;
+  width: 10.5rem;
+  min-width: 10.5rem;
   position: relative;
   z-index: 2;
-  margin: 0 0 0 -2.7rem;
+  margin: 0 0 0 -5.4rem;
 
   @include responsive(md) {
     width: auto;
     min-width: auto;
-    height: 45rem;
+    height: 40rem;
     margin: 0;
   }
 
@@ -126,7 +126,7 @@
   &__img {
     width: 100%;
     height: 100%;
-    aspect-ratio: 9 / 18.5;
+    aspect-ratio: 9 / 17;
     object-fit: cover;
   }
 }
