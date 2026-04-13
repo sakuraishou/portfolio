@@ -4,8 +4,9 @@ export const Projects: CollectionConfig = {
   slug: 'projects',
   admin: {
     useAsTitle: 'title', // 管理画面でタイトルを表示
-    defaultSort: 'sort_order',
+    defaultColumns: ['title', 'sort_order', 'updatedAt'],
   },
+  defaultSort: 'sort_order',
   fields: [
     {
       name: 'title',
