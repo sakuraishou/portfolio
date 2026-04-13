@@ -1,29 +1,11 @@
-import { Zen_Kaku_Gothic_New, Dancing_Script, Quicksand } from 'next/font/google'
 import type { Metadata } from 'next'
 import './styles.scss'
 import Header from '@/components/Layout/Header'
 import Footer from '@/components/Layout/Footer'
 
-const zenKaku = Zen_Kaku_Gothic_New({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-zen-kaku',
-  display: 'swap',
-})
-
-// サブ1
-const dancingScript = Dancing_Script({
-  subsets: ['latin'],
-  weight: ['500'],
-  variable: '--font-dancing',
-})
-
-// サブ2
-const quicksand = Quicksand({
-  subsets: ['latin'],
-  weight: ['500'],
-  variable: '--font-quicksand',
-})
+/** Turbopack + next/font/google の解決バグを避けるため、Google Fonts は link で読み込む */
+const googleFontsStylesheet =
+  'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Quicksand:wght@500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap'
 
 export const metadata: Metadata = {
   title: {
@@ -37,10 +19,12 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
   return (
-    <html
-      lang="ja"
-      className={`${zenKaku.variable} ${dancingScript.variable} ${quicksand.variable}`}
-    >
+    <html lang="ja">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href={googleFontsStylesheet} rel="stylesheet" />
+      </head>
       <body>
         <Header />
         <main>{children}</main>

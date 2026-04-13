@@ -34,5 +34,5 @@ services:
     # 今回のトラブル対策として DNS 設定は残しておくと安心です
     dns:
       - 8.8.8.8
-    # まず Turbopack で起動し、失敗した場合のみ non-turbo へフォールバック
+    # 既定は webpack の next dev（Turbopack は `npm run dev:turbo` で任意利用）
     command: sh -c "npm cache clean --force && npx -y npm@11.12.1 ci --include=optional --no-audit && (npm run dev || npm run devsafe)"

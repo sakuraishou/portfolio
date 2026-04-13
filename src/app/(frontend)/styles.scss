@@ -1,5 +1,12 @@
 @use 'ress';
 
+// CSS Modules には書けないため、フォント用変数はグローバル SCSS のみで定義する
+:root {
+  --font-zen-kaku: 'Zen Kaku Gothic New';
+  --font-dancing: 'Dancing Script';
+  --font-quicksand: 'Quicksand';
+}
+
 html {
   font-size: pxtovw(10);
   height: -webkit-fill-available;
