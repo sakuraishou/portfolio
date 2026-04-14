@@ -2,53 +2,88 @@
 @use '@/app/(frontend)/_styles/mixins' as *;
 
 .notFound {
-  min-height: calc(100vh - 20rem);
+  min-height: calc(100dvh - 16rem);
   display: grid;
   place-items: center;
-  padding: 6rem 0;
-  background: linear-gradient(180deg, $bg 0%, rgba(255, 238, 223, 0.6) 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 8rem 0;
+  background: linear-gradient(180deg, #fffbf6 0%, #fff7ee 100%);
+
+  @include responsive(md) {
+    min-height: calc(100dvh - 18rem);
+    padding: 10rem 0;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    width: min(72vmin, 44rem);
+    height: min(64vmin, 40rem);
+    top: 50%;
+    left: 50%;
+    border: 0.12rem solid rgba(255, 255, 255, 0.35);
+    box-shadow:
+      0 1.2rem 3.2rem rgba(94, 49, 0, 0.16),
+      inset 0 0 0 0.1rem rgba(255, 255, 255, 0.12);
+    background: linear-gradient(152deg, $main 0%, $accent 100%);
+    pointer-events: none;
+    animation: edgeMorph 30s ease-in-out infinite alternate;
+    transform: translate3d(-50%, -50%, 0);
+
+    @include responsive(md) {
+      width: min(62vmin, 54rem);
+      height: min(54vmin, 48rem);
+    }
+  }
 }
 
 .inner {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 72rem;
   margin: 0 auto;
-  padding: 3.2rem 2.4rem;
+  padding: 2.4rem 1.2rem;
   text-align: center;
-  background-color: #fff;
-  border: 0.1rem solid rgba(94, 49, 0, 0.12);
-  border-radius: 1.2rem;
-  box-shadow: 0 0.8rem 2.4rem rgba(94, 49, 0, 0.12);
+  animation: fadeUp 0.9s ease-out both;
 
   @include responsive(md) {
-    padding: 4.8rem 4rem;
+    padding: 4rem 2rem;
   }
 }
 
 .code {
+  @include dancing;
   margin: 0;
-  font-size: 4rem;
-  font-weight: 700;
-  line-height: 1;
+  font-size: 8rem;
+  font-weight: 500;
+  line-height: 0.85;
+  letter-spacing: 0.02em;
   color: $main;
+  text-shadow: 0 0.4rem 1.2rem rgba(94, 49, 0, 0.16);
 
   @include responsive(md) {
-    font-size: 5.6rem;
+    font-size: 12rem;
   }
 }
 
 .title {
-  margin: 1.2rem 0 0;
+  margin: 0.8rem 0 0;
   font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.35;
   color: $fontBase;
 
   @include responsive(md) {
-    font-size: 3rem;
+    font-size: 3.2rem;
   }
 }
 
 .description {
-  margin: 1.6rem 0 0;
+  margin: 1.6rem auto 0;
+  max-width: 48rem;
   font-size: 1.5rem;
   line-height: 1.8;
   color: rgba($fontBase, 0.9);
@@ -62,6 +97,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: min(30rem, 100%);
   min-height: 4.8rem;
   margin: 2.4rem auto 0;
   padding: 0 2rem;
@@ -76,10 +112,6 @@
     box-shadow 0.15s ease,
     transform 0.15s ease;
 
-  @include responsive(md) {
-    width: 30rem;
-  }
-
   &:hover {
     background-color: #dc7d00;
     box-shadow: 0 0.35rem 1rem rgba(94, 49, 0, 0.25);
@@ -89,5 +121,51 @@
   &:focus-visible {
     outline: 0.2rem solid rgba(247, 140, 0, 0.75);
     outline-offset: 0.2rem;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(1.2rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes edgeMorph {
+  0% {
+    border-radius: 58% 42% 38% 62% / 62% 38% 58% 42%;
+    transform: translate3d(-50%, -50%, 0) translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+
+  18% {
+    border-radius: 40% 60% 55% 45% / 48% 42% 58% 52%;
+    transform: translate3d(-50%, -50%, 0) translate3d(2.4rem, -1.8rem, 0) scale(1.12) rotate(0.9deg);
+  }
+
+  38% {
+    border-radius: 62% 38% 44% 56% / 54% 58% 42% 46%;
+    transform: translate3d(-50%, -50%, 0) translate3d(-2.2rem, 1.6rem, 0) scale(0.86)
+      rotate(-0.75deg);
+  }
+
+  58% {
+    border-radius: 46% 54% 62% 38% / 40% 52% 48% 60%;
+    transform: translate3d(-50%, -50%, 0) translate3d(1.6rem, 2rem, 0) scale(1.08) rotate(0.65deg);
+  }
+
+  78% {
+    border-radius: 54% 46% 48% 52% / 62% 44% 56% 38%;
+    transform: translate3d(-50%, -50%, 0) translate3d(-1.8rem, -1.2rem, 0) scale(0.9)
+      rotate(-0.55deg);
+  }
+
+  100% {
+    border-radius: 52% 48% 48% 52% / 48% 52% 52% 48%;
+    transform: translate3d(-50%, -50%, 0) translate3d(0.4rem, 0.2rem, 0) scale(1) rotate(0deg);
   }
 }
