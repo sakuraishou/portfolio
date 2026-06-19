@@ -1,0 +1,13 @@
+# ビルドコンテキストから除外（COPY . . で取り込まないもの）
+# ※ .env はサーバー上のビルド（next build）で必要なため、あえて除外しない
+node_modules
+.next
+.git
+*.log
+npm-debug.log*
+coverage
+test-results
+playwright-report
+blob-report
+.DS_Store
+media
