@@ -9,6 +9,19 @@
 - 識別子・ライブラリ名・型名は英語のままでよい。
 - 詳細: `.cursor/rules/project-language.mdc`
 
+## ドキュメント保守（必須・毎回）
+
+コードベースに変更・追加を加えたら、**同じ作業の中で**関連ドキュメントを必ず最新化する。後回しにして実態とドキュメントをずらさない。
+
+更新対象（変更内容に応じて該当するものすべて）:
+
+- `README.md`（セットアップ・技術スタック・公開向け説明）
+- `CLAUDE.md`（全体像・構成・コマンド・規約）
+- `AGENTS.md`（本ファイル。Payload バックエンドのルール）
+- `.cursor/`（`rules/*.mdc`・`context/*.md`）
+
+特に次を変えたら必ず見直す: 依存の追加/更新、コマンド/スクリプト、ディレクトリ構成、コーディング規約、ビルド/デプロイ設定、パッケージマネージャ、Node バージョン、コレクション/フィールド構成。
+
 ## 1. 最優先セキュリティルール（必須）
 
 1. Local API に `user` を渡す場合は必ず `overrideAccess: false` を指定する。
@@ -20,9 +33,10 @@
 ## 2. 型安全・生成物
 
 - TypeScript で実装し、`any` の安易な導入を避ける。
-- スキーマ変更後は `npm run generate:types` を実行する。
-- 管理 UI コンポーネント変更後は `npm run generate:importmap` を実行する。
-- 変更後は `tsc --noEmit` で型エラーを確認する。
+- スキーマ変更後は `pnpm generate:types` を実行する。
+- 管理 UI コンポーネント変更後は `pnpm generate:importmap` を実行する。
+- 変更後は `pnpm exec tsc --noEmit` で型エラーを確認する。
+- パッケージマネージャは **pnpm**（`packageManager: pnpm@10.34.3`／`pnpm-lock.yaml`）。`npm` は使わない。
 
 ## 3. アクセス制御（RBAC）
 
@@ -39,10 +53,11 @@
 
 ### 作業後
 
-- [ ] `tsc --noEmit`
-- [ ] 必要なら `npm run generate:types`
-- [ ] 必要なら `npm run generate:importmap`
+- [ ] `pnpm exec tsc --noEmit`
+- [ ] 必要なら `pnpm generate:types`
+- [ ] 必要なら `pnpm generate:importmap`
 - [ ] セキュリティ 3 原則（overrideAccess / req / ループ防止）を再確認
+- [ ] 変更内容に応じて README.md / CLAUDE.md / AGENTS.md / .cursor を最新化
 
 ## 5. 詳細ドキュメント
 
