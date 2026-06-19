@@ -13,7 +13,7 @@ services:
 
   app:
     # Alpine (musl) では sharp のネイティブバイナリが合わず落ちることがあるため glibc 系を使う
-    image: node:22-bookworm-slim
+    image: node:24-bookworm-slim
     stdin_open: true   # プロンプトに入力できるようにする
     tty: true
     ports:
@@ -34,5 +34,6 @@ services:
     # 今回のトラブル対策として DNS 設定は残しておくと安心です
     dns:
       - 8.8.8.8
-    # 既定は webpack の next dev（Turbopack は `npm run dev:turbo` で任意利用）
-    command: sh -c "npm cache clean --force && npx -y npm@11.12.1 ci --include=optional --no-audit && (npm run dev || npm run devsafe)"
+    # 既定は webpack の next dev（Turbopack は `pnpm dev:turbo` で任意利用）
+    # pnpm を固定バージョンで導入し、lockfile を厳守して依存をインストールしてから dev 起動
+    command: sh -c "npm install -g pnpm@10.34.3 && pnpm install --frozen-lockfile && (pnpm dev || pnpm devsafe)"
