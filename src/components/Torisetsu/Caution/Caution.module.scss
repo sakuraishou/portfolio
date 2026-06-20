@@ -1,0 +1,200 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
+.caution {
+  isolation: isolate;
+  background-color: $bg2;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+
+  @include responsive(lg) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 4rem;
+  }
+}
+
+/* ===== 左：警告バッジ ===== */
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 2.4rem 2rem;
+  border-radius: 1rem;
+  background-color: #fff;
+  border: 0.2rem solid $main;
+  text-align: center;
+
+  @include responsive(lg) {
+    flex: 0 0 24rem;
+    padding: 3.2rem 2.4rem;
+  }
+}
+
+.badgeMark {
+  @include center;
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  background-color: $main;
+  color: #fff;
+  font-size: 3.6rem;
+  line-height: 1;
+
+  @include responsive(lg) {
+    width: 8.4rem;
+    height: 8.4rem;
+    font-size: 4.4rem;
+  }
+}
+
+.badgeText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.badgeEn {
+  @include quicksand;
+  font-size: 1.2rem;
+  letter-spacing: 0.16em;
+  color: $main;
+}
+
+.badgeJa {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 2rem;
+  }
+}
+
+.badgeLead {
+  font-size: 1.3rem;
+  line-height: 1.7;
+  color: rgba($fontBase, 0.7);
+}
+
+/* ===== 右：注意書きラベル（帳票風） ===== */
+.sheet {
+  flex: 1;
+  padding: 2rem 2rem 2.4rem;
+  border-radius: 1rem;
+  background-color: #fff;
+  border: 0.1rem solid rgba($main, 0.3);
+
+  @include responsive(md) {
+    padding: 2.8rem 3.2rem 3.2rem;
+  }
+}
+
+.sheetHead {
+  @include quicksand;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding-bottom: 1.2rem;
+  margin-bottom: 0.4rem;
+  border-bottom: 0.2rem solid $main;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: $main;
+
+  @include responsive(md) {
+    font-size: 1.6rem;
+  }
+}
+
+.notices {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: 1.6rem 0;
+  border-bottom: 0.1rem dashed rgba($fontBase, 0.25);
+
+  @include responsive(md) {
+    gap: 1.6rem;
+    padding: 2rem 0;
+  }
+}
+
+.mark {
+  flex: 0 0 auto;
+  @include center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.8rem;
+  background-color: rgba($main, 0.2);
+  color: $main;
+  font-size: 1.8rem;
+  line-height: 1;
+
+  @include responsive(md) {
+    width: 3.6rem;
+    height: 3.6rem;
+    font-size: 2.2rem;
+  }
+}
+
+.text {
+  flex: 1;
+  padding-top: 0.2rem;
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 1.6rem;
+    line-height: 1.9;
+  }
+}
+
+/* ===== ダミー画像プレースホルダー ===== */
+.photo {
+  @include center;
+  flex-direction: column;
+  gap: 1rem;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  margin-top: 2rem;
+  border-radius: 0.8rem;
+  border: 0.2rem dashed rgba($main, 0.5);
+  background-color: rgba($bg, 0.6);
+
+  @include responsive(md) {
+    margin-top: 2.4rem;
+  }
+}
+
+.photoLabel {
+  text-align: center;
+  font-size: 1.3rem;
+  line-height: 1.7;
+  color: rgba($fontBase, 0.55);
+
+  @include responsive(md) {
+    font-size: 1.4rem;
+  }
+}
+
+.photoCaption {
+  font-size: 1.1rem;
+  color: rgba($fontBase, 0.45);
+
+  @include responsive(md) {
+    font-size: 1.2rem;
+  }
+}

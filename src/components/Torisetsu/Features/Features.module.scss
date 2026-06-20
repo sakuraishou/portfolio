@@ -1,0 +1,255 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
+.features {
+  isolation: isolate;
+  background-color: $bg;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+
+  @include responsive(lg) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 6rem;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  @include responsive(lg) {
+    flex: 1;
+    gap: 2.4rem;
+  }
+}
+
+.item {
+  padding: 2rem 2.4rem;
+  border-radius: 1rem;
+  background-color: #fff;
+  border: 0.1rem solid rgba($main, 0.18);
+
+  @include responsive(md) {
+    padding: 2.8rem 3.2rem;
+  }
+}
+
+.itemTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: $main;
+  margin-bottom: 0.8rem;
+
+  @include responsive(md) {
+    font-size: 2.2rem;
+  }
+}
+
+.itemBody {
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 1.6rem;
+  }
+}
+
+/* ===== レーダーチャート（PCではより大きく・主役級に） ===== */
+.chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include responsive(lg) {
+    flex: 0 0 auto;
+    width: 46rem;
+  }
+
+  @include responsive(xl) {
+    width: 50rem;
+  }
+}
+
+.chartCaption {
+  position: relative;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: $fontBase;
+  text-align: center;
+  margin-bottom: 2.4rem;
+  padding-bottom: 1rem;
+
+  @include responsive(md) {
+    font-size: 2.4rem;
+  }
+
+  @include responsive(lg) {
+    font-size: 2.6rem;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 3.6rem;
+    height: 0.3rem;
+    border-radius: 99rem;
+    background-color: $main;
+  }
+}
+
+.radarWrap {
+  width: 100%;
+  max-width: 36rem;
+
+  @include responsive(lg) {
+    max-width: 44rem;
+  }
+}
+
+.radar {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.radarGrid {
+  fill: none;
+  stroke: rgba($fontBase, 0.12);
+  stroke-width: 1;
+}
+
+.radarAxis {
+  stroke: rgba($fontBase, 0.15);
+  stroke-width: 1;
+}
+
+.radarData {
+  fill: rgba($main, 0.25);
+  stroke: $main;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+
+  @include responsive(lg) {
+    fill: rgba($main, 0.32);
+    stroke-width: 3;
+    filter: drop-shadow(0 0.4rem 1.2rem rgba($main, 0.4));
+  }
+}
+
+.radarDot {
+  fill: $main;
+
+  @include responsive(lg) {
+    r: 6;
+  }
+}
+
+.radarLabel {
+  fill: $fontBase;
+  font-size: 1.4rem;
+  font-weight: 700;
+
+  @include responsive(lg) {
+    font-size: 1.6rem;
+  }
+}
+
+.specList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+  margin-top: 2.4rem;
+
+  // PC では2カラムにして凡例の縦長を抑え、左の文字列と高さを釣り合わせる
+  @include responsive(lg) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem 2.4rem;
+  }
+}
+
+.specItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding-bottom: 1rem;
+  border-bottom: 0.1rem solid rgba($fontBase, 0.12);
+}
+
+.specMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.specName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 1.6rem;
+  }
+}
+
+.specDesc {
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: rgba($fontBase, 0.6);
+
+  @include responsive(md) {
+    font-size: 1.3rem;
+  }
+}
+
+.specNum {
+  display: inline-flex;
+  align-items: baseline;
+  color: $main;
+}
+
+.specValue {
+  @include quicksand;
+  font-size: 2.2rem;
+  line-height: 1;
+
+  @include responsive(md) {
+    font-size: 2.6rem;
+  }
+
+  @include responsive(lg) {
+    font-size: 3rem;
+  }
+}
+
+.specUnit {
+  @include quicksand;
+  font-size: 1.2rem;
+  margin-left: 0.2rem;
+}
+
+.specNote {
+  width: 100%;
+  margin-top: 1.6rem;
+  font-size: 1.1rem;
+  color: rgba($fontBase, 0.5);
+  text-align: right;
+
+  @include responsive(md) {
+    font-size: 1.2rem;
+  }
+}

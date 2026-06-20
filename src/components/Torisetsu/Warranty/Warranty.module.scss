@@ -1,0 +1,182 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
+.warranty {
+  isolation: isolate;
+  background-color: #fff;
+}
+
+.certificate {
+  position: relative;
+  border: 0.3rem double rgba($main, 0.55);
+  border-radius: 1rem;
+  background-color: $bg;
+  padding: 0.8rem;
+
+  @include responsive(md) {
+    padding: 1.2rem;
+  }
+}
+
+// 内側の罫線（証書らしい二重枠）
+.frame {
+  position: relative;
+  border: 0.1rem solid rgba($main, 0.4);
+  border-radius: 0.8rem;
+  background-color: #fff;
+  padding: 3.2rem 2.4rem 4rem;
+  overflow: hidden;
+
+  @include responsive(md) {
+    padding: 5.6rem 6rem 6.4rem;
+  }
+}
+
+.ribbon {
+  @include quicksand;
+  font-size: 1.2rem;
+  letter-spacing: 0.28em;
+  color: $main;
+  text-align: center;
+  padding-bottom: 1.6rem;
+  border-bottom: 0.1rem solid rgba($main, 0.25);
+
+  @include responsive(md) {
+    font-size: 1.4rem;
+    padding-bottom: 2.4rem;
+  }
+}
+
+.docTitle {
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.3em;
+  text-align: center;
+  color: $fontBase;
+  margin: 2.8rem 0;
+
+  @include responsive(md) {
+    font-size: 4.8rem;
+    margin: 4rem 0;
+  }
+}
+
+.bodyText {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  max-width: 60rem;
+  margin: 0 auto;
+
+  p {
+    font-size: 1.4rem;
+    line-height: 2;
+    color: $fontBase;
+
+    @include responsive(md) {
+      font-size: 1.7rem;
+      line-height: 2.1;
+    }
+  }
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 48rem;
+  margin: 3.2rem auto 0;
+
+  @include responsive(md) {
+    margin-top: 4.8rem;
+  }
+}
+
+.detailRow {
+  display: flex;
+  align-items: baseline;
+  gap: 1.6rem;
+  padding: 1.2rem 0;
+  border-bottom: 0.1rem dashed rgba($main, 0.35);
+
+  &:first-child {
+    border-top: 0.1rem dashed rgba($main, 0.35);
+  }
+}
+
+.detailLabel {
+  flex: 0 0 9rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: $main;
+
+  @include responsive(md) {
+    flex-basis: 12rem;
+    font-size: 1.6rem;
+  }
+}
+
+.detailValue {
+  flex: 1;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 1.8rem;
+  }
+}
+
+// スタンプ配置（右下）
+.stampArea {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2.4rem;
+
+  @include responsive(md) {
+    position: absolute;
+    right: 4rem;
+    bottom: 3.6rem;
+    margin-top: 0;
+  }
+}
+
+.stamp {
+  display: block;
+  width: 9rem;
+  height: 9rem;
+  transform: rotate(-8deg);
+
+  @include responsive(md) {
+    width: 12rem;
+    height: 12rem;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.stampRingOuter,
+.stampRingInner {
+  fill: none;
+  stroke: $main;
+}
+
+.stampRingOuter {
+  stroke-width: 3;
+}
+
+.stampRingInner {
+  stroke-width: 1.5;
+}
+
+.stampChar {
+  fill: $main;
+  font-size: 4rem;
+  font-weight: 700;
+  dominant-baseline: middle;
+}

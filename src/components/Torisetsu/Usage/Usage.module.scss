@@ -1,0 +1,217 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
+.usage {
+  isolation: isolate;
+  background-color: #fff;
+}
+
+/* ===== 工程フロー ===== */
+.flow {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  @include responsive(md) {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  @include responsive(md) {
+    flex: 1;
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+.step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 2.4rem 2rem;
+  border-radius: 1rem;
+  background-color: $bg;
+  border: 0.1rem solid rgba($main, 0.18);
+
+  @include responsive(md) {
+    padding: 2.8rem 2rem;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+.stepNo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  color: $main;
+  line-height: 1;
+}
+
+.stepNoLabel {
+  @include quicksand;
+  font-size: 1.2rem;
+  letter-spacing: 0.16em;
+
+  @include responsive(md) {
+    font-size: 1.3rem;
+  }
+}
+
+.stepNoNum {
+  @include quicksand;
+  font-size: 4rem;
+  line-height: 1;
+
+  @include responsive(md) {
+    font-size: 4.8rem;
+  }
+}
+
+.stepTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 2rem;
+  }
+}
+
+.stepBody {
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 1.5rem;
+  }
+}
+
+/* ===== 接続線（SP=縦 / PC=横） ===== */
+.connector {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // SP: 縦の接続線
+  height: 4rem;
+  width: 100%;
+
+  @include responsive(md) {
+    // PC: 横の接続線
+    height: auto;
+    width: 4rem;
+    flex: 0 0 auto;
+  }
+
+  @include responsive(lg) {
+    width: 5.6rem;
+  }
+}
+
+.line {
+  background-color: rgba($main, 0.5);
+
+  // SP: 縦に伸びる
+  width: 0.2rem;
+  height: 100%;
+  transform: scaleY(0);
+  transform-origin: top center;
+
+  @include responsive(md) {
+    // PC: 横に伸びる
+    width: 100%;
+    height: 0.2rem;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+}
+
+.arrow {
+  position: absolute;
+
+  // SP: 下向き矢印
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 0.6rem solid transparent;
+  border-right: 0.6rem solid transparent;
+  border-top: 0.8rem solid $main;
+
+  @include responsive(md) {
+    // PC: 右向き矢印
+    bottom: auto;
+    left: auto;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: 0.8rem solid $main;
+    border-right: 0;
+    border-top: 0.6rem solid transparent;
+    border-bottom: 0.6rem solid transparent;
+  }
+}
+
+/* ===== 口ぐせ（複数の吹き出しチップ） ===== */
+.quotes {
+  max-width: 76rem;
+  margin: 4.8rem auto 0;
+  text-align: center;
+
+  @include responsive(md) {
+    margin-top: 6.4rem;
+  }
+}
+
+.quotesLabel {
+  display: inline-block;
+  margin-bottom: 2rem;
+  padding: 0.3rem 1.2rem 0.4rem;
+  border-radius: 0.8rem;
+  background-color: $main;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+
+  @include responsive(md) {
+    font-size: 1.3rem;
+  }
+}
+
+.quoteList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+
+  @include responsive(md) {
+    gap: 1.6rem;
+  }
+}
+
+.quoteItem {
+  padding: 1.2rem 1.8rem;
+  border-radius: 1.6rem 1.6rem 1.6rem 0.4rem;
+  background-color: rgba($main, 0.12);
+  border: 0.1rem solid rgba($main, 0.3);
+  color: $main;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.5;
+
+  @include responsive(md) {
+    font-size: 1.8rem;
+    padding: 1.4rem 2.2rem;
+  }
+}
