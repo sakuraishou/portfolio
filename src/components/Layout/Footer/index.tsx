@@ -5,8 +5,8 @@ import styles from './Footer.module.scss'
 const NAV_ITEMS = [
   { href: '/', ja: 'ホーム', en: 'HOME' },
   { href: '/#about', ja: '私について', en: 'ABOUT' },
+  { href: '/#skills', ja: 'できること', en: 'SKILLS' },
   { href: '/#works', ja: '制作実績', en: 'WORKS' },
-  { href: '/#blog', ja: 'ブログ', en: 'BLOG' },
   { href: '/#contact', ja: 'お問い合わせ', en: 'CONTACT' },
 ] as const
 
