@@ -122,8 +122,7 @@
   @include responsive(lg) {
     grid-area: tags;
     justify-content: center;
-    width: 90rem;
-    gap: 3.5rem 4rem;
+    gap: 2.4rem;
     margin: 5rem auto 0;
   }
 
@@ -143,5 +142,73 @@
       font-size: 2rem;
       padding: 0 2rem 0.1rem;
     }
+  }
+}
+
+/* 取扱説明書（/manual）への導線 */
+.aboutCtaWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+  margin: 3.6rem auto 0;
+
+  @include responsive(lg) {
+    margin-top: 5.6rem;
+  }
+}
+
+.aboutCtaLead {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #fff;
+
+  @include responsive(md) {
+    font-size: 2.4rem;
+  }
+}
+
+.aboutCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.6rem 3.2rem;
+  border-radius: 0.8rem;
+  background-color: #fff;
+  color: $main;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 0.6rem 1.8rem rgba($fontBase, 0.28);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  @include responsive(md) {
+    font-size: 1.8rem;
+    padding: 1.8rem 3.6rem;
+  }
+
+  &:hover {
+    transform: translateY(-0.2rem);
+    box-shadow: 0 1rem 2.6rem rgba($fontBase, 0.36);
+  }
+}
+
+.aboutCtaBook {
+  width: 1.8rem;
+  height: 1.8rem;
+  flex: 0 0 auto;
+}
+
+.aboutCtaArrow {
+  width: 1.8rem;
+  height: 1.8rem;
+  flex: 0 0 auto;
+  transition: transform 0.2s ease;
+
+  .aboutCta:hover & {
+    transform: translateX(0.3rem);
   }
 }

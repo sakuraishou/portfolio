@@ -1,6 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import Image from 'next/image'
+import Link from 'next/link'
 import Title from '@/components/UI/Title'
 import styles from './About.module.scss'
 
@@ -49,6 +50,40 @@ export default async function About() {
               ))}
             </ul>
           )}
+        </div>
+
+        <div className={styles.aboutCtaWrap}>
+          <p className={styles.aboutCtaLead}>もっと深く知りたい方へ</p>
+          <Link href="/manual" className={styles.aboutCta}>
+            <svg
+              className={styles.aboutCtaBook}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+              focusable="false"
+            >
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+            </svg>
+            わたしの取扱説明書を見る
+            <svg
+              className={styles.aboutCtaArrow}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+              focusable="false"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

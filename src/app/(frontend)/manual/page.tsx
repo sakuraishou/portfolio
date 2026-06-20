@@ -7,6 +7,7 @@ import Faq from '@/components/Torisetsu/Faq'
 import Spec from '@/components/Torisetsu/Spec'
 import Changelog from '@/components/Torisetsu/Changelog'
 import Warranty from '@/components/Torisetsu/Warranty'
+import BackHome from '@/components/Torisetsu/BackHome'
 
 export const metadata: Metadata = {
   title: '取扱説明書',
@@ -25,6 +26,7 @@ export default function TorisetsuPage() {
       <Spec />
       <Changelog />
       <Warranty />
+      <BackHome />
     </>
   )
 }

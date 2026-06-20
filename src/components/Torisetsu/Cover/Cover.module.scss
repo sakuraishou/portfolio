@@ -70,6 +70,52 @@
   }
 }
 
+/* パンくず（現在地＋ホームへ戻る） */
+.crumb {
+  position: absolute;
+  top: 7rem;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.3rem;
+
+  @include responsive(md) {
+    top: 9rem;
+    font-size: 1.4rem;
+  }
+}
+
+.crumbLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba($fontBase, 0.7);
+  font-weight: 500;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $main;
+  }
+}
+
+.crumbIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  flex: 0 0 auto;
+}
+
+.crumbSep {
+  color: rgba($fontBase, 0.4);
+}
+
+.crumbHere {
+  color: $main;
+  font-weight: 700;
+}
+
 .head {
   display: flex;
   flex-direction: column;

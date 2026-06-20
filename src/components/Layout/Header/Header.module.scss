@@ -105,7 +105,7 @@
     flex-direction: row;
     align-items: center;
     background-color: transparent;
-    gap: 2.4rem;
+    gap: 3rem;
     padding: 0;
     transform: none;
     opacity: 1;
@@ -139,6 +139,8 @@
       transform: none;
       transition-delay: 0ms;
       gap: 0.8rem;
+      font-size: 1.6rem;
+      text-shadow: 0 0 1rem rgba(#fff, 0.85);
 
       &:hover {
         text-shadow: 0 0 0.2rem rgba($main, 0.5);
@@ -169,16 +171,8 @@
 }
 
 .navIndex {
-  @include quicksand;
-  font-size: 2.4rem;
-  letter-spacing: 0.08em;
-  opacity: 0.85;
-
-  @include responsive(md) {
-    min-width: auto;
-    font-size: 2.5rem;
-    opacity: 0.7;
-  }
+  // 番号は SP / PC とも非表示（すっきり統一）
+  display: none;
 }
 
 .navText {
@@ -188,6 +182,10 @@
 .navLabel {
   display: block;
   line-height: 2.5;
+
+  @include responsive(md) {
+    line-height: 1;
+  }
 }
 
 .navEn {
@@ -203,10 +201,71 @@
   z-index: -1;
 
   @include responsive(md) {
-    font-size: 2.6rem;
+    font-size: 2.2rem;
     top: 80%;
     right: initial;
-    left: 4rem;
+    left: 1rem;
     color: #fff;
+  }
+}
+
+/* 取扱説明書：SP/PCとも"特別ピル"（番号・★は無し） */
+.navManual {
+  display: inline-flex;
+  align-self: flex-start; // SP: 内容幅のチップとして左に置く
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1cm;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.9rem 1.8rem;
+  border-radius: 99.9rem;
+  background-color: #fff;
+  color: $main;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
+
+  @include responsive(md) {
+    align-self: center;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0.7rem 1.6rem 0.8rem;
+    background-color: $main;
+    border: 0.1rem solid $main;
+    color: #fff;
+
+    &:hover {
+      background-color: #fff;
+      color: $main;
+      transform: translateY(-0.2rem);
+    }
+  }
+}
+
+.navManualLabel {
+  font-size: 2rem;
+  font-weight: 700;
+
+  @include responsive(md) {
+    font-size: 1.5rem;
+  }
+}
+
+.navManualEn {
+  @include quicksand;
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
+  opacity: 0.75;
+
+  @include responsive(md) {
+    display: inline-block;
+    font-size: 1.1rem;
   }
 }

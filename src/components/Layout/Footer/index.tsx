@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { href: '/#skills', ja: 'できること', en: 'SKILLS' },
   { href: '/#works', ja: '制作実績', en: 'WORKS' },
   { href: '/#contact', ja: 'お問い合わせ', en: 'CONTACT' },
+  { href: '/manual', ja: '取扱説明書', en: 'MANUAL' },
 ] as const
 
 const GITHUB_URL = 'https://github.com/sakuraishou'
@@ -33,7 +34,10 @@ export default function Footer() {
           <ul className={styles.navList}>
             {NAV_ITEMS.map((item) => (
               <li key={item.href} className={styles.navItem}>
-                <Link className={styles.navLink} href={item.href}>
+                <Link
+                  className={`${styles.navLink} ${item.href === '/manual' ? styles.navLinkManual : ''}`}
+                  href={item.href}
+                >
                   <span className={styles.navJa}>{item.ja}</span>
                   <span className={styles.navEn} aria-hidden>
                     {item.en}

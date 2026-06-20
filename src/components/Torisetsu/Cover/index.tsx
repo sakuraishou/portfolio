@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
+import Link from 'next/link'
 import Title from '@/components/UI/Title'
 import { PRODUCT } from '../data'
 import styles from './Cover.module.scss'
@@ -42,6 +43,33 @@ export default function Cover() {
       <span className={styles.bgWord} aria-hidden>
         TORISETSU
       </span>
+
+      <nav className={`wrap ${styles.crumb}`} aria-label="現在地">
+        <Link href="/" className={styles.crumbLink}>
+          <svg
+            className={styles.crumbIcon}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+            focusable="false"
+          >
+            <path d="M19 12H5" />
+            <path d="m12 19-7-7 7-7" />
+          </svg>
+          ホーム
+        </Link>
+        <span className={styles.crumbSep} aria-hidden>
+          /
+        </span>
+        <span className={styles.crumbHere} aria-current="page">
+          取扱説明書
+        </span>
+      </nav>
+
       <div className={`wrap ${styles.inner}`}>
         <div className={styles.head}>
           <p className={`${styles.meta} ${styles.reveal}`}>

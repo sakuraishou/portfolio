@@ -134,6 +134,22 @@ export default function Contact() {
             )}
             <button type="submit" className={styles.submit} disabled={pending}>
               {pending ? '送信中…' : '送信する'}
+              {!pending && (
+                <svg
+                  className={styles.submitIcon}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden
+                  focusable="false"
+                >
+                  <path d="M22 2 11 13" />
+                  <path d="M22 2 15 22 11 13 2 9z" />
+                </svg>
+              )}
             </button>
           </div>
         </form>
