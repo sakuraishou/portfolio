@@ -5,6 +5,13 @@ import Link from 'next/link'
 import Title from '@/components/UI/Title'
 import styles from './About.module.scss'
 
+/** スペック表（基本情報）。文言はここを直すだけでOK */
+const SPEC: { label: string; value: string }[] = [
+  { label: '背景 / BG', value: 'アパレル販売（約10年）→ Web ディレクター → エンジニア' },
+  { label: '強み / STR', value: '相手の本音を汲み取り、一歩先を提案する力' },
+  { label: '姿勢 / WAY', value: 'まず作って見せる。納得いくまで一緒に磨く' },
+]
+
 export default async function About() {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
@@ -16,47 +23,79 @@ export default async function About() {
 
   return (
     <section id="about" className={styles.about}>
-      <div className="wrap flex">
-        <Title en="ABOUT" className={styles.aboutTitle}>
+      <div className="wrap">
+        <Title en="ABOUT" no="01" className={styles.aboutTitle}>
           私について
         </Title>
-        <div className={styles.aboutWrap}>
-          <figure className={styles.aboutImg}>
+
+        {/* 氏名ヘッダー（全幅・横広） */}
+        <div className={styles.idHeader}>
+          <p className={styles.idEyebrow}>PROFILE</p>
+          <div className={styles.idRow}>
+            <h3 className={styles.idName}>桜井 翔</h3>
+            <p className={styles.idMeta}>
+              <span>Web Engineer / Tokyo</span>
+              <span className={styles.idStatus}>
+                <span className={styles.idDot} aria-hidden />
+                Open to Work
+              </span>
+            </p>
+          </div>
+        </div>
+
+        {/* 本文ボディ（写真｜詳細） */}
+        <div className={styles.body}>
+          <figure className={styles.photo}>
             <Image
               src="/assets/about/about-img.png"
-              alt="プロフィール画像"
-              width={100}
-              height={100}
+              alt="桜井 翔のプロフィール写真"
+              width={400}
+              height={500}
+              className={styles.photoImg}
             />
-            <figcaption className={styles.aboutImg__name}>Sho Sakurai</figcaption>
+            <figcaption className={styles.photoCap}>
+              <span>FIG.1</span>
+              <span>PORTRAIT</span>
+            </figcaption>
           </figure>
-          <div className={styles.aboutName}>
-            <p className={styles.aboutName__ja}>桜井 翔</p>
-            <p className={styles.aboutName__en}>Web Engineer / Tokyo </p>
+
+          <div className={styles.detail}>
+            <p className={styles.lead}>「作りたい」を、一番近くで形にするエンジニア。</p>
+            <p className={styles.text}>
+              アパレルやWebディレクターなど、常に「人」と向き合う仕事をしてきました。その対人経験をベースにした「ユーザーに寄り添う想像力」を武器に、使う人が心地よく、信頼できるWebサイトを構築します。
+            </p>
+
+            <dl className={styles.spec}>
+              {SPEC.map((row) => (
+                <div key={row.label} className={styles.specRow}>
+                  <dt className={styles.specKey}>{row.label}</dt>
+                  <dd className={styles.specVal}>{row.value}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
-          <p className={styles.aboutContent}>
-            アパレルやWebディレクターなど、常に「人」と向き合う仕事をしてきました。<br></br>
-            「もっとこうなら使いやすいのに」「自分の手で形にしたい」<br></br>
-            その想いが強くなり、技術を習得してエンジニアへ転身しました。<br></br>
-            豊富な対人経験をベースにした「ユーザーに寄り添う想像力」を武器に、<br></br>
-            使う人が心地よく、信頼できるWebサイトを構築します。
-          </p>
-          {tags.length > 0 && (
-            <ul className={styles.aboutTags}>
+        </div>
+
+        {/* タグ（全幅・横広） */}
+        {tags.length > 0 && (
+          <div className={styles.tagsRow}>
+            <span className={styles.tagsLabel}>KEYWORDS</span>
+            <ul className={styles.tags}>
               {tags.map((tag) => (
-                <li key={tag.id} className={styles.aboutTags__item}>
+                <li key={tag.id} className={styles.tagItem}>
                   #{tag.name}
                 </li>
               ))}
             </ul>
-          )}
-        </div>
+          </div>
+        )}
 
-        <div className={styles.aboutCtaWrap}>
-          <p className={styles.aboutCtaLead}>もっと深く知りたい方へ</p>
-          <Link href="/manual" className={styles.aboutCta}>
+        {/* CTA フッター帯（全幅） */}
+        <div className={styles.footer}>
+          <p className={styles.ctaLead}>もっと深く知りたい方へ</p>
+          <Link href="/manual" className={styles.cta}>
             <svg
-              className={styles.aboutCtaBook}
+              className={styles.ctaBook}
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -70,7 +109,7 @@ export default async function About() {
             </svg>
             わたしの取扱説明書を見る
             <svg
-              className={styles.aboutCtaArrow}
+              className={styles.ctaArrow}
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"

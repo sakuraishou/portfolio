@@ -53,7 +53,7 @@ export default function Contact() {
   return (
     <section id="contact" className={styles.contact}>
       <div className="wrap">
-        <Title en="CONTACT" className={styles.contactTitle}>
+        <Title en="CONTACT" no="04" className={styles.contactTitle}>
           お問い合わせ
         </Title>
 

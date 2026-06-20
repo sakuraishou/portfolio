@@ -17,8 +17,15 @@ $breakpoint-sp: 768px;
   visibility: hidden;
 }
 
-@mixin dancing {
-  font-family: $font-sub-script;
+@mixin display {
+  font-family: $font-display;
+  font-optical-sizing: auto;
+  font-weight: 600;
+}
+
+@mixin mono {
+  font-family: $font-mono;
+  letter-spacing: 0.02em;
   font-weight: 500;
 }
 

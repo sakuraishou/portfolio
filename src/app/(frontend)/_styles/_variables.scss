@@ -6,7 +6,9 @@ $accent: #ffa836;
 // フォント（グローバル styles.scss の :root で定義した CSS 変数と紐付け）
 $font-main: var(--font-zen-kaku), sans-serif;
 
-//dancing
-$font-sub-script: var(--font-dancing), cursive;
+// display（Fraunces：上品な見出し英字。旧 Dancing Script の置き換え）
+$font-display: var(--font-fraunces), serif;
+// mono（IBM Plex Mono：ラベル・データ用の隠し味）
+$font-mono: var(--font-plex-mono), monospace;
 //quicksand
 $font-sub-modern: var(--font-quicksand), sans-serif;

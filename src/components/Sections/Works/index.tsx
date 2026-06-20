@@ -56,7 +56,7 @@ export default async function Works() {
   return (
     <section id="works" className={styles.works}>
       <div className="wrap">
-        <Title en="WORKS" className={styles.worksTitle}>
+        <Title en="WORKS" no="03" className={styles.worksTitle}>
           制作実績
         </Title>
         {projects.length > 0 ? (
