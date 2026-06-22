@@ -88,6 +88,7 @@ export default function SkillListItem({
   return (
     <li
       className={`${styles.skillsList__item} ${hasDescription ? styles.itemHasDesc : ''}`}
+      data-reveal
       onClick={openModalIfSp}
       onKeyDown={onRowKeyDown}
       role={rowInteractive ? 'button' : undefined}

@@ -65,6 +65,12 @@ export default function ScrollFX() {
       })
     }
 
+    // 途中位置でのリロード対策：すでに画面上方へ通過済みの要素は即時表示にして取り残さない
+    const passed = reveals.filter((el) => el.getBoundingClientRect().bottom < 0)
+    if (passed.length > 0) {
+      gsap.set(passed, { opacity: 1, y: 0, clearProps: 'transform,willChange' })
+    }
+
     // ---- パララックス ----
     const parallaxEls = gsap.utils.toArray<HTMLElement>('[data-parallax]')
     parallaxEls.forEach((el) => {

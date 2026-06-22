@@ -58,7 +58,7 @@ export default async function Works() {
               const reverse = i % 2 === 0
 
               return (
-                <li key={project.id} className={styles.worksList__item}>
+                <li key={project.id} className={styles.worksList__item} data-reveal>
                   <Link
                     href={`/works/${project.id}`}
                     className={`${styles.card} ${reverse ? styles.cardReverse : ''}`.trim()}

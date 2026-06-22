@@ -112,7 +112,7 @@ export default async function Skills() {
           <div className={styles.skillsGroup}>
             {categoryBlocks.map((block) => (
               <div key={block.categoryId} className={styles.categoryBlock}>
-                <h3 className={styles.categoryTitle}>
+                <h3 className={styles.categoryTitle} data-reveal>
                   {block.categoryName.toUpperCase()}
                   <span className={styles.categoryCount}>
                     {String(block.skills.length).padStart(2, '0')}

@@ -38,6 +38,22 @@ export default function FirstView() {
           '-=0.5',
         )
         .from(`.${styles.scrollCue}`, { y: 10, opacity: 0, duration: 0.6 }, '-=0.2')
+
+      // 背面の巨大透かしを、中央寄せ(translate(-50%,-50%))を保ったまま控えめにパララックス
+      const watermark = root.current?.querySelector<HTMLElement>(`.${styles.watermark}`)
+      if (watermark) {
+        gsap.set(watermark, { xPercent: -50, yPercent: -50 })
+        gsap.to(watermark, {
+          y: 110,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: root.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          },
+        })
+      }
     },
     { scope: root },
   )

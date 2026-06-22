@@ -30,7 +30,7 @@ export default async function About() {
 
         <div className="w1000">
           {/* 氏名ヘッダー（全幅・横広） */}
-          <div className={styles.idHeader}>
+          <div className={styles.idHeader} data-reveal>
             <p className={styles.idEyebrow}>PROFILE</p>
             <div className={styles.idRow}>
               <h3 className={styles.idName}>桜井 翔</h3>
@@ -46,7 +46,7 @@ export default async function About() {
 
           {/* 本文ボディ（写真｜詳細） */}
           <div className={styles.body}>
-            <figure className={styles.photo}>
+            <figure className={styles.photo} data-reveal>
               <Image
                 src="/assets/about/about-img.png"
                 alt="桜井 翔のプロフィール写真"
@@ -61,12 +61,14 @@ export default async function About() {
             </figure>
 
             <div className={styles.detail}>
-              <p className={styles.lead}>「作りたい」を、一番近くで形にするエンジニア。</p>
-              <p className={styles.text}>
+              <p className={styles.lead} data-reveal>
+                「作りたい」を、一番近くで形にするエンジニア。
+              </p>
+              <p className={styles.text} data-reveal>
                 アパレルやWebディレクターなど、常に「人」と向き合う仕事をしてきました。その対人経験をベースにした「ユーザーに寄り添う想像力」を武器に、使う人が心地よく、信頼できるWebサイトを構築します。
               </p>
 
-              <dl className={styles.spec}>
+              <dl className={styles.spec} data-reveal>
                 {SPEC.map((row) => (
                   <div key={row.label} className={styles.specRow}>
                     <dt className={styles.specKey}>{row.label}</dt>
@@ -79,7 +81,7 @@ export default async function About() {
 
           {/* タグ（全幅・横広） */}
           {tags.length > 0 && (
-            <div className={styles.tagsRow}>
+            <div className={styles.tagsRow} data-reveal="fade">
               <span className={styles.tagsLabel}>KEYWORDS</span>
               <ul className={styles.tags}>
                 {tags.map((tag) => (
@@ -92,7 +94,7 @@ export default async function About() {
           )}
 
           {/* CTA フッター帯（全幅） */}
-          <div className={styles.footer}>
+          <div className={styles.footer} data-reveal>
             <p className={styles.ctaLead}>もっと深く知りたい方へ</p>
             <Link href="/manual" className={styles.cta}>
               <svg
