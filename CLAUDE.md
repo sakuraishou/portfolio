@@ -36,7 +36,7 @@ Works の各案件は詳細ページ `/works/[id]`（ケーススタディ：課
 - **UI**: React 19
 - **スタイル**: SCSS Modules（`sass`）
 - **フォント**: Google Fonts を `layout.tsx` の `<link>` で読込。**日本語＝Zen Kaku Gothic New / 見出し英字＝Fraunces / ラベル・データ英字（等幅）＝IBM Plex Mono** の3書体（`@include display` / `@include mono`。詳細は `/scss-rules`・`/design-rules`）。
-- **アニメーション**: GSAP（`gsap` / React 用に `@gsap/react` の `useGSAP`。トップ MV の登場演出や `/manual`（`ScrollTrigger` 含む）で採用）
+- **アニメーション**: GSAP（`gsap` / React 用に `@gsap/react` の `useGSAP`。トップ MV の登場演出、トップ全セクションのスクロール演出（`ScrollTrigger`／後述の `ScrollFX`）、`/manual`（`ScrollTrigger` 含む）で採用）
 - **メール送信**: nodemailer（お問い合わせフォーム）
 - **テスト**: Playwright（e2e）※ 現状テストは未整備
 - **ランタイム**: Node.js 24（Docker イメージ `node:24-*`）
@@ -62,7 +62,7 @@ src/
 │   ├── Layout/              # Header / Footer
 │   ├── Sections/            # FirstView / About / Skills / Works / Contact
 │   ├── Torisetsu/           # 「取扱説明書」特設ページの章（Cover / Features / Usage / … / Warranty）+ data.ts
-│   └── UI/                  # 汎用 UI（Title / DeviceShowcase〔Works の端末ショーケース〕など）
+│   └── UI/                  # 汎用 UI（Title / DeviceShowcase〔Works の端末ショーケース〕/ ScrollFX〔トップのスクロール演出ドライバ〕など）
 ├── payload.config.ts        # Payload 設定
 └── payload-types.ts         # 自動生成型（手で編集しない）
 ```
@@ -99,6 +99,15 @@ src/
 - パスエイリアスは `@/*` → `src/*`。
 - Server Component が既定。状態・イベントが要るものだけ先頭に `'use client'`。
 - 生成型は `import type { ... } from '@/payload-types'` から取得する。
+
+### トップのスクロール演出（ScrollFX）
+
+トップページの出現・パララックス演出は、`page.tsx` に 1 つだけ置く client ドライバ `components/UI/ScrollFX` が担う。各セクション（**Server Component のまま**でよい）は **`data-*` 属性を付けるだけ**で演出が乗る。新規セクション・要素を足すときも同じ流儀に従う。
+
+- `data-reveal` … ビューポート進入時に フェード＋わずかな上昇で出現。大きいブロックは `data-reveal="fade"`（透明度のみ）。
+- `data-parallax` … 装飾要素向けの控えめなパララックス。`data-parallax-speed`（移動量 yPercent・既定 14）/ `data-parallax-anchor="top"`（初期表示で見えている要素はセクション上端基準）。
+- 注意: reveal は出現後に inline transform を `clearProps` で除去するため、**ベース／ホバーで `transform` に依存する要素（例: ツールチップの `translateX(-50%)`、カードのホバー浮き）には `data-reveal` を付けない**（親や別要素に付ける）。`transform: translate()` で中央寄せした要素にパララックスを足すときは `xPercent/yPercent` を併用して中央寄せを保つ（`FirstView` の透かし参照）。
+- `prefers-reduced-motion: reduce` 指定時はドライバ側で全演出を無効化し、静止状態で表示する（CSS で隠さないため JS 無効でも表示は壊れない）。
 
 ## Payload バックエンドの作業
 

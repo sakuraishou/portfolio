@@ -32,11 +32,7 @@ export default function FirstView() {
 
       const tl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 0.7 } })
       tl.from(`.${styles.reveal}`, { y: 24, opacity: 0, stagger: 0.09, delay: 0.1 })
-        .from(
-          `.${styles.specRow}`,
-          { x: -14, opacity: 0, duration: 0.5, stagger: 0.07 },
-          '-=0.5',
-        )
+        .from(`.${styles.specRow}`, { x: -14, opacity: 0, duration: 0.5, stagger: 0.07 }, '-=0.5')
         .from(`.${styles.scrollCue}`, { y: 10, opacity: 0, duration: 0.6 }, '-=0.2')
 
       // 背面の巨大透かしを、中央寄せ(translate(-50%,-50%))を保ったまま控えめにパララックス
