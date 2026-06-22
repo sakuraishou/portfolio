@@ -84,8 +84,6 @@ export const USAGE_QUOTES = [
 export const CAUTION: {
   intro: string
   notices: string[]
-  photoNote: string
-  photoCaption: string
 } = {
   intro: '本製品（私）を末永く快適にご利用いただくため、ご使用前に必ずお読みください。',
   notices: [
@@ -93,8 +91,6 @@ export const CAUTION: {
     '詰まったら、犬の散歩へ。歩くとアイデアが降りてきます。',
     '気になった技術はつい触ってしまうので、放っておくと休日が溶けます（笑）。',
   ],
-  photoNote: '（犬の散歩 ＝ 最高のデバッグ環境）',
-  photoCaption: '図：推奨されるリフレッシュ動作',
 }
 
 /* ===================== 04 困ったときは（FAQ） ===================== */

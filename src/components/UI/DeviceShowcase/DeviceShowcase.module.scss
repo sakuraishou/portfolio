@@ -1,0 +1,209 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
+.showcase {
+  position: relative;
+}
+
+/* スマホがある時だけ、はみ出し配置用の余白を右に確保 */
+.withSp {
+  padding-right: 16%;
+
+  @include responsive(md) {
+    padding-right: 12%;
+  }
+}
+
+/* ===== PC：ブラウザ枠 ===== */
+.pc {
+  width: 100%;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  border: 0.1rem solid rgba($fontBase, 0.18);
+  background: #fff;
+  box-shadow: 0 0.8rem 2rem -1rem rgba($fontBase, 0.3);
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2rem;
+    padding: 0 0.9rem;
+    background: $bg;
+    border-bottom: 0.1rem solid rgba($fontBase, 0.1);
+
+    &::after {
+      content: '';
+      flex: 1;
+      height: 0.9rem;
+      background: rgba($fontBase, 0.08);
+      border-radius: 0.45rem;
+    }
+  }
+
+  &__dot {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+
+    &:nth-child(1) {
+      background-color: $main;
+    }
+    &:nth-child(2) {
+      background-color: $accent;
+    }
+    &:nth-child(3) {
+      background-color: $bg2;
+    }
+  }
+
+  &__screen {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: linear-gradient(160deg, #fff, #ffe6cc);
+  }
+}
+
+/* ===== SP：暖色ベゼルのスマホ（既定＝上下中央・はみ出し） ===== */
+.sp {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38%;
+  padding: 0.3rem;
+  border-radius: 0.8rem;
+  border: 0.1rem solid rgba($fontBase, 0.22);
+  background: $bg;
+  box-shadow: 0 1.2rem 2.8rem -0.8rem rgba($fontBase, 0.42);
+  z-index: 2;
+
+  @include responsive(md) {
+    width: 28%;
+    padding: 0.5rem;
+    border-radius: 1.8rem;
+  }
+
+  /* ノッチ（暖色・控えめ） */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    width: 24%;
+    height: 0.4rem;
+    background: rgba($fontBase, 0.3);
+    border-radius: 0.4rem;
+  }
+
+  &__screen {
+    position: relative;
+    aspect-ratio: 9 / 18;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background: linear-gradient(160deg, #fff, #ffe6cc);
+
+    @include responsive(md) {
+      border-radius: 1.2rem;
+    }
+  }
+}
+
+.shotImg {
+  object-fit: cover;
+  object-position: top;
+}
+
+.shotPlaceholder {
+  @include center;
+  @include mono;
+  position: absolute;
+  inset: 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: rgba($fontBase, 0.3);
+}
+
+/* 社外秘（画像非公開）表示 */
+.confidential {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.2rem;
+  text-align: center;
+  background:
+    repeating-linear-gradient(-45deg, rgba($main, 0.05) 0 1rem, transparent 1rem 2rem),
+    rgba(#fff, 0.4);
+}
+
+.confidentialIcon {
+  width: 2.4rem;
+  height: 2.4rem;
+  color: $main;
+
+  @include responsive(md) {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
+}
+
+.confidentialEn {
+  @include mono;
+  font-size: 1.1rem;
+  letter-spacing: 0.2em;
+  color: $main;
+}
+
+.confidentialJa {
+  font-family: $font-main;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba($fontBase, 0.7);
+
+  @include responsive(md) {
+    font-size: 1.3rem;
+  }
+}
+
+/* ===== detail variant（PC小さめ・SPは下揃え＆大きめ） ===== */
+.detail {
+  @include responsive(md) {
+    max-width: 66rem;
+  }
+}
+
+.detail.withSp {
+  padding-right: 19%;
+
+  @include responsive(md) {
+    padding-right: 16%;
+  }
+}
+
+.detail .sp {
+  top: auto;
+  bottom: -1rem;
+  transform: none;
+  width: 34%;
+
+  @include responsive(md) {
+    width: 26%;
+    bottom: -1.5rem;
+    padding: 0.7rem;
+    border-radius: 2.2rem;
+  }
+}
+
+.detail .sp__screen {
+  @include responsive(md) {
+    border-radius: 1.6rem;
+  }
+}

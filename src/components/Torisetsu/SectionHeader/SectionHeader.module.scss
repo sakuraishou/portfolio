@@ -38,7 +38,7 @@
 }
 
 .ghost {
-  @include quicksand;
+  @include mono;
   position: absolute;
   top: 0;
   right: 0;
@@ -63,7 +63,7 @@
 .no {
   position: relative;
   z-index: 1;
-  @include quicksand;
+  @include mono;
   font-size: 4.8rem;
   line-height: 1;
   color: $main;
@@ -95,7 +95,7 @@
 }
 
 .en {
-  @include quicksand;
+  @include mono;
   font-size: 1.3rem;
   letter-spacing: 0.12em;
   color: $main;

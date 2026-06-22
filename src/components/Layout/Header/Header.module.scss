@@ -189,7 +189,7 @@
 }
 
 .navEn {
-  @include quicksand;
+  @include mono;
   display: block;
   font-size: 3.2rem;
   letter-spacing: 0.08em;
@@ -259,7 +259,7 @@
 }
 
 .navManualEn {
-  @include quicksand;
+  @include mono;
   font-size: 1.3rem;
   letter-spacing: 0.1em;
   opacity: 0.75;

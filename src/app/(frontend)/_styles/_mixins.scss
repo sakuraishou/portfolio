@@ -29,12 +29,6 @@ $breakpoint-sp: 768px;
   font-weight: 500;
 }
 
-@mixin quicksand {
-  font-family: $font-sub-modern;
-  letter-spacing: 0.05em;
-  font-weight: 500;
-}
-
 /* vwの設定
 ========================================================================== */
 @function get_vw($size, $viewport: 375) {

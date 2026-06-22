@@ -87,7 +87,7 @@
 }
 
 .version {
-  @include quicksand;
+  @include mono;
   font-size: 2rem;
   line-height: 1;
   color: $main;
@@ -98,7 +98,7 @@
 }
 
 .badge {
-  @include quicksand;
+  @include mono;
   display: inline-flex;
   align-items: center;
   height: 2rem;

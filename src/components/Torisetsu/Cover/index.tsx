@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
+import Image from 'next/image'
 import Link from 'next/link'
 import Title from '@/components/UI/Title'
 import { PRODUCT } from '../data'
@@ -92,11 +93,13 @@ export default function Cover() {
         </div>
 
         <figure className={`${styles.photo} ${styles.reveal}`}>
-          <span className={styles.photoLabel}>
-            製品画像
-            <br />
-            （写真はあとで差し替え）
-          </span>
+          <Image
+            src="/assets/manual/human@2x.jpg"
+            alt={PRODUCT.nameJa}
+            fill
+            sizes="(max-width: 767px) 26rem, 27rem"
+            className={styles.photoImg}
+          />
         </figure>
       </div>
 

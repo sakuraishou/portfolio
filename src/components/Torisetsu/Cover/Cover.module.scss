@@ -31,7 +31,7 @@
   flex-direction: column;
   gap: 2.4rem;
 
-  @include responsive(lg) {
+  @include responsive(md) {
     display: grid;
     grid-template-columns: auto 27rem;
     justify-content: center;
@@ -42,7 +42,7 @@
 
 /* 表紙の特大ウォーターマーク（パララックス・飾り） */
 .bgWord {
-  @include quicksand;
+  @include mono;
   white-space: nowrap;
   line-height: 1;
   font-weight: 700;
@@ -128,7 +128,7 @@
   max-width: 30rem;
   padding-bottom: 1.2rem;
   border-bottom: 0.1rem solid rgba($main, 0.3);
-  @include quicksand;
+  @include mono;
   font-size: 1.2rem;
   letter-spacing: 0.12em;
   color: $main;
@@ -184,7 +184,7 @@
 }
 
 .productEn {
-  @include quicksand;
+  @include mono;
   font-size: 1.8rem;
   color: $main;
 
@@ -194,7 +194,7 @@
 }
 
 .model {
-  @include quicksand;
+  @include mono;
   font-size: 1.4rem;
   letter-spacing: 0.04em;
   color: rgba($fontBase, 0.7);
@@ -228,26 +228,24 @@
 }
 
 .photo {
-  @include center;
+  position: relative;
   aspect-ratio: 3 / 4;
   max-width: 26rem;
   width: 100%;
   margin: 0 auto;
+  overflow: hidden;
   border-radius: 1rem;
-  border: 0.2rem dashed rgba($main, 0.5);
+  border: 0.1rem solid rgba($main, 0.25);
   background-color: rgba(#fff, 0.45);
 
-  @include responsive(lg) {
+  @include responsive(md) {
     max-width: none;
     margin: 0;
   }
 }
 
-.photoLabel {
-  text-align: center;
-  font-size: 1.4rem;
-  line-height: 1.7;
-  color: rgba($fontBase, 0.55);
+.photoImg {
+  object-fit: cover;
 }
 
 .scrollCue {
@@ -266,7 +264,7 @@
 }
 
 .scrollText {
-  @include quicksand;
+  @include mono;
   font-size: 1.2rem;
   letter-spacing: 0.16em;
   color: $main;

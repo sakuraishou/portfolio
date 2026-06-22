@@ -198,8 +198,28 @@ export interface Project {
   sort_order?: number | null;
   mainImage?: (number | null) | Media;
   mobileImage?: (number | null) | Media;
+  /**
+   * ONにすると、画像があっても表示せず「社外秘のため画像は非公開」と表示します（NO IMAGE の代わり）。
+   */
+  confidential?: boolean | null;
   url?: string | null;
   description?: string | null;
+  /**
+   * なぜ作ったか／解決したかった課題（ケーススタディ用）
+   */
+  challenge?: string | null;
+  /**
+   * なぜその構成にしたか。一番の見せ場（ケーススタディ用）
+   */
+  approach?: string | null;
+  /**
+   * ケーススタディ用
+   */
+  highlights?: string | null;
+  /**
+   * ケーススタディ用
+   */
+  result?: string | null;
   /**
    * 管理画面「Project Scopes」で選択肢の数と並び順を管理できます
    */
@@ -243,6 +263,10 @@ export interface Skill {
   name: string;
   description?: string | null;
   studying?: boolean | null;
+  /**
+   * チェックすると「得意」バッジを表示します
+   */
+  featured?: boolean | null;
   icon: number | Media;
   updatedAt: string;
   createdAt: string;
@@ -414,8 +438,13 @@ export interface ProjectsSelect<T extends boolean = true> {
   sort_order?: T;
   mainImage?: T;
   mobileImage?: T;
+  confidential?: T;
   url?: T;
   description?: T;
+  challenge?: T;
+  approach?: T;
+  highlights?: T;
+  result?: T;
   scope?: T;
   techStack?:
     | T
@@ -448,6 +477,7 @@ export interface SkillsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
   studying?: T;
+  featured?: T;
   icon?: T;
   updatedAt?: T;
   createdAt?: T;

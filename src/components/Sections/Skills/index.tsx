@@ -27,13 +27,10 @@ function sortByOrder<T extends { sort_order?: number | null }>(items: T[]): T[] 
 
 type CategoryWithSkills = { categoryId: number | 'none'; categoryName: string; skills: Skill[] }
 
-/** 「得意」バッジ（仮）。後で Payload に featured フィールドを追加して置き換える */
-const FEATURED_SKILLS = new Set<string>(['WordPress'])
-
 function SkillItem({ skill }: { skill: Skill }) {
   const iconUrl = getMediaUrl(skill.icon)
   const isStudying = Boolean(skill.studying)
-  const isFeatured = FEATURED_SKILLS.has(skill.name)
+  const isFeatured = Boolean(skill.featured)
   const iconAlt =
     typeof skill.icon === 'object' ? (skill.icon.alt ?? skill.name) : skill.name
 

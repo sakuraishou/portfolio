@@ -5,7 +5,7 @@ import Footer from '@/components/Layout/Footer'
 
 /** Turbopack + next/font/google の解決バグを避けるため、Google Fonts は link で読み込む */
 const googleFontsStylesheet =
-  'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Quicksand:wght@500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap'
+  'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap'
 
 export const metadata: Metadata = {
   title: {

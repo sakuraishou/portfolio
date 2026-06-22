@@ -182,7 +182,7 @@
   flex-direction: column;
   gap: 2.8rem;
 
-  @include responsive(lg) {
+  @include responsive(md) {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -191,7 +191,7 @@
 }
 
 .lead {
-  @include responsive(lg) {
+  @include responsive(md) {
     flex: 1 1 auto;
   }
 }
@@ -254,7 +254,7 @@
   border-radius: 1rem;
   backdrop-filter: blur(0.2rem);
 
-  @include responsive(lg) {
+  @include responsive(md) {
     flex: 0 0 36rem;
     max-width: 36rem;
   }

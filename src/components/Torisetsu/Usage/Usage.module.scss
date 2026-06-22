@@ -57,7 +57,7 @@
 }
 
 .stepNoLabel {
-  @include quicksand;
+  @include mono;
   font-size: 1.2rem;
   letter-spacing: 0.16em;
 
@@ -67,7 +67,7 @@
 }
 
 .stepNoNum {
-  @include quicksand;
+  @include mono;
   font-size: 4rem;
   line-height: 1;
 
@@ -110,12 +110,8 @@
   @include responsive(md) {
     // PC: 横の接続線
     height: auto;
-    width: 4rem;
-    flex: 0 0 auto;
-  }
-
-  @include responsive(lg) {
     width: 5.6rem;
+    flex: 0 0 auto;
   }
 }
 

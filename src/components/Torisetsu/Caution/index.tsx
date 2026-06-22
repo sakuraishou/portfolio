@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
+import Image from 'next/image'
 import SectionHeader from '@/components/Torisetsu/SectionHeader'
 import { CAUTION } from '../data'
 import styles from './Caution.module.scss'
@@ -82,12 +83,13 @@ export default function Caution() {
             </ul>
 
             <figure className={styles.photo}>
-              <span className={styles.photoLabel}>
-                画像準備中
-                <br />
-                {CAUTION.photoNote}
-              </span>
-              <figcaption className={styles.photoCaption}>{CAUTION.photoCaption}</figcaption>
+              <Image
+                src="/assets/manual/dog@2x.jpg"
+                alt="犬の散歩でリフレッシュ"
+                fill
+                sizes="(max-width: 767px) 90vw, 56rem"
+                className={styles.photoImg}
+              />
             </figure>
           </div>
         </div>

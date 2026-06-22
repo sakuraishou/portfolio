@@ -5,7 +5,6 @@
   --font-zen-kaku: 'Zen Kaku Gothic New';
   --font-fraunces: 'Fraunces';
   --font-plex-mono: 'IBM Plex Mono';
-  --font-quicksand: 'Quicksand';
 }
 
 html {
@@ -122,6 +121,16 @@ select {
 
   @include responsive(md) {
     padding: 0;
+  }
+}
+
+.w1000 {
+  width: 100%;
+  @include responsive(md) {
+    max-width: 100rem;
+    @include responsive(md) {
+      margin: 0 auto;
+    }
   }
 }
 

@@ -10,12 +10,12 @@
   position: relative;
   z-index: 1;
 
-  @include responsive(lg) {
+  @include responsive(md) {
     font-size: 3rem;
   }
 
   &[data-en]::before {
-    @include quicksand;
+    @include mono;
     content: attr(data-en);
     display: block;
     font-size: 4.2rem;
@@ -27,7 +27,7 @@
     bottom: 0.8rem;
     left: 2rem;
 
-    @include responsive(lg) {
+    @include responsive(md) {
       font-size: 6rem;
     }
   }
@@ -57,7 +57,7 @@
   pointer-events: none;
   user-select: none;
 
-  @include responsive(lg) {
+  @include responsive(md) {
     font-size: 7.4rem;
   }
 }
@@ -71,7 +71,7 @@
   letter-spacing: 0.16em;
   color: var(--title-accent);
 
-  @include responsive(lg) {
+  @include responsive(md) {
     font-size: 1.4rem;
   }
 }
@@ -92,10 +92,6 @@
   margin-top: 0.9rem;
 
   @include responsive(md) {
-    font-size: 3.2rem;
-  }
-
-  @include responsive(lg) {
     font-size: 3.8rem;
   }
 }

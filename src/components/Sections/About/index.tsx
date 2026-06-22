@@ -28,101 +28,103 @@ export default async function About() {
           私について
         </Title>
 
-        {/* 氏名ヘッダー（全幅・横広） */}
-        <div className={styles.idHeader}>
-          <p className={styles.idEyebrow}>PROFILE</p>
-          <div className={styles.idRow}>
-            <h3 className={styles.idName}>桜井 翔</h3>
-            <p className={styles.idMeta}>
-              <span>Web Engineer / Tokyo</span>
-              <span className={styles.idStatus}>
-                <span className={styles.idDot} aria-hidden />
-                Open to Work
-              </span>
-            </p>
+        <div className="w1000">
+          {/* 氏名ヘッダー（全幅・横広） */}
+          <div className={styles.idHeader}>
+            <p className={styles.idEyebrow}>PROFILE</p>
+            <div className={styles.idRow}>
+              <h3 className={styles.idName}>桜井 翔</h3>
+              <p className={styles.idMeta}>
+                <span>Web Engineer / Tokyo</span>
+                <span className={styles.idStatus}>
+                  <span className={styles.idDot} aria-hidden />
+                  Open to Work
+                </span>
+              </p>
+            </div>
           </div>
-        </div>
 
-        {/* 本文ボディ（写真｜詳細） */}
-        <div className={styles.body}>
-          <figure className={styles.photo}>
-            <Image
-              src="/assets/about/about-img.png"
-              alt="桜井 翔のプロフィール写真"
-              width={400}
-              height={500}
-              className={styles.photoImg}
-            />
-            <figcaption className={styles.photoCap}>
-              <span>FIG.1</span>
-              <span>PORTRAIT</span>
-            </figcaption>
-          </figure>
+          {/* 本文ボディ（写真｜詳細） */}
+          <div className={styles.body}>
+            <figure className={styles.photo}>
+              <Image
+                src="/assets/about/about-img.png"
+                alt="桜井 翔のプロフィール写真"
+                width={400}
+                height={500}
+                className={styles.photoImg}
+              />
+              <figcaption className={styles.photoCap}>
+                <span>FIG.1</span>
+                <span>PORTRAIT</span>
+              </figcaption>
+            </figure>
 
-          <div className={styles.detail}>
-            <p className={styles.lead}>「作りたい」を、一番近くで形にするエンジニア。</p>
-            <p className={styles.text}>
-              アパレルやWebディレクターなど、常に「人」と向き合う仕事をしてきました。その対人経験をベースにした「ユーザーに寄り添う想像力」を武器に、使う人が心地よく、信頼できるWebサイトを構築します。
-            </p>
+            <div className={styles.detail}>
+              <p className={styles.lead}>「作りたい」を、一番近くで形にするエンジニア。</p>
+              <p className={styles.text}>
+                アパレルやWebディレクターなど、常に「人」と向き合う仕事をしてきました。その対人経験をベースにした「ユーザーに寄り添う想像力」を武器に、使う人が心地よく、信頼できるWebサイトを構築します。
+              </p>
 
-            <dl className={styles.spec}>
-              {SPEC.map((row) => (
-                <div key={row.label} className={styles.specRow}>
-                  <dt className={styles.specKey}>{row.label}</dt>
-                  <dd className={styles.specVal}>{row.value}</dd>
-                </div>
-              ))}
-            </dl>
+              <dl className={styles.spec}>
+                {SPEC.map((row) => (
+                  <div key={row.label} className={styles.specRow}>
+                    <dt className={styles.specKey}>{row.label}</dt>
+                    <dd className={styles.specVal}>{row.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </div>
-        </div>
 
-        {/* タグ（全幅・横広） */}
-        {tags.length > 0 && (
-          <div className={styles.tagsRow}>
-            <span className={styles.tagsLabel}>KEYWORDS</span>
-            <ul className={styles.tags}>
-              {tags.map((tag) => (
-                <li key={tag.id} className={styles.tagItem}>
-                  #{tag.name}
-                </li>
-              ))}
-            </ul>
+          {/* タグ（全幅・横広） */}
+          {tags.length > 0 && (
+            <div className={styles.tagsRow}>
+              <span className={styles.tagsLabel}>KEYWORDS</span>
+              <ul className={styles.tags}>
+                {tags.map((tag) => (
+                  <li key={tag.id} className={styles.tagItem}>
+                    #{tag.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* CTA フッター帯（全幅） */}
+          <div className={styles.footer}>
+            <p className={styles.ctaLead}>もっと深く知りたい方へ</p>
+            <Link href="/manual" className={styles.cta}>
+              <svg
+                className={styles.ctaBook}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+                focusable="false"
+              >
+                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+              </svg>
+              わたしの取扱説明書を見る
+              <svg
+                className={styles.ctaArrow}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+                focusable="false"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </Link>
           </div>
-        )}
-
-        {/* CTA フッター帯（全幅） */}
-        <div className={styles.footer}>
-          <p className={styles.ctaLead}>もっと深く知りたい方へ</p>
-          <Link href="/manual" className={styles.cta}>
-            <svg
-              className={styles.ctaBook}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden
-              focusable="false"
-            >
-              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-            </svg>
-            わたしの取扱説明書を見る
-            <svg
-              className={styles.ctaArrow}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden
-              focusable="false"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </Link>
         </div>
       </div>
     </section>

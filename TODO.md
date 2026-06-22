@@ -17,14 +17,14 @@
 
 トップを「桜井 翔という"製品"の仕様書（スペックシート）」コンセプトで MV→About→Skills→/manual と統一した。その続きで未対応のもの:
 
-### 1. Skills「得意」バッジを Payload フィールド化（システム改修）
-- 現状は**フロントにベタ書きの仮実装**：`src/components/Sections/Skills/index.tsx` の `FEATURED_SKILLS = new Set(['WordPress'])`。
-- `skills` コレクションに `featured`(boolean=得意) か `level`(得意/通常/学習中) を1つ追加 → 型再生成（`pnpm generate:types`）→ フロントを置換。
-- 管理画面でポチっと「得意」を指定できるようにする。
+### 1. Skills「得意」バッジを Payload フィールド化 ✅ 完了
+- `skills` に `featured`(boolean=得意) を追加・型再生成済み。フロントは `skill.featured` を参照（仮の静的リストは撤去）。
+- あとは**管理画面で「得意」なスキルにチェック**を入れるだけ。
 
-### 2. Works / Contact の「中身」も MV 調に寄せる
-- 今回は **見出し（`UI/Title` のスペックシート版）だけ統一**。Works のプロジェクトカード・Contact のフォーム本体のトーンは未調整。
-- mono ラベル／ヘアライン／key-value など、About・Skills と同じ語彙で揃えるか検討。
+### 2. Works ケーススタディページ（`/works/[id]`）✅ ページ実装済み
+- `projects` に 課題／技術選定・設計判断／工夫・詰まった所／結果・学び を追加・型再生成済み。`/works/[id]` を実装し、トップ Works カードから「ケーススタディを見る」で導線（本文が1つでも入っている案件のみ表示）。
+- **あとは管理画面で各案件の本文を入力**（特に CRM＝Nuxt×Supabase モノレポ、社内アプリ＝Next.js）。
+- Contact フォーム本体のトーン調整は未（必要なら別途）。
 
 ### 3. About の文言を CMS 管理化（任意）
 - 現状 About の本文・スペック表（背景／強み／姿勢）・リードは `index.tsx` にベタ書き。
