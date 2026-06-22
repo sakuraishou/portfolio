@@ -2,91 +2,65 @@
 @use '@/app/(frontend)/_styles/mixins' as *;
 
 .notFound {
-  min-height: calc(100dvh - 16rem);
-  display: grid;
-  place-items: center;
-  position: relative;
-  overflow: hidden;
-  padding: 8rem 0;
-  background: linear-gradient(180deg, #fffbf6 0%, #fff7ee 100%);
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10rem 2.4rem;
+  background: linear-gradient(180deg, #fffbf6 0%, $bg 100%);
 
   @include responsive(md) {
-    min-height: calc(100dvh - 18rem);
-    padding: 10rem 0;
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    z-index: 0;
-    width: min(72vmin, 44rem);
-    height: min(64vmin, 40rem);
-    top: 50%;
-    left: 50%;
-    border: 0.12rem solid rgba(255, 255, 255, 0.35);
-    box-shadow:
-      0 1.2rem 3.2rem rgba(94, 49, 0, 0.16),
-      inset 0 0 0 0.1rem rgba(255, 255, 255, 0.12);
-    background: linear-gradient(152deg, $main 0%, $accent 100%);
-    pointer-events: none;
-    animation: edgeMorph 30s ease-in-out infinite alternate;
-    transform: translate3d(-50%, -50%, 0);
-
-    @include responsive(md) {
-      width: min(62vmin, 54rem);
-      height: min(54vmin, 48rem);
-    }
+    padding: 12rem 3.2rem;
   }
 }
 
 .inner {
-  position: relative;
-  z-index: 1;
   width: 100%;
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 2.4rem 1.2rem;
+  max-width: 56rem;
   text-align: center;
-  animation: fadeUp 0.9s ease-out both;
-
-  @include responsive(md) {
-    padding: 4rem 2rem;
-  }
 }
 
 .code {
   @include display;
-  margin: 0;
-  font-size: 8rem;
-  font-weight: 500;
-  line-height: 0.85;
-  letter-spacing: 0.02em;
+  font-size: 9rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
   color: $main;
-  text-shadow: 0 0.4rem 1.2rem rgba(94, 49, 0, 0.16);
 
   @include responsive(md) {
-    font-size: 12rem;
+    font-size: 14rem;
+  }
+}
+
+.label {
+  @include mono;
+  margin-top: 0.8rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.3em;
+  color: rgba($fontBase, 0.5);
+
+  @include responsive(md) {
+    font-size: 1.4rem;
   }
 }
 
 .title {
-  margin: 0.8rem 0 0;
-  font-size: 2.2rem;
+  font-family: $font-main;
+  margin-top: 2rem;
+  font-size: 2rem;
   font-weight: 700;
-  line-height: 1.35;
   color: $fontBase;
 
   @include responsive(md) {
-    font-size: 3.2rem;
+    font-size: 2.6rem;
   }
 }
 
 .description {
-  margin: 1.6rem auto 0;
-  max-width: 48rem;
+  margin-top: 1.6rem;
   font-size: 1.5rem;
-  line-height: 1.8;
-  color: rgba($fontBase, 0.9);
+  line-height: 1.9;
+  color: rgba($fontBase, 0.75);
 
   @include responsive(md) {
     font-size: 1.6rem;
@@ -96,76 +70,39 @@
 .link {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: min(30rem, 100%);
-  min-height: 4.8rem;
-  margin: 2.4rem auto 0;
-  padding: 0 2rem;
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #fff;
-  background-color: $main;
-  border-radius: 0.8rem;
-  box-shadow: 0 0.2rem 0.8rem rgba(94, 49, 0, 0.2);
+  gap: 0.8rem;
+  margin-top: 3.2rem;
+  padding: 1.4rem 3.2rem;
+  border-radius: 99.9rem;
+  border: 0.15rem solid $main;
+  color: $main;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
   transition:
-    background-color 0.15s ease,
-    box-shadow 0.15s ease,
-    transform 0.15s ease;
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+
+  @include responsive(md) {
+    margin-top: 4rem;
+    font-size: 1.6rem;
+  }
 
   &:hover {
-    background-color: #dc7d00;
-    box-shadow: 0 0.35rem 1rem rgba(94, 49, 0, 0.25);
-    transform: translateY(-0.05rem);
-  }
-
-  &:focus-visible {
-    outline: 0.2rem solid rgba(247, 140, 0, 0.75);
-    outline-offset: 0.2rem;
+    background-color: $main;
+    color: #fff;
+    transform: translateY(-0.2rem);
   }
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(1.2rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.linkIcon {
+  width: 1.7rem;
+  height: 1.7rem;
+  flex: 0 0 auto;
+  transition: transform 0.2s ease;
 }
 
-@keyframes edgeMorph {
-  0% {
-    border-radius: 58% 42% 38% 62% / 62% 38% 58% 42%;
-    transform: translate3d(-50%, -50%, 0) translate3d(0, 0, 0) scale(1) rotate(0deg);
-  }
-
-  18% {
-    border-radius: 40% 60% 55% 45% / 48% 42% 58% 52%;
-    transform: translate3d(-50%, -50%, 0) translate3d(2.4rem, -1.8rem, 0) scale(1.12) rotate(0.9deg);
-  }
-
-  38% {
-    border-radius: 62% 38% 44% 56% / 54% 58% 42% 46%;
-    transform: translate3d(-50%, -50%, 0) translate3d(-2.2rem, 1.6rem, 0) scale(0.86)
-      rotate(-0.75deg);
-  }
-
-  58% {
-    border-radius: 46% 54% 62% 38% / 40% 52% 48% 60%;
-    transform: translate3d(-50%, -50%, 0) translate3d(1.6rem, 2rem, 0) scale(1.08) rotate(0.65deg);
-  }
-
-  78% {
-    border-radius: 54% 46% 48% 52% / 62% 44% 56% 38%;
-    transform: translate3d(-50%, -50%, 0) translate3d(-1.8rem, -1.2rem, 0) scale(0.9)
-      rotate(-0.55deg);
-  }
-
-  100% {
-    border-radius: 52% 48% 48% 52% / 48% 52% 52% 48%;
-    transform: translate3d(-50%, -50%, 0) translate3d(0.4rem, 0.2rem, 0) scale(1) rotate(0deg);
-  }
+.link:hover .linkIcon {
+  transform: translateX(-0.3rem);
 }
