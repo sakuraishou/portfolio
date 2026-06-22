@@ -9,6 +9,7 @@ Next.js + Payload CMS で構築したポートフォリオサイトです。
 - **言語**: TypeScript
 - **リッチテキスト**: Lexical Editor
 - **アニメーション**: GSAP（`gsap` / `@gsap/react`）
+- **フォント**: Google Fonts（Zen Kaku Gothic New / Fraunces / IBM Plex Mono）
 - **ランタイム**: Node.js 24
 - **パッケージ管理**: pnpm（`packageManager: pnpm@10.34.3`）
 
@@ -79,7 +80,7 @@ src/
 │   ├── (frontend)/   # 公開ページのルート
 │   └── (payload)/    # Payload 管理画面・API のルート
 ├── collections/      # Payload コレクション設定
-├── components/       # React コンポーネント（Layout / Sections / UI）
+├── components/       # React コンポーネント（Layout / Sections / Torisetsu / UI）
 ├── payload.config.ts # Payload メイン設定
 └── payload-types.ts  # 自動生成型（手で編集しない）
 ```
