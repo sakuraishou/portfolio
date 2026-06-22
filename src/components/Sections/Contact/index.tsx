@@ -53,12 +53,12 @@ export default function Contact() {
   return (
     <section id="contact" className={styles.contact}>
       <div className="wrap">
-        <Title en="CONTACT" className={styles.contactTitle}>
+        <Title en="CONTACT" no="04" className={styles.contactTitle}>
           お問い合わせ
         </Title>
 
         <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.field}>
+          <div className={styles.field} data-reveal>
             <label htmlFor="contact-name" className={styles.label}>
               名前
               <span className={styles.badgeRequired}>必須</span>
@@ -74,7 +74,7 @@ export default function Contact() {
             />
           </div>
 
-          <div className={styles.field}>
+          <div className={styles.field} data-reveal>
             <label htmlFor="contact-tel" className={styles.label}>
               電話番号
               <span className={styles.badgeOptional}>任意</span>
@@ -89,7 +89,7 @@ export default function Contact() {
             />
           </div>
 
-          <div className={styles.field}>
+          <div className={styles.field} data-reveal>
             <label htmlFor="contact-email" className={styles.label}>
               メールアドレス
               <span className={styles.badgeRequired}>必須</span>
@@ -105,7 +105,7 @@ export default function Contact() {
             />
           </div>
 
-          <div className={styles.field}>
+          <div className={styles.field} data-reveal>
             <label htmlFor="contact-message" className={styles.label}>
               お問い合わせ内容
               <span className={styles.badgeRequired}>必須</span>
@@ -120,7 +120,7 @@ export default function Contact() {
             />
           </div>
 
-          <div className={styles.submitRow}>
+          <div className={styles.submitRow} data-reveal>
             {feedback && (
               <p
                 className={`${styles.message} ${
@@ -134,6 +134,22 @@ export default function Contact() {
             )}
             <button type="submit" className={styles.submit} disabled={pending}>
               {pending ? '送信中…' : '送信する'}
+              {!pending && (
+                <svg
+                  className={styles.submitIcon}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden
+                  focusable="false"
+                >
+                  <path d="M22 2 11 13" />
+                  <path d="M22 2 15 22 11 13 2 9z" />
+                </svg>
+              )}
             </button>
           </div>
         </form>

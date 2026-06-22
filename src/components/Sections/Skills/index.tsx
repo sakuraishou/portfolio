@@ -30,6 +30,7 @@ type CategoryWithSkills = { categoryId: number | 'none'; categoryName: string; s
 function SkillItem({ skill }: { skill: Skill }) {
   const iconUrl = getMediaUrl(skill.icon)
   const isStudying = Boolean(skill.studying)
+  const isFeatured = Boolean(skill.featured)
   const iconAlt =
     typeof skill.icon === 'object' ? (skill.icon.alt ?? skill.name) : skill.name
 
@@ -38,6 +39,7 @@ function SkillItem({ skill }: { skill: Skill }) {
       iconUrl={iconUrl}
       iconAlt={iconAlt}
       isStudying={isStudying}
+      isFeatured={isFeatured}
       name={skill.name}
       description={skill.description}
     />
@@ -103,14 +105,19 @@ export default async function Skills() {
   return (
     <section id="skills" className={styles.skills}>
       <div className="wrap">
-        <Title en="SKILLS" className={styles.skillsTitle}>
+        <Title en="SKILLS" no="02" className={styles.skillsTitle}>
           できること
         </Title>
         {hasAnySkills ? (
           <div className={styles.skillsGroup}>
             {categoryBlocks.map((block) => (
               <div key={block.categoryId} className={styles.categoryBlock}>
-                <h3 className={styles.categoryTitle}>{block.categoryName.toUpperCase()}</h3>
+                <h3 className={styles.categoryTitle} data-reveal>
+                  {block.categoryName.toUpperCase()}
+                  <span className={styles.categoryCount}>
+                    {String(block.skills.length).padStart(2, '0')}
+                  </span>
+                </h3>
                 <ul className={styles.skillsList}>
                   {block.skills.map((skill) => (
                     <SkillItem key={skill.id} skill={skill} />

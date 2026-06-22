@@ -10,10 +10,10 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const NAV_ITEMS = [
-    { href: '#about', label: '私について', en: 'ABOUT' },
-    { href: '#skills', label: 'できること', en: 'SKILLS' },
-    { href: '#works', label: '制作実績', en: 'WORKS' },
-    { href: '#contact', label: 'お問い合わせ', en: 'CONTACT' },
+    { href: '/#about', label: '私について', en: 'ABOUT' },
+    { href: '/#skills', label: 'できること', en: 'SKILLS' },
+    { href: '/#works', label: '制作実績', en: 'WORKS' },
+    { href: '/#contact', label: 'お問い合わせ', en: 'CONTACT' },
   ]
 
   return (
@@ -43,6 +43,17 @@ export default function Header() {
             </span>
           </Link>
         ))}
+
+        <Link
+          href="/manual"
+          className={styles.navManual}
+          onClick={() => setIsMenuOpen(false)}
+        >
+          <span className={styles.navManualLabel}>取扱説明書</span>
+          <span className={styles.navManualEn} aria-hidden>
+            MANUAL
+          </span>
+        </Link>
       </nav>
     </header>
   )

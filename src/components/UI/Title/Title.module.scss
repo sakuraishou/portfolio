@@ -1,6 +1,7 @@
 @use '@/app/(frontend)/_styles/variables' as *;
 @use '@/app/(frontend)/_styles/mixins' as *;
 
+/* ===== 従来見出し（manual Cover など no 未指定） ===== */
 .title {
   font-size: 2.4rem;
   font-weight: 700;
@@ -9,12 +10,12 @@
   position: relative;
   z-index: 1;
 
-  @include responsive(lg) {
+  @include responsive(md) {
     font-size: 3rem;
   }
 
   &[data-en]::before {
-    @include quicksand;
+    @include mono;
     content: attr(data-en);
     display: block;
     font-size: 4.2rem;
@@ -26,8 +27,71 @@
     bottom: 0.8rem;
     left: 2rem;
 
-    @include responsive(lg) {
+    @include responsive(md) {
       font-size: 6rem;
     }
+  }
+}
+
+/* ===== MV 調見出し（no 指定）=====
+   色は CSS 変数で受け、濃い背景のセクション（About 等）は className 側で上書きする */
+.head {
+  position: relative;
+  z-index: 1;
+  --title-accent: #{$main};
+  --title-fg: #{$fontBase};
+  --title-wm: var(--title-accent);
+}
+
+.wm {
+  @include display;
+  position: absolute;
+  z-index: -1;
+  bottom: -0.4rem;
+  left: 1.2rem;
+  font-size: 4.6rem;
+  line-height: 0.8;
+  color: var(--title-wm);
+  opacity: 0.12;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+
+  @include responsive(md) {
+    font-size: 7.4rem;
+  }
+}
+
+.eyebrow {
+  @include mono;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.16em;
+  color: var(--title-accent);
+
+  @include responsive(md) {
+    font-size: 1.4rem;
+  }
+}
+
+.eyebrowLine {
+  width: 2.4rem;
+  height: 0.1rem;
+  background-color: var(--title-accent);
+  opacity: 0.6;
+}
+
+.jp {
+  font-family: $font-main;
+  font-weight: 700;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--title-fg);
+  margin-top: 0.9rem;
+
+  @include responsive(md) {
+    font-size: 3.8rem;
   }
 }

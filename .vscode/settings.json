@@ -1,7 +1,7 @@
 {
   "prettier.configPath": ".prettierrc.json",
   "prettier.requireConfig": true,
-  "npm.packageManager": "npm",
+  "npm.packageManager": "pnpm",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -34,12 +34,23 @@
   },
   "editor.formatOnSaveMode": "file",
   "files.exclude": {
-    "**/.next": true
+    "**/.next": true,
+    "**/.pnpm-store": true
+  },
+  "files.watcherExclude": {
+    "**/.pnpm-store/**": true,
+    "**/node_modules/**": true,
+    "**/.next/**": true
+  },
+  "search.exclude": {
+    "**/.pnpm-store": true,
+    "**/pnpm-lock.yaml": true
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "[javascript][typescript][typescriptreact]": {
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
     }
-  }
+  },
+  "git.ignoreLimitWarning": true
 }

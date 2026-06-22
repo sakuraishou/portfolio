@@ -3,8 +3,8 @@
 // CSS Modules には書けないため、フォント用変数はグローバル SCSS のみで定義する
 :root {
   --font-zen-kaku: 'Zen Kaku Gothic New';
-  --font-dancing: 'Dancing Script';
-  --font-quicksand: 'Quicksand';
+  --font-fraunces: 'Fraunces';
+  --font-plex-mono: 'IBM Plex Mono';
 }
 
 html {
@@ -124,10 +124,20 @@ select {
   }
 }
 
+.w1000 {
+  width: 100%;
+  @include responsive(md) {
+    max-width: 100rem;
+    @include responsive(md) {
+      margin: 0 auto;
+    }
+  }
+}
+
 section {
   padding: 8rem 0;
 
   @include responsive(md) {
-    padding: 16rem 0;
+    padding: 10rem 0;
   }
 }

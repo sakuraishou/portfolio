@@ -1,0 +1,237 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
+.faq {
+  isolation: isolate;
+  background-color: $bg;
+}
+
+.lead {
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: $fontBase;
+  margin-bottom: 2.8rem;
+
+  @include responsive(md) {
+    font-size: 1.6rem;
+    margin-bottom: 4rem;
+  }
+}
+
+/* ===== コンソール本体 ===== */
+.console {
+  border-radius: 1rem;
+  background-color: #fff;
+  border: 0.1rem solid rgba($main, 0.18);
+  overflow: hidden;
+}
+
+.consoleBar {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 1.2rem 1.6rem;
+  background-color: $bg2;
+  border-bottom: 0.1rem solid rgba($fontBase, 0.12);
+
+  @include responsive(md) {
+    padding: 1.4rem 2.4rem;
+  }
+}
+
+.consoleDots {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.consoleDot {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: rgba($fontBase, 0.25);
+
+  &.dotActive {
+    background-color: $main;
+  }
+}
+
+.consoleTitle {
+  @include mono;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 1.4rem;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== 1行（アコーディオン） ===== */
+.row {
+  border-top: 0.1rem solid rgba($fontBase, 0.1);
+
+  &:first-child {
+    border-top: none;
+  }
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+  padding: 1.8rem 1.6rem;
+  background-color: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba($main, 0.06);
+  }
+
+  &:focus-visible {
+    outline: 0.2rem solid $main;
+    outline-offset: -0.2rem;
+  }
+
+  @include responsive(md) {
+    gap: 1.6rem;
+    padding: 2.2rem 2.4rem;
+  }
+}
+
+.badge {
+  @include mono;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  height: 2.4rem;
+  padding: 0 0.8rem;
+  border-radius: 0.8rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+
+  @include responsive(md) {
+    height: 2.8rem;
+    padding: 0 1rem;
+    font-size: 1.3rem;
+  }
+}
+
+.badgeError {
+  background-color: $main;
+  color: #fff;
+}
+
+.badgeWarn {
+  background-color: rgba($main, 0.2);
+  color: $main;
+}
+
+.triggerText {
+  flex: 1;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 1.7rem;
+  }
+}
+
+.chevron {
+  flex-shrink: 0;
+  display: block;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-right: 0.2rem solid $main;
+  border-bottom: 0.2rem solid $main;
+  transform: rotate(45deg);
+  transition: transform 0.25s ease;
+
+  .triggerOpen & {
+    transform: rotate(-135deg);
+  }
+}
+
+/* ===== ログ（コンソール出力） ===== */
+.panel {
+  overflow: hidden;
+}
+
+.log {
+  margin: 0 1.6rem 2rem;
+  padding: 1.6rem;
+  border-radius: 0.8rem;
+  background-color: $fontBase;
+  color: $bg;
+  font-size: 1.3rem;
+  line-height: 1.7;
+
+  @include responsive(md) {
+    margin: 0 2.4rem 2.4rem;
+    padding: 2rem 2.4rem;
+    font-size: 1.5rem;
+  }
+}
+
+.logLine {
+  display: flex;
+  gap: 0.8rem;
+  min-height: 1.7em;
+
+  & + & {
+    margin-top: 0.6rem;
+  }
+}
+
+.logPrompt {
+  @include mono;
+  flex-shrink: 0;
+  color: $accent;
+}
+
+.logText {
+  flex: 1;
+}
+
+.caret {
+  display: inline-block;
+  width: 0.7em;
+  height: 1.1em;
+  margin-left: 0.1em;
+  vertical-align: text-bottom;
+  background-color: $accent;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.logDone {
+  @include mono;
+  margin-top: 1.2rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  color: rgba($bg, 0.6);
+
+  @include responsive(md) {
+    font-size: 1.2rem;
+  }
+}

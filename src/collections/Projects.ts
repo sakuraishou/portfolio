@@ -35,6 +35,16 @@ export const Projects: CollectionConfig = {
       label: 'SP画像',
     },
     {
+      name: 'confidential',
+      type: 'checkbox',
+      defaultValue: false,
+      label: '画像を公開しない（社外秘）',
+      admin: {
+        description:
+          'ONにすると、画像があっても表示せず「社外秘のため画像は非公開」と表示します（NO IMAGE の代わり）。',
+      },
+    },
+    {
       name: 'url',
       type: 'text',
       label: 'サイトURL',
@@ -43,6 +53,30 @@ export const Projects: CollectionConfig = {
       name: 'description',
       type: 'textarea',
       label: '説明文',
+    },
+    {
+      name: 'challenge',
+      type: 'textarea',
+      label: '課題・背景',
+      admin: { description: 'なぜ作ったか／解決したかった課題（ケーススタディ用）' },
+    },
+    {
+      name: 'approach',
+      type: 'textarea',
+      label: '技術選定・設計判断',
+      admin: { description: 'なぜその構成にしたか。一番の見せ場（ケーススタディ用）' },
+    },
+    {
+      name: 'highlights',
+      type: 'textarea',
+      label: '工夫した点・詰まった所',
+      admin: { description: 'ケーススタディ用' },
+    },
+    {
+      name: 'result',
+      type: 'textarea',
+      label: '結果・学び',
+      admin: { description: 'ケーススタディ用' },
     },
     {
       name: 'scope',

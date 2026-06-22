@@ -6,12 +6,11 @@ import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import styles from './Skills.module.scss'
 
-const LEARNING_ICON_SRC = '/assets/skills/learning.svg'
-
 export type SkillListItemProps = {
   iconUrl: string | null
   iconAlt: string
   isStudying: boolean
+  isFeatured: boolean
   name: string
   description: string | null | undefined
 }
@@ -20,6 +19,7 @@ export default function SkillListItem({
   iconUrl,
   iconAlt,
   isStudying,
+  isFeatured,
   name,
   description,
 }: SkillListItemProps) {
@@ -88,6 +88,7 @@ export default function SkillListItem({
   return (
     <li
       className={`${styles.skillsList__item} ${hasDescription ? styles.itemHasDesc : ''}`}
+      data-reveal
       onClick={openModalIfSp}
       onKeyDown={onRowKeyDown}
       role={rowInteractive ? 'button' : undefined}
@@ -96,24 +97,25 @@ export default function SkillListItem({
       aria-expanded={rowInteractive ? modalOpen : undefined}
       aria-label={rowInteractive ? `${name}の説明を表示` : undefined}
     >
-      {(iconUrl || isStudying) && (
-        <div className={styles.skillIconWrap}>
-          {iconUrl && (
-            <div className={styles.skillIcon}>
-              <Image src={iconUrl} alt={iconAlt} width={64} height={64} />
-            </div>
-          )}
-          {isStudying && (
-            <div className={styles.skillLearning}>
-              <Image src={LEARNING_ICON_SRC} alt="勉強中" width={40} height={40} />
-            </div>
-          )}
-        </div>
+      {iconUrl && (
+        <span className={styles.skillIcon}>
+          <Image src={iconUrl} alt={iconAlt} width={64} height={64} />
+        </span>
       )}
 
-      <div className={styles.skillMeta}>
+      <span className={styles.skillBody}>
         <span className={styles.skillName}>{name}</span>
-      </div>
+        {(isFeatured || isStudying) && (
+          <span className={styles.skillBadges}>
+            {isFeatured && (
+              <span className={`${styles.badge} ${styles.badgeFeatured}`}>得意</span>
+            )}
+            {isStudying && (
+              <span className={`${styles.badge} ${styles.badgeStudying}`}>学習中</span>
+            )}
+          </span>
+        )}
+      </span>
 
       {hasDescription && (
         <>

@@ -1,0 +1,297 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
+.cover {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  // マニュアル表紙らしい書類フレーム（控えめに見ごたえを足す）
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 1.6rem;
+    border: 0.1rem solid rgba($main, 0.22);
+    border-radius: 0.6rem;
+    pointer-events: none;
+
+    @include responsive(md) {
+      inset: 2.4rem;
+    }
+  }
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+
+  @include responsive(md) {
+    display: grid;
+    grid-template-columns: auto 27rem;
+    justify-content: center;
+    align-items: center;
+    gap: 18rem;
+  }
+}
+
+/* 表紙の特大ウォーターマーク（パララックス・飾り） */
+.bgWord {
+  @include mono;
+  white-space: nowrap;
+  line-height: 1;
+  font-weight: 700;
+  color: $main;
+  opacity: 0.05;
+  z-index: 0;
+  pointer-events: none;
+
+  // SP: 右端の縦組みワード（英字は90度回転表示）
+  position: absolute;
+  top: 6rem;
+  right: -3rem;
+  writing-mode: vertical-rl;
+  font-size: 14rem;
+
+  @include responsive(md) {
+    // PC: 下部の横ワード
+    writing-mode: horizontal-tb;
+    top: auto;
+    right: auto;
+    left: 50%;
+    bottom: 6rem;
+    transform: translateX(-50%);
+    font-size: 28rem;
+  }
+}
+
+/* パンくず（現在地＋ホームへ戻る） */
+.crumb {
+  position: absolute;
+  top: 7rem;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.3rem;
+
+  @include responsive(md) {
+    top: 9rem;
+    font-size: 1.4rem;
+  }
+}
+
+.crumbLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba($fontBase, 0.7);
+  font-weight: 500;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $main;
+  }
+}
+
+.crumbIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  flex: 0 0 auto;
+}
+
+.crumbSep {
+  color: rgba($fontBase, 0.4);
+}
+
+.crumbHere {
+  color: $main;
+  font-weight: 700;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  max-width: 30rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 0.1rem solid rgba($main, 0.3);
+  @include mono;
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+  color: $main;
+
+  @include responsive(md) {
+    max-width: 38rem;
+    font-size: 1.4rem;
+  }
+}
+
+.title {
+  font-size: 3.4rem;
+  margin-top: 1.6rem;
+
+  @include responsive(md) {
+    font-size: 6rem;
+    margin-top: 2.4rem;
+  }
+
+  // OWNER'S MANUAL のウォーターマーク。上に浮かせず、見出しの真上に重ねる
+  // （Title 側 .title[data-en]::before の詳細度が高いため !important で上書き）
+  &::before {
+    display: none !important; // SP は途切れるので非表示、PCのみ表示
+    font-size: 3rem !important;
+    top: 50% !important;
+    bottom: auto !important;
+    left: 0 !important;
+    transform: translateY(-50%) !important;
+    white-space: nowrap !important;
+
+    @include responsive(md) {
+      display: block !important;
+      font-size: 5.4rem !important;
+    }
+  }
+}
+
+.product {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 1.2rem 2rem;
+}
+
+.productJa {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 3.6rem;
+  }
+}
+
+.productEn {
+  @include mono;
+  font-size: 1.8rem;
+  color: $main;
+
+  @include responsive(md) {
+    font-size: 2.2rem;
+  }
+}
+
+.model {
+  @include mono;
+  font-size: 1.4rem;
+  letter-spacing: 0.04em;
+  color: rgba($fontBase, 0.7);
+
+  @include responsive(md) {
+    font-size: 1.6rem;
+  }
+}
+
+.catch {
+  @include display;
+  font-size: 3rem;
+  line-height: 1.1;
+  color: $main;
+
+  @include responsive(md) {
+    font-size: 4.4rem;
+    white-space: nowrap;
+  }
+}
+
+.lead {
+  max-width: 52rem;
+  font-size: 1.4rem;
+  line-height: 1.9;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 1.6rem;
+  }
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  max-width: 26rem;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 0.1rem solid rgba($main, 0.25);
+  background-color: rgba(#fff, 0.45);
+
+  @include responsive(md) {
+    max-width: none;
+    margin: 0;
+  }
+}
+
+.photoImg {
+  object-fit: cover;
+  object-position: top;
+}
+
+.scrollCue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: absolute;
+  bottom: 2.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  @include responsive(md) {
+    bottom: 3.2rem;
+  }
+}
+
+.scrollText {
+  @include mono;
+  font-size: 1.2rem;
+  letter-spacing: 0.16em;
+  color: $main;
+}
+
+.scrollLine {
+  display: block;
+  width: 0.1rem;
+  height: 4rem;
+  background-color: rgba($main, 0.5);
+  transform-origin: top;
+  animation: scrollLine 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  40% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0);
+    opacity: 0;
+    transform-origin: bottom;
+  }
+}

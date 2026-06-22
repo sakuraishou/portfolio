@@ -1,0 +1,117 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  margin-bottom: 3.2rem;
+
+  @include responsive(md) {
+    gap: 2.4rem;
+    margin-bottom: 4.8rem;
+  }
+}
+
+/* 見出し裏の特大ウォーターマーク（パララックスで上下にドリフト） */
+.ghostClip {
+  // SP: 右端の縦ストリップ（縦組みワードを流す）
+  position: absolute;
+  top: 0;
+  right: -3rem;
+  width: 11rem;
+  height: 34rem;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+
+  @include responsive(md) {
+    // PC: 見出し裏の横ワード
+    top: 50%;
+    right: auto;
+    left: 0;
+    width: 100%;
+    height: 26rem;
+    transform: translateY(-50%);
+  }
+}
+
+.ghost {
+  @include mono;
+  position: absolute;
+  top: 0;
+  right: 0;
+  writing-mode: vertical-rl; // SP: 縦組み（英字は90度回転表示）
+  white-space: nowrap;
+  font-size: 8rem;
+  line-height: 1;
+  font-weight: 700;
+  color: $main;
+  opacity: 0.06;
+
+  @include responsive(md) {
+    writing-mode: horizontal-tb;
+    top: 50%;
+    right: auto;
+    left: -0.4rem;
+    transform: translateY(-50%);
+    font-size: 14rem;
+  }
+}
+
+.no {
+  position: relative;
+  z-index: 1;
+  @include mono;
+  font-size: 4.8rem;
+  line-height: 1;
+  color: $main;
+
+  @include responsive(md) {
+    font-size: 6.4rem;
+  }
+}
+
+.divider {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 0.2rem;
+  height: 4rem;
+  background-color: rgba($main, 0.4);
+
+  @include responsive(md) {
+    height: 5.6rem;
+  }
+}
+
+.texts {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.en {
+  @include mono;
+  font-size: 1.3rem;
+  letter-spacing: 0.12em;
+  color: $main;
+
+  @include responsive(md) {
+    font-size: 1.6rem;
+  }
+}
+
+.ja {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 3rem;
+  }
+}

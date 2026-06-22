@@ -36,6 +36,13 @@ export const Skills: CollectionConfig = {
       defaultValue: false,
     },
     {
+      name: 'featured',
+      type: 'checkbox',
+      label: '得意',
+      defaultValue: false,
+      admin: { description: 'チェックすると「得意」バッジを表示します' },
+    },
+    {
       name: 'icon',
       type: 'upload',
       relationTo: 'media',
