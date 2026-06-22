@@ -15,15 +15,17 @@ export default function Title({ children, en, no, as: Tag = 'h2', className = ''
     return (
       <div className={`${styles.head} ${className}`.trim()}>
         {en && (
-          <span className={styles.wm} aria-hidden>
+          <span className={styles.wm} aria-hidden data-parallax data-parallax-speed="22">
             {en}
           </span>
         )}
-        <span className={styles.eyebrow}>
+        <span className={styles.eyebrow} data-reveal>
           <span className={styles.eyebrowLine} aria-hidden />
           {en ? `${no} / ${en}` : no}
         </span>
-        <Tag className={styles.jp}>{children}</Tag>
+        <Tag className={styles.jp} data-reveal>
+          {children}
+        </Tag>
       </div>
     )
   }
