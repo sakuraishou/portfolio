@@ -9,6 +9,11 @@
   position: relative;
   overflow: hidden;
 
+  @include responsive(md) {
+    min-height: 70rem;
+    height: 100svh;
+  }
+
   // マニュアル表紙らしい書類フレーム（控えめに見ごたえを足す）
   &::after {
     content: '';
