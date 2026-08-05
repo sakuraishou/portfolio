@@ -57,6 +57,7 @@
 - [ ] 必要なら `pnpm generate:types`
 - [ ] 必要なら `pnpm generate:importmap`
 - [ ] セキュリティ 3 原則（overrideAccess / req / ループ防止）を再確認
+- [ ] **スキーマ変更でテーブルを追加した場合、本番 Supabase で RLS 有効化 SQL を再実行**（新テーブルは RLS 無効で作られるため。→ 6 節）
 - [ ] 変更内容に応じて README.md / CLAUDE.md / AGENTS.md / .cursor を最新化
 
 ## 5. 詳細ドキュメント
@@ -76,7 +77,41 @@
 - `.cursor/context/plugin-development.md`
 - `.cursor/context/components.md`
 
-## 6. 参考リンク
+## 6. 本番 DB（Supabase）と RLS
+
+本番 DB は **Supabase の Postgres**。アプリ（Payload）は `DATABASE_URL` の**直接接続（`postgres` ロール）**で読み書きしており、**Supabase の自動生成 REST API（PostgREST）や client SDK は使っていない**。
+
+### なぜ RLS が要るか
+
+Supabase は `public` スキーマのテーブルに対して外部向けの Web API（PostgREST）を自動公開する。テーブルに **RLS（Row-Level Security）が無効**だと、匿名キー（anon key）を知る第三者が API 経由で全データを読み書きできてしまい、Security Advisor が **Critical（`rls_disabled_in_public`）** として検知し、通知メールが届く。
+
+### 対処（安全・冪等）
+
+`public` の全テーブルで RLS を**有効化**する。アプリは**テーブル所有者 `postgres` で接続**しているため、RLS を有効化しても（`FORCE ROW LEVEL SECURITY` を付けない限り）**所有者は素通り＝アプリ動作に影響しない**。ポリシーは不要（このアプリは PostgREST を使わないため、anon/authenticated は全拒否でよい）。
+
+Supabase ダッシュボード → SQL Editor で以下を実行（何度流しても安全）:
+
+```sql
+do $$
+declare r record;
+begin
+  for r in select tablename from pg_tables where schemaname = 'public'
+  loop
+    execute format('alter table public.%I enable row level security;', r.tablename);
+  end loop;
+end $$;
+```
+
+- 確認: `select tablename, rowsecurity from pg_tables where schemaname='public';` が全て `true`。
+- 反映確認: ダッシュボード → **Advisors → Security** で `rls_disabled_in_public` が消えること。
+- ロールバック（万一アプリが読めなくなった場合）: `alter table public.<tablename> disable row level security;`
+
+### 注意
+
+- **スキーマ変更で新テーブルが増えるたびに、その新テーブルは RLS 無効で作られる**ため警告が再発する。都度、上の SQL を再実行する（→ 4 節「作業後」チェックリスト）。
+- 適用対象は**本番 Supabase** のみ。ローカル開発 DB（Docker/ローカル Postgres）は Advisor 対象外。
+
+## 7. 参考リンク
 
 - [Payload Docs](https://payloadcms.com/docs)
 - [Payload LLM Context](https://payloadcms.com/llms-full.txt)
