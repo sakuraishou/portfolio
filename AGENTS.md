@@ -111,6 +111,14 @@ end $$;
 - **スキーマ変更で新テーブルが増えるたびに、その新テーブルは RLS 無効で作られる**ため警告が再発する。都度、上の SQL を再実行する（→ 4 節「作業後」チェックリスト）。
 - 適用対象は**本番 Supabase** のみ。ローカル開発 DB（Docker/ローカル Postgres）は Advisor 対象外。
 
+### 自動停止（Free プラン）とキープアライブ
+
+Supabase の **Free プランは 7 日間 DB 活動が無いとプロジェクトを一時停止**する（停止中は DB に繋がらずサイトがエラーになる。ダッシュボードの Restore で復帰可）。これを防ぐため、GitHub Actions の定期ジョブ **`.github/workflows/keepalive.yml`** が毎日 1 回 `select 1` を投げて活動を維持している。
+
+- 必要な Secret: **`KEEPALIVE_DATABASE_URL`**（GitHub → repo Settings → Secrets and variables → Actions）。値は Supabase の **Session pooler 接続文字列**（IPv4 で Actions から到達できる。直接接続 `db.<ref>.supabase.co` は IPv6 のみで届かないことがある）。
+- 注意: GitHub は **リポジトリに 60 日間コミットが無いと schedule ワークフローを自動無効化**する。長期間コミットが無い場合は Actions 画面から再有効化するか、外部監視（UptimeRobot 等）に切り替える。
+- Pro プランにアップグレードすれば自動停止は無くなり、このジョブは不要。
+
 ## 7. 参考リンク
 
 - [Payload Docs](https://payloadcms.com/docs)

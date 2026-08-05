@@ -1,0 +1,23 @@
+name: Supabase Keepalive
+
+# Supabase の Free プランは「7 日間 DB 活動が無い」とプロジェクトを自動で一時停止する。
+# 毎日 1 回だけ `select 1` を投げて「活動あり」状態を保ち、停止を防ぐ。
+# 必要な Secret: KEEPALIVE_DATABASE_URL（Supabase の "Session pooler" 接続文字列）
+on:
+  schedule:
+    - cron: "17 3 * * *" # 毎日 03:17 UTC（≒ 日本時間 12:17）。7 日の猶予があるので 1 日 1 回で十分
+  workflow_dispatch: # 手動実行（動作確認用の「ボタンポチ」）
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Postgres
+        env:
+          # 直接接続(db.<ref>.supabase.co)は IPv6 のみで Actions から届かないことがあるため、
+          # IPv4 で到達できる Session pooler の接続文字列を使う。
+          PGSSLMODE: require
+          PGCONNECT_TIMEOUT: "15"
+        run: |
+          psql "${{ secrets.KEEPALIVE_DATABASE_URL }}" -Atc "select 1;"
+          echo "keepalive ok"
