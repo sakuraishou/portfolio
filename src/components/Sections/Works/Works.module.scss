@@ -47,7 +47,7 @@
   align-items: center;
   gap: 0.6rem;
   min-height: 3.6rem;
-  padding: 0.4rem 1rem;
+  padding: 0.4rem 0.8rem;
   border: 0.1rem solid rgba($fontBase, 0.35);
   border-radius: 0.4rem;
   font-size: 1.1rem;
@@ -91,7 +91,7 @@
   gap: 5.6rem;
   list-style: none;
   padding: 0;
-  margin: 4rem 0 0;
+  margin: 4.8rem 0 0;
 
   @include responsive(md) {
     gap: 8rem;
