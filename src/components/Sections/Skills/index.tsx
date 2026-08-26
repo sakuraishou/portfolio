@@ -1,9 +1,10 @@
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import Title from '@/components/UI/Title'
-import SkillListItem from './SkillListItem'
+import { sortProjects } from '@/lib/projects'
+import SkillListItem, { type RelatedWork } from './SkillListItem'
 import styles from './Skills.module.scss'
-import type { Media, Skill } from '@/payload-types'
+import type { Media, Project, Skill } from '@/payload-types'
 
 function getMediaUrl(icon: number | Media): string | null {
   if (typeof icon === 'object' && icon?.url) {
@@ -27,7 +28,21 @@ function sortByOrder<T extends { sort_order?: number | null }>(items: T[]): T[] 
 
 type CategoryWithSkills = { categoryId: number | 'none'; categoryName: string; skills: Skill[] }
 
-function SkillItem({ skill }: { skill: Skill }) {
+/** Projects の skills relationship を逆引きし、skillId → 実績リストの Map を作る */
+function buildRelatedWorksMap(projects: Project[]): Map<number, RelatedWork[]> {
+  const map = new Map<number, RelatedWork[]>()
+  for (const project of sortProjects(projects)) {
+    for (const ref of project.skills ?? []) {
+      const skillId = typeof ref === 'object' && ref !== null ? ref.id : ref
+      const list = map.get(skillId) ?? []
+      list.push({ id: project.id, title: project.title })
+      map.set(skillId, list)
+    }
+  }
+  return map
+}
+
+function SkillItem({ skill, relatedWorks }: { skill: Skill; relatedWorks: RelatedWork[] }) {
   const iconUrl = getMediaUrl(skill.icon)
   const isStudying = Boolean(skill.studying)
   const isFeatured = Boolean(skill.featured)
@@ -39,6 +54,7 @@ function SkillItem({ skill }: { skill: Skill }) {
       isFeatured={isFeatured}
       name={skill.name}
       description={skill.description}
+      relatedWorks={relatedWorks}
     />
   )
 }
@@ -47,7 +63,7 @@ export default async function Skills() {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
-  const [{ docs: categories }, { docs: skills }] = await Promise.all([
+  const [{ docs: categories }, { docs: skills }, { docs: projects }] = await Promise.all([
     payload.find({
       collection: 'skill-categories',
       sort: 'sort_order',
@@ -58,7 +74,15 @@ export default async function Skills() {
       depth: 1,
       limit: 100,
     }),
+    payload.find({
+      collection: 'projects',
+      depth: 0,
+      limit: 100,
+      sort: 'sort_order',
+    }),
   ])
+
+  const relatedWorksMap = buildRelatedWorksMap(projects)
 
   const sortedCategories = sortByOrder(categories)
   const sortedSkills = sortByOrder(skills)
@@ -117,7 +141,11 @@ export default async function Skills() {
                 </h3>
                 <ul className={styles.skillsList}>
                   {block.skills.map((skill) => (
-                    <SkillItem key={skill.id} skill={skill} />
+                    <SkillItem
+                      key={skill.id}
+                      skill={skill}
+                      relatedWorks={relatedWorksMap.get(skill.id) ?? []}
+                    />
                   ))}
                 </ul>
               </div>

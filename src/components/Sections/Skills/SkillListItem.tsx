@@ -4,7 +4,13 @@ import { useCallback, useEffect, useId, useState } from 'react'
 import type { KeyboardEvent as ReactKeyboardEvent, MouseEvent, SyntheticEvent } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
+import Link from 'next/link'
 import styles from './Skills.module.scss'
+
+export type RelatedWork = {
+  id: number
+  title: string
+}
 
 export type SkillListItemProps = {
   iconUrl: string | null
@@ -12,6 +18,8 @@ export type SkillListItemProps = {
   isFeatured: boolean
   name: string
   description: string | null | undefined
+  /** この技術を使った実績（Projects の skills relationship 逆引き） */
+  relatedWorks: RelatedWork[]
 }
 
 export default function SkillListItem({
@@ -20,6 +28,7 @@ export default function SkillListItem({
   isFeatured,
   name,
   description,
+  relatedWorks,
 }: SkillListItemProps) {
   const [modalOpen, setModalOpen] = useState(false)
   const [isNarrow, setIsNarrow] = useState(false)
@@ -61,7 +70,7 @@ export default function SkillListItem({
     }
   }, [modalOpen, closeModal])
 
-  const hasDescription = Boolean(description?.trim())
+  const hasDescription = Boolean(description?.trim()) || relatedWorks.length > 0
 
   const openModalIfSp = useCallback(
     (_e: MouseEvent<HTMLLIElement>) => {
@@ -83,6 +92,22 @@ export default function SkillListItem({
   )
 
   const rowInteractive = hasDescription && isNarrow
+
+  /** 「この技術を使った実績」リンク。JSなしでも辿れる素の Link にする */
+  const worksLinks = relatedWorks.length > 0 && (
+    <div className={styles.skillWorks}>
+      <p className={styles.skillWorksLabel}>WORKS / この技術を使った実績</p>
+      <ul className={styles.skillWorksList}>
+        {relatedWorks.map((w) => (
+          <li key={w.id}>
+            <Link href={`/works/${w.id}`} className={styles.skillWorksLink}>
+              {w.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 
   return (
     <li
@@ -122,7 +147,8 @@ export default function SkillListItem({
       {hasDescription && (
         <>
           <div id={tooltipId} className={styles.skillDescHover} role="tooltip">
-            <p className={styles.skillDescription}>{description}</p>
+            {description?.trim() && <p className={styles.skillDescription}>{description}</p>}
+            {worksLinks}
           </div>
 
           {modalOpen &&
@@ -155,7 +181,10 @@ export default function SkillListItem({
                       ×
                     </button>
                   </div>
-                  <p className={styles.skillDescription}>{description}</p>
+                  {description?.trim() && (
+                    <p className={styles.skillDescription}>{description}</p>
+                  )}
+                  {worksLinks}
                 </div>
               </div>,
               document.body,

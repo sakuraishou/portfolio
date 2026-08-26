@@ -217,7 +217,8 @@
 }
 
 .itemHasDesc:hover .skillDescHover,
-.itemHasDesc:focus-visible .skillDescHover {
+.itemHasDesc:focus-visible .skillDescHover,
+.itemHasDesc:focus-within .skillDescHover {
   @include responsive(md) {
     opacity: 1;
     visibility: visible;
@@ -229,6 +230,55 @@
 .itemHasDesc:focus-visible {
   outline: 0.2rem solid rgba($main, 0.6);
   outline-offset: 0.2rem;
+}
+
+/* 「この技術を使った実績」リンク（ツールチップ・モーダル共用） */
+.skillWorks {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 0.1rem solid rgba($fontBase, 0.12);
+}
+
+.skillWorksLabel {
+  @include mono;
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  color: $main;
+
+  @include responsive(md) {
+    font-size: 1.1rem;
+  }
+}
+
+.skillWorksList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.skillWorksLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.4rem;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: $fontBase;
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+  transition: color 0.2s ease;
+
+  @include responsive(md) {
+    font-size: 1.3rem;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: $main;
+  }
 }
 
 .skillDescModalRoot {
