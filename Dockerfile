@@ -7,7 +7,7 @@ RUN npm install -g pnpm@11.24.0
 
 # 依存関係のインストール（キャッシュを効かせるため先にコピー）
 # lockfile を厳守して再現性のあるインストールを行う
-COPY package.json pnpm-lock.yaml .npmrc ./
+COPY package.json pnpm-lock.yaml .npmrc pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # 全ファイルをコピーしてビルド
