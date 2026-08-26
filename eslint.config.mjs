@@ -30,7 +30,7 @@ const eslintConfig = [
     },
   },
   {
-    ignores: ['.next/'],
+    ignores: ['.next/', '_archive/'],
   },
 ]
 
