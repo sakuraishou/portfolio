@@ -19,6 +19,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           # ↓ ここに、サーバーで実行したいコマンドを書く
           script: |
+            set -e
             cd /var/www/my-apps/portfolio
-            git pull origin main
+            # force push や履歴整理があっても止まらないよう、pull ではなく origin へ強制一致させる
+            # （このリポジトリはVPS上で直接編集しない運用。media/ と .env は追跡外なので影響しない）
+            git fetch origin main
+            git reset --hard origin/main
             docker compose -f docker-compose.prod.yml up -d --build
