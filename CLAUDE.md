@@ -38,6 +38,7 @@ Works の各案件は詳細ページ `/works/[id]`（ケーススタディ：課
 - **フォント**: Google Fonts を `layout.tsx` の `<link>` で読込。**日本語＝Zen Kaku Gothic New / 見出し英字＝Fraunces / ラベル・データ英字（等幅）＝IBM Plex Mono** の3書体（`@include display` / `@include mono`。詳細は `/scss-rules`・`/design-rules`）。
 - **アニメーション**: GSAP（`gsap` / React 用に `@gsap/react` の `useGSAP`。トップ MV の登場演出、トップ全セクションのスクロール演出（`ScrollTrigger`／後述の `ScrollFX`）、`/manual`（`ScrollTrigger` 含む）で採用）
 - **メール送信**: nodemailer（お問い合わせフォーム）
+- **アクセス解析**: Google Analytics 4（`@next/third-parties/google` の `GoogleAnalytics` を `layout.tsx` に配置。`NODE_ENV=production` かつ `NEXT_PUBLIC_GA_ID` がある時のみ有効。App Router のクライアント遷移も自動計測）
 - **テスト**: Playwright（e2e）※ 現状テストは未整備
 - **ランタイム**: Node.js 24（Docker イメージ `node:24-*`）
 - **パッケージ管理**: **pnpm**（`pnpm-lock.yaml`／`packageManager: pnpm@10.34.3`）。Docker も pnpm でインストール。`.npmrc` で `node-linker=hoisted`（Next standalone 互換のためフラット構成）。

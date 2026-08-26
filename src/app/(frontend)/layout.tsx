@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './styles.scss'
 import Header from '@/components/Layout/Header'
 import Footer from '@/components/Layout/Footer'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 /** Turbopack + next/font/google の解決バグを避けるため、Google Fonts は link で読み込む */
 const googleFontsStylesheet =
@@ -23,6 +24,10 @@ export const metadata: Metadata = {
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
+  // GA4: 本番ビルドかつ測定IDがある時だけ読み込む（開発中の誤送信を防ぐ）
+  const gaId = process.env.NEXT_PUBLIC_GA_ID
+  const isProduction = process.env.NODE_ENV === 'production'
+
   return (
     <html lang="ja">
       <head>
@@ -35,6 +40,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
         <main>{children}</main>
         <Footer />
       </body>
+      {isProduction && gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
   )
 }

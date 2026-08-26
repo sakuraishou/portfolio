@@ -9,6 +9,7 @@ Next.js + Payload CMS で構築したポートフォリオサイトです。
 - **言語**: TypeScript
 - **リッチテキスト**: Lexical Editor
 - **アニメーション**: GSAP（`gsap` / `@gsap/react`）
+- **アクセス解析**: Google Analytics 4（`@next/third-parties/google` の `GoogleAnalytics`。本番ビルドのみ有効）
 - **フォント**: Google Fonts（Zen Kaku Gothic New / Fraunces / IBM Plex Mono）
 - **ランタイム**: Node.js 24
 - **パッケージ管理**: pnpm（`packageManager: pnpm@10.34.3`）
@@ -31,6 +32,13 @@ cp .env.example .env
 ```
 
 `.env` を開いて各値を設定してください。
+
+アクセス解析（GA4）を使う場合は、次の変数を追加します（任意・未設定でもアプリは動作します）。
+
+```env
+# Google Analytics 4 の測定ID。設定すると本番ビルドでのみ計測が有効になる（開発では送信しない）
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+```
 
 3. 開発サーバーを起動
 
