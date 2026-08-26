@@ -1,7 +1,7 @@
 {
   "name": "portfolio",
   "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
+  "description": "Next.js（App Router）× Payload CMS で構築した桜井 翔のポートフォリオサイト。実績・スキルを CMS で構造化し、型生成でフロントと接続する",
   "license": "MIT",
   "type": "module",
   "scripts": {

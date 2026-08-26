@@ -39,7 +39,7 @@ Works の各案件は詳細ページ `/works/[id]` を持つ。ケーススタ�
 - **アニメーション**: GSAP（`gsap` / React 用に `@gsap/react` の `useGSAP`。トップ MV の登場演出、トップ全セクションのスクロール演出（`ScrollTrigger`／後述の `ScrollFX`）、`/manual`（`ScrollTrigger` 含む）で採用）
 - **メール送信**: nodemailer（お問い合わせフォーム）
 - **アクセス解析**: Google Analytics 4（`@next/third-parties/google` の `GoogleAnalytics` を `layout.tsx` に配置。`NODE_ENV=production` かつ `NEXT_PUBLIC_GA_ID` がある時のみ有効。App Router のクライアント遷移も自動計測）
-- **テスト**: Playwright（e2e）※ 現状テストは未整備
+- **テスト**: Playwright（e2e）。`tests/e2e/` に主要導線（トップ表示・一覧→詳細→戻る・404・/manual）の回帰テストあり。ホスト側で `pnpm test:e2e`（初回は `playwright install chromium`）。起動中の開発サーバーを再利用する
 - **ランタイム**: Node.js 24（Docker イメージ `node:24-*`）
 - **パッケージ管理**: **pnpm**（`pnpm-lock.yaml`／`packageManager: pnpm@10.34.3`）。Docker も pnpm でインストール。`.npmrc` で `node-linker=hoisted`（Next standalone 互換のためフラット構成）。
 
@@ -121,4 +121,5 @@ src/
 - **機密ファイルは読まない**: `.env` / `.env.*` / `*.pem` / 鍵・認証情報は `.claude/settings.json` の `permissions.deny` で読み込み禁止にしてある。
 - **`payload-types.ts` は自動生成物**。手で編集せず、スキーマ変更後に `pnpm generate:types` で再生成する。
 - **`sync-media` はファイルのみ同期する**（rsync）。DB（Postgres）のメディアレコードは同期しないため、ローカル DB と実ファイルがずれると管理画面・フロントで画像が壊れて見えることがある。
+- **dev サーバー稼働中に同じコンテナで `pnpm build` を実行しない**。`.next` を dev と本番ビルドが取り合ってキャッシュが壊れ、全ページ 500 になる（`.next` の中身を空にして `docker compose restart app` で復旧）。
 - **依存が壊れたとき**: `node_modules` は匿名ボリューム。Payload が 500（`fast-copy/dist` 不足等）になったら `docker compose down -v` でボリュームを捨ててから再起動する。

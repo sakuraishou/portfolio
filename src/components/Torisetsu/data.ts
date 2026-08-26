@@ -220,7 +220,7 @@ export const CHANGELOG_RELEASES: ChangelogRelease[] = [
     version: 'v4.0',
     badge: 'LATEST',
     title: 'モダンスタックで実プロダクト開発',
-    body: 'Next.js で社内アプリを、Nuxt × Supabase のモノレポ構成で整骨院のWeb予約システム＋CRMを開発中。AI（Cursor・Claude Code 等）も使い倒し、モダンな構成を実プロダクトで形にしています。',
+    body: 'Next.js × Sanity で複数ブランドのWeb基盤リプレイスを、Nuxt × Supabase で整骨院のWeb予約システム＋CRMを開発中。AI（Cursor・Claude Code 等）も使い倒し、モダンな構成を実プロダクトで形にしています。',
     current: true,
   },
 ]

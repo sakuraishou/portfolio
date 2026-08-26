@@ -51,3 +51,9 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# 内部作業ドキュメント（公開リポジトリに含めない）
+/docs/phase0-audit.md
+/docs/github-profile-plan.md
+/docs/works-draft.md
+/TODO.md
