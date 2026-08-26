@@ -39,7 +39,7 @@ flowchart LR
 
 | コレクション | 役割 |
 |---|---|
-| `Projects` | 実績。ケーススタディの章（`caseSections`）、状態（`status`）、案件種別（`workType`）、代表案件フラグ（`isFeatured`）、関連案件（`relatedProjects`）、担当範囲・使用技術・制作時期を持つ |
+| `Projects` | 実績。ケーススタディの章（`caseSections`）、状態（`status`）、案件種別（`workType`）、代表案件フラグ（`isFeatured`）、関連案件（`relatedProjects`）、使用スキル（`skills`・Skills逆引き用）、担当範囲・使用技術・制作時期を持つ |
 | `ProjectScopes` | 担当範囲のマスタ（要件定義／基本設計／実装 など） |
 | `Skills` / `SkillCategories` | スキルと分類（frontend / backend / tools）。得意・学習中のバッジ管理 |
 | `Tags` | About の KEYWORDS |
@@ -49,14 +49,14 @@ flowchart LR
 
 ## 品質
 
-- **E2E テスト（Playwright）**: `tests/e2e/` に主要導線の回帰テストを実装しています — トップの表示（ファーストビュー・Skills・WORKS）、一覧 → 詳細 → 一覧へ戻る回遊、存在しない実績IDの404、`/manual` への導線。`pnpm test:e2e` で実行（開発サーバー起動中はそれを再利用）
+- **E2E テスト（Playwright）**: `tests/e2e/` に主要導線の回帰テストを実装しています — トップの表示（ファーストビュー・Skills・WORKS）、一覧 → 詳細 → 一覧へ戻る回遊、種別の絞り込み、存在しない実績IDの404、`/manual` への導線。`pnpm test:e2e` で実行（開発サーバー起動中はそれを再利用）
 - **型チェック**: `pnpm exec tsc --noEmit`（strict）
 - **Lint**: `pnpm lint`（`next/core-web-vitals` + `next/typescript`）
 - **フォーマット**: Prettier（`semi: false` / `singleQuote` / `trailingComma: all`）
 
 ## デプロイ
 
-GitHub Actions の手動実行ワークフロー（`deploy.yml`）で行います: Actions から実行 → VPS へ SSH → `git pull` → `docker compose -f docker-compose.prod.yml up -d --build`。
+GitHub Actions の手動実行ワークフロー（`deploy.yml`）で行います: Actions から実行 → VPS へ SSH → `git fetch` + `git reset --hard origin/main` → `docker compose -f docker-compose.prod.yml up -d --build`。
 
 アップロード画像（`/media`）はホスト側ボリュームで永続化し、ローカルへは `sync-media` サービス（rsync）で同期します。本番 DB（Supabase）はテーブル追加時に RLS の有効化 SQL を再実行する運用です（詳細は [AGENTS.md](AGENTS.md)）。
 
@@ -86,7 +86,7 @@ NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 | `docker compose exec app pnpm generate:importmap` | Payload の ImportMap を生成 |
 | `docker compose exec app pnpm lint` | ESLint でコードチェック |
 | `docker compose exec app pnpm exec tsc --noEmit` | 型チェック |
-| `pnpm test:e2e` | Playwright の E2E テスト（ホスト側で実行。初回は `pnpm exec playwright install chromium`） |
+| `pnpm test:e2e` | Playwright の E2E テスト（ホスト側で実行。初回のみ `npx playwright install chromium`） |
 
 ※ コンテナが起動していない場合は `docker compose run --rm app pnpm <script>` で実行できます。
 
@@ -116,9 +116,8 @@ tests/e2e/            # Playwright の E2E テスト
 
 ## 今後の改善
 
-- Skills → 関連実績の逆引き表示（Projects との relationship 化）
-- WORKS 一覧の案件種別・技術での絞り込み
 - OG 画像の用意（現在は `twitter:card: summary`）
+- 技術（Skills）での WORKS 絞り込み
 
 ## 詰まった時の対処（Docker / pnpm）
 
