@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Title from '@/components/UI/Title'
+import FilterTabs from './FilterTabs'
 import DeviceShowcase from '@/components/UI/DeviceShowcase'
 import {
   getSortedProjects,
@@ -24,15 +25,33 @@ function getTechChips(techStack: Project['techStack']): string[] {
   return (techStack ?? []).map((t) => t.name).filter(Boolean)
 }
 
-export default async function Works() {
+type WorksProps = {
+  /** null = 全件表示 */
+  filterType: 'case-study' | 'site-work' | null
+}
+
+export default async function Works({ filterType }: WorksProps) {
+  // 常に全件を描画し、絞り込みは <section> の data-filter 属性 + CSS で行う。
+  // ページ遷移を挟まないので一瞬白くならない（FilterTabs 参照）。
+  // ?type= 付きの直リンク・JS 無効時はサーバー側でこの属性を初期設定するため、そのまま絞り込まれて見える。
   const projects = await getSortedProjects()
+  const siteCount = projects.filter((p) => p.workType === 'site-work').length
+
+  const tabs = [
+    { label: 'ALL', count: projects.length, value: null },
+    { label: 'CASE STUDY', count: projects.length - siteCount, value: 'case-study' },
+    { label: 'SITE WORK', count: siteCount, value: 'site-work' },
+  ] as const
 
   return (
-    <section id="works" className={styles.works}>
+    <section id="works" className={styles.works} data-filter={filterType ?? 'all'}>
       <div className="wrap">
         <Title en="WORKS" no="03" className={styles.worksTitle}>
           制作実績
         </Title>
+
+        <FilterTabs tabs={[...tabs]} initial={filterType} />
+
         {projects.length > 0 ? (
           <ul className={styles.worksList}>
             {projects.map((project, i) => {
@@ -50,7 +69,12 @@ export default async function Works() {
               const reverse = i % 2 === 0
 
               return (
-                <li key={project.id} className={styles.worksList__item} data-reveal>
+                <li
+                  key={project.id}
+                  className={styles.worksList__item}
+                  data-reveal
+                  data-worktype={project.workType === 'site-work' ? 'site-work' : 'case-study'}
+                >
                   <Link
                     href={`/works/${project.id}`}
                     className={`${styles.card} ${reverse ? styles.cardReverse : ''}`.trim()}

@@ -22,16 +22,80 @@
 }
 
 /* ===== 全幅・枠なしカード一覧 ===== */
+/* 絞り込み: セクションの data-filter と一致しない種別のカードを隠す */
+.works[data-filter='case-study'] .worksList__item[data-worktype='site-work'],
+.works[data-filter='site-work'] .worksList__item[data-worktype='case-study'] {
+  display: none;
+}
+
+/* 絞り込みタブ（種別ラベルと同じ角チップの語彙） */
+.filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 2.4rem 0 0;
+
+  @include responsive(md) {
+    gap: 1rem;
+    margin-top: 3.2rem;
+  }
+}
+
+.filterLink {
+  @include mono;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 3.6rem;
+  padding: 0.4rem 1rem;
+  border: 0.1rem solid rgba($fontBase, 0.35);
+  border-radius: 0.4rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: rgba($fontBase, 0.75);
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+
+  @include responsive(md) {
+    min-height: 4rem;
+    font-size: 1.4rem;
+    padding: 0.4rem 1.6rem;
+  }
+
+  &:hover {
+    border-color: rgba($main, 0.6);
+    color: $main;
+  }
+}
+
+.filterCount {
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
+.filterActive {
+  background-color: $main;
+  border-color: $main;
+  color: #fff;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
 .worksList {
   display: flex;
   flex-direction: column;
   gap: 5.6rem;
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 4rem 0 0;
 
   @include responsive(md) {
     gap: 8rem;
+    margin-top: 4rem;
   }
 
   &__item {
@@ -206,7 +270,6 @@
     padding: 0.4rem 1.1rem;
   }
 }
-
 
 /* ===== 詳細ボタン（塗りの“しっかりした”ボタン） ===== */
 .cardMore {

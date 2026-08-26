@@ -9,11 +9,19 @@ import Contact from '@/components/Sections/Contact'
 import ScrollFX from '@/components/UI/ScrollFX'
 import './styles.scss'
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>
+}) {
   const headers = await getHeaders()
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
   await payload.auth({ headers })
+
+  // WORKS の絞り込み（?type=case-study / site-work）。不正値は全件表示にフォールバック
+  const { type } = await searchParams
+  const workType = type === 'case-study' || type === 'site-work' ? type : null
 
   return (
     <>
@@ -21,7 +29,7 @@ export default async function HomePage() {
       <FirstView />
       <About />
       <Skills />
-      <Works />
+      <Works filterType={workType} />
       <Contact />
     </>
   )
