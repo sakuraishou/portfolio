@@ -94,7 +94,13 @@ export default async function WorkDetailPage({ params }: { params: Promise<{ id:
 
         <header className={styles.hero}>
           <p className={styles.eyebrow}>
-            <span>{workTypeLabel}</span>
+            <span
+              className={`${styles.heroType} ${
+                project.workType === 'site-work' ? styles.heroTypeSite : ''
+              }`.trim()}
+            >
+              {workTypeLabel}
+            </span>
             {period && <span>{period}</span>}
             {statusLabel && <span className={styles.heroStatus}>{statusLabel}</span>}
           </p>

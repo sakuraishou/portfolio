@@ -44,6 +44,26 @@
   color: $main;
 }
 
+/* 案件種別ラベル: 一覧カード（.cardTag）と同じ見た目に揃える */
+.heroType {
+  padding: 0.2rem 0.8rem;
+  border: 0.1rem solid rgba($main, 0.55);
+  border-radius: 0.4rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  color: $main;
+  white-space: nowrap;
+
+  @include responsive(md) {
+    font-size: 1.4rem;
+  }
+}
+
+.heroTypeSite {
+  border-color: rgba($fontBase, 0.4);
+  color: rgba($fontBase, 0.75);
+}
+
 /* 状態は日本語なので本文フォント。チップは クリーム背景 × オレンジ文字 */
 .heroStatus {
   padding: 0.2rem 0.8rem;

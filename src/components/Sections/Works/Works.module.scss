@@ -115,6 +115,27 @@
   }
 }
 
+/* 案件種別ラベル: 枠線だけの角チップ（技術チップの丸ピルと形で区別する） */
+.cardTag {
+  padding: 0.2rem 0.8rem;
+  border: 0.1rem solid rgba($main, 0.55);
+  border-radius: 0.4rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: $main;
+  white-space: nowrap;
+
+  @include responsive(md) {
+    font-size: 1.3rem;
+  }
+}
+
+/* SITE WORK は焦げ茶。同じ形・同じ大きさで種類の違いだけを表す */
+.cardTagSite {
+  border-color: rgba($fontBase, 0.4);
+  color: rgba($fontBase, 0.75);
+}
+
 .cardFeatured {
   color: $main;
   font-weight: 600;
@@ -156,17 +177,36 @@
   }
 }
 
-.cardStack {
-  @include mono;
-  font-size: 1.3rem;
-  line-height: 1.6;
-  letter-spacing: 0.02em;
-  color: rgba($fontBase, 0.6);
+/* 使用技術チップ（About の KEYWORDS タグと同じ型: クリーム背景 × オレンジ文字） */
+.cardChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 
   @include responsive(md) {
-    font-size: 1.6rem;
+    gap: 0.8rem;
   }
 }
+
+.cardChip {
+  @include mono;
+  padding: 0.3rem 0.9rem;
+  background-color: $bg;
+  border-radius: 999px;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  color: $main;
+  white-space: nowrap;
+
+  @include responsive(md) {
+    font-size: 1.3rem;
+    padding: 0.4rem 1.1rem;
+  }
+}
+
 
 /* ===== 詳細ボタン（塗りの“しっかりした”ボタン） ===== */
 .cardMore {

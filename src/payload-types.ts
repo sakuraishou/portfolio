@@ -267,6 +267,10 @@ export interface Project {
    * 管理画面「Project Scopes」で選択肢の数と並び順を管理できます
    */
   scope?: (number | ProjectScope)[] | null;
+  /**
+   * Skills セクションの「この技術を使った実績」リンクに使います。使用技術（techStack）の表示とは独立
+   */
+  skills?: (number | Skill)[] | null;
   techStack?:
     | {
         name: string;
@@ -275,20 +279,6 @@ export interface Project {
     | null;
   productionDate?: string | null;
   productionEndDate?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "skill-categories".
- */
-export interface SkillCategory {
-  id: number;
-  name: string;
-  /**
-   * 数値が小さいほど前に表示されます
-   */
-  sort_order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -311,6 +301,20 @@ export interface Skill {
    */
   featured?: boolean | null;
   icon: number | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "skill-categories".
+ */
+export interface SkillCategory {
+  id: number;
+  name: string;
+  /**
+   * 数値が小さいほど前に表示されます
+   */
+  sort_order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -502,6 +506,7 @@ export interface ProjectsSelect<T extends boolean = true> {
       };
   relatedProjects?: T;
   scope?: T;
+  skills?: T;
   techStack?:
     | T
     | {

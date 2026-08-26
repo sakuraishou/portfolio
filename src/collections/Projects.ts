@@ -183,6 +183,17 @@ export const Projects: CollectionConfig = {
       },
     },
     {
+      name: 'skills',
+      type: 'relationship',
+      relationTo: 'skills',
+      hasMany: true,
+      label: '使用スキル（Skills逆引き用）',
+      admin: {
+        description:
+          'Skills セクションの「この技術を使った実績」リンクに使います。使用技術（techStack）の表示とは独立',
+      },
+    },
+    {
       name: 'techStack',
       type: 'array',
       label: '使用技術',

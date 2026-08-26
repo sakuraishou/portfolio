@@ -19,11 +19,9 @@ function getMediaAlt(media: number | Media | null | undefined, fallback: string)
   return fallback
 }
 
-/** 使用技術を「 · 」区切りで全部つなぐ */
-function getTechLine(techStack: Project['techStack']): string | null {
-  if (!techStack || techStack.length === 0) return null
-  const names = techStack.map((t) => t.name).filter(Boolean)
-  return names.length > 0 ? names.join(' · ') : null
+/** カードに出す使用技術チップ */
+function getTechChips(techStack: Project['techStack']): string[] {
+  return (techStack ?? []).map((t) => t.name).filter(Boolean)
 }
 
 export default async function Works() {
@@ -43,7 +41,7 @@ export default async function Works() {
               const desktopAlt = getMediaAlt(project.mainImage, `${project.title} PC表示`)
               const mobileAlt = getMediaAlt(project.mobileImage, `${project.title} SP表示`)
               const confidential = Boolean(project.confidential)
-              const techLine = getTechLine(project.techStack)
+              const techChips = getTechChips(project.techStack)
               const workTypeLabel = getWorkTypeLabel(project.workType)
               const statusLabel = getStatusLabel(project.status)
               const summary = project.summary?.trim()
@@ -70,7 +68,13 @@ export default async function Works() {
                     <div className={styles.cardText}>
                       <p className={styles.cardTop}>
                         <span className={styles.cardNo}>{no}</span>
-                        <span className={styles.cardTag}>{workTypeLabel}</span>
+                        <span
+                          className={`${styles.cardTag} ${
+                            project.workType === 'site-work' ? styles.cardTagSite : ''
+                          }`.trim()}
+                        >
+                          {workTypeLabel}
+                        </span>
                         {project.isFeatured && (
                           <span className={styles.cardFeatured}>FEATURED</span>
                         )}
@@ -78,7 +82,15 @@ export default async function Works() {
                       </p>
                       <h3 className={styles.cardTitle}>{project.title}</h3>
                       {summary && <p className={styles.cardSummary}>{summary}</p>}
-                      {techLine && <p className={styles.cardStack}>{techLine}</p>}
+                      {techChips.length > 0 && (
+                        <ul className={styles.cardChips} aria-label="使用技術">
+                          {techChips.map((name) => (
+                            <li key={name} className={styles.cardChip}>
+                              {name}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                       <span className={styles.cardMore}>
                         詳細を見る
                         <span className={styles.cardMore__circle} aria-hidden>
