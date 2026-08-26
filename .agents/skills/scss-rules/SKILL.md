@@ -19,7 +19,8 @@ description: このポートフォリオの SCSS / CSS Modules スタイリン�
 
 ## モジュール冒頭のお作法
 
-`next.config.mjs` の `sassOptions.prependData` で全 SCSS に `index` が自動注入されるが、**各モジュールの先頭にも明示的に下記 2 行を書く**（既存コードがそうなっている。エディタ補完・可読性のため）。
+変数・mixin を使う SCSS は、**必ずファイル先頭に明示的に下記 2 行を書く**。
+（かつては `next.config.mjs` の `sassOptions.prependData` で全 SCSS に自動注入していたが、Payload 3.88 が管理 UI に .scss を同梱するようになり、node_modules 配下にまで注入が及んでビルドが壊れるため 2026-08 に撤廃した。明示の `@use` が唯一の取り込み方法）。
 
 ```scss
 @use '@/app/(frontend)/_styles/variables' as *;

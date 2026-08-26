@@ -30,9 +30,9 @@ Works の各案件は詳細ページ `/works/[id]` を持つ。ケーススタ�
 
 ## 技術スタック
 
-- **フレームワーク**: Next.js 15.4（App Router）
-- **CMS**: Payload CMS 3.78（DB アダプタ: `@payloadcms/db-postgres`）
-- **言語**: TypeScript 5.7（`strict: true`）
+- **フレームワーク**: Next.js 16.3（App Router。dev / build とも Turbopack が既定）
+- **CMS**: Payload CMS 3.88（DB アダプタ: `@payloadcms/db-postgres`。管理画面の日本語化に `@payloadcms/translations` を直接依存で使用）
+- **言語**: TypeScript 6.0（`strict: true`。7 系は typescript-eslint が未対応のため見送り）
 - **UI**: React 19
 - **スタイル**: SCSS Modules（`sass`）
 - **フォント**: Google Fonts を `layout.tsx` の `<link>` で読込。**日本語＝Zen Kaku Gothic New / 見出し英字＝Fraunces / ラベル・データ英字（等幅）＝IBM Plex Mono** の3書体（`@include display` / `@include mono`。詳細は `/scss-rules`・`/design-rules`）。
@@ -41,7 +41,7 @@ Works の各案件は詳細ページ `/works/[id]` を持つ。ケーススタ�
 - **アクセス解析**: Google Analytics 4（`@next/third-parties/google` の `GoogleAnalytics` を `layout.tsx` に配置。`NODE_ENV=production` かつ `NEXT_PUBLIC_GA_ID` がある時のみ有効。App Router のクライアント遷移も自動計測）
 - **テスト**: Playwright（e2e）。`tests/e2e/` に主要導線（トップ表示・一覧→詳細→戻る・404・/manual）の回帰テストあり。ホスト側で `pnpm test:e2e`（初回は `playwright install chromium`）。起動中の開発サーバーを再利用する
 - **ランタイム**: Node.js 24（Docker イメージ `node:24-*`）
-- **パッケージ管理**: **pnpm**（`pnpm-lock.yaml`／`packageManager: pnpm@10.34.3`）。Docker も pnpm でインストール。`.npmrc` で `node-linker=hoisted`（Next standalone 互換のためフラット構成）。
+- **パッケージ管理**: **pnpm**（`pnpm-lock.yaml`／`packageManager: pnpm@11.24.0`）。Docker も pnpm でインストール。`.npmrc` で `node-linker=hoisted`（Next standalone 互換のためフラット構成）。
 
 ## ディレクトリ構成
 

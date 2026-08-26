@@ -3,7 +3,7 @@ FROM node:24-alpine AS builder
 WORKDIR /app
 
 # pnpm を固定バージョンで導入（package.json の packageManager と一致させること）
-RUN npm install -g pnpm@10.34.3
+RUN npm install -g pnpm@11.24.0
 
 # 依存関係のインストール（キャッシュを効かせるため先にコピー）
 # lockfile を厳守して再現性のあるインストールを行う

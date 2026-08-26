@@ -1,0 +1,23 @@
+# pnpm の設定ファイル（single-package 構成でも設定置き場として使う）
+#
+# pnpm v11 は依存パッケージの postinstall 等のビルドスクリプトをデフォルトでブロックする。
+# 実行を許可するパッケージだけをここに列挙する（サプライチェーン対策）。
+# 新しい依存で「Ignored build scripts」警告が出たら、内容を確認した上でここに追加すること。
+# ※ v10 の package.json pnpm.onlyBuiltDependencies は v11 で allowBuilds に置き換えられた
+allowBuilds:
+  # 画像処理のネイティブバイナリ
+  sharp: true
+  # Next.js / Vite のネイティブバイナリ
+  esbuild: true
+  # ESLint の import resolver ネイティブバイナリ
+  unrs-resolver: true
+  # 開発サーバーのファイル監視ネイティブバイナリ
+  '@parcel/watcher': true
+
+# 公開から24時間未満のパッケージをブロックするサプライチェーン対策（v11既定）。
+# sharp ファミリーは正規メンテナのリリース頻度が高く、公開直後のパッチが
+# 必要になることがあるため除外する
+minimumReleaseAgeExclude:
+  - sharp
+  - '@img/*'
+

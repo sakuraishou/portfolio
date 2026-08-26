@@ -1,4 +1,6 @@
 @use 'ress';
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
 
 // CSS Modules には書けないため、フォント用変数はグローバル SCSS のみで定義する
 :root {

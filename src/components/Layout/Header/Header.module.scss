@@ -1,3 +1,6 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
 .header {
   display: flex;
   align-items: center;

@@ -31,9 +31,7 @@ services:
     # 大事な情報は .env ファイルから読み込むように戻します
     env_file:
       - .env
-    # 今回のトラブル対策として DNS 設定は残しておくと安心です
-    dns:
-      - 8.8.8.8
-    # 既定は webpack の next dev（Turbopack は `pnpm dev:turbo` で任意利用）
+    # Next 16 のため dev は Turbopack が既定
     # pnpm を固定バージョンで導入し、lockfile を厳守して依存をインストールしてから dev 起動
-    command: sh -c "npm install -g pnpm@10.34.3 && pnpm install --frozen-lockfile && (pnpm dev || pnpm devsafe)"
+    # pnpm が既に入っていれば再インストールしない（起動時の不要なネットワーク依存を減らす）
+    command: sh -c "pnpm --version 2>/dev/null | grep -q 11.24.0 || npm install -g pnpm@11.24.0; pnpm install --frozen-lockfile && (pnpm dev || pnpm devsafe)"
