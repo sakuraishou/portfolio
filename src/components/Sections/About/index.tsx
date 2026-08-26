@@ -65,7 +65,8 @@ export default async function About() {
                 「作りたい」を、一番近くで形にするエンジニア。
               </p>
               <p className={styles.text} data-reveal>
-                アパレルやWebディレクターなど、常に「人」と向き合う仕事をしてきました。その対人経験をベースにした「ユーザーに寄り添う想像力」を武器に、使う人が心地よく、信頼できるWebサイトを構築します。
+                Webサイト・Webシステムの要件整理から設計、実装、運用改善まで一貫して担当しています。PHP／WordPressで培ったWeb開発経験を土台に、現在はNext.js／Nuxt／TypeScript、Headless
+                CMS、DB・API連携を用いたWebアプリケーションや業務システム、Web基盤の開発へ領域を広げています。事業や現場の課題を整理し、技術選定から実装・継続運用までつなげることを得意としています。
               </p>
 
               <dl className={styles.spec} data-reveal>

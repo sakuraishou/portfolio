@@ -196,6 +196,22 @@ export interface Project {
    * 数値が小さいほど前に表示されます
    */
   sort_order?: number | null;
+  /**
+   * 20〜45文字程度。案件の課題や価値が1行で伝わる説明。例: 複数サイトの掲載情報を一画面で横断管理
+   */
+  summary?: string | null;
+  /**
+   * 未設定の既存データはケーススタディとして表示します
+   */
+  workType?: ('case-study' | 'site-work') | null;
+  /**
+   * 未設定なら状態ラベルを表示しません。開発中の案件を完成品に見せないために使います
+   */
+  status?: ('in-development' | 'in-verification' | 'in-production' | 'completed' | 'internal') | null;
+  /**
+   * ONにすると、並び順より前に一覧の先頭グループへ表示します
+   */
+  isFeatured?: boolean | null;
   mainImage?: (number | null) | Media;
   mobileImage?: (number | null) | Media;
   /**
@@ -220,6 +236,33 @@ export interface Project {
    * ケーススタディ用
    */
   result?: string | null;
+  /**
+   * 1件でも登録すると、上の4項目（課題・背景／技術選定／工夫／結果）の代わりに、ここに並べた順で表示します。
+   */
+  caseSections?:
+    | {
+        en:
+          | 'PROBLEM'
+          | 'DECISION'
+          | 'STACK'
+          | 'ARCHITECTURE'
+          | 'IMPLEMENTATION'
+          | 'HIGHLIGHT'
+          | 'MIGRATION'
+          | 'RESULT'
+          | 'STATUS';
+        /**
+         * 例: 課題・背景 / 技術選定・設計判断 / 移行設計 / 現在の状況
+         */
+        label: string;
+        body: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * 「先行改善 → 残課題 → 刷新」のように、つながりのある案件を相互に指定します
+   */
+  relatedProjects?: (number | Project)[] | null;
   /**
    * 管理画面「Project Scopes」で選択肢の数と並び順を管理できます
    */
@@ -436,6 +479,10 @@ export interface ProjectScopesSelect<T extends boolean = true> {
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   sort_order?: T;
+  summary?: T;
+  workType?: T;
+  status?: T;
+  isFeatured?: T;
   mainImage?: T;
   mobileImage?: T;
   confidential?: T;
@@ -445,6 +492,15 @@ export interface ProjectsSelect<T extends boolean = true> {
   approach?: T;
   highlights?: T;
   result?: T;
+  caseSections?:
+    | T
+    | {
+        en?: T;
+        label?: T;
+        body?: T;
+        id?: T;
+      };
+  relatedProjects?: T;
   scope?: T;
   techStack?:
     | T

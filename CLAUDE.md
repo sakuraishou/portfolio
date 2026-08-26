@@ -25,7 +25,7 @@
 
 Next.js（App Router）+ Payload CMS で構築した個人ポートフォリオサイト。
 公開ページのトップは 1 ページ構成（FirstView / About / Skills / Works / Contact）で、コンテンツは Payload CMS（Postgres）で管理する。トップ全体は「桜井 翔という"製品"の仕様書（スペックシート）」をコンセプトに、型番・key-value・連番・等幅ラベルで統一している。
-Works の各案件は詳細ページ `/works/[id]`（ケーススタディ：課題 → 技術選定・設計判断 → 工夫 → 結果）を持つ。
+Works の各案件は詳細ページ `/works/[id]` を持つ。ケーススタディの章は Payload の `caseSections`（任意順の配列）で組み立て、未登録の案件は従来の固定4項目（課題・背景 → 技術選定・設計判断 → 工夫 → 結果）へフォールバックする。カードと詳細には案件種別（CASE STUDY／SITE WORK）と状態（開発中／本番稼働中 等）を表示する。
 加えて、人柄・マインドを「取扱説明書（オーナーズマニュアル）」風に見せる特設ページ `/manual` を持つ（GSAP 演出・SVG グラフ中心の静的コンテンツ。Payload 非依存）。
 
 ## 技術スタック
@@ -59,6 +59,7 @@ src/
 │   ├── (payload)/           # Payload 管理画面 + API（route group）
 │   └── api/contact/route.ts # お問い合わせ送信 API（nodemailer）
 ├── collections/             # Payload コレクション定義
+├── lib/                     # 画面をまたぐ共有ロジック（projects.ts＝Works の取得・整列・表示ラベル）
 ├── components/
 │   ├── Layout/              # Header / Footer
 │   ├── Sections/            # FirstView / About / Skills / Works / Contact
@@ -69,6 +70,7 @@ src/
 ```
 
 - コンポーネントは `components/<分類>/<Name>/index.tsx` + `<Name>.module.scss` を 1 セットで配置する。
+- Works 一覧と Works 詳細の**並び順は必ず `lib/projects.ts` の `sortProjects` を通す**（代表案件 `isFeatured` を先頭グループへ、その後は `sort_order` 昇順）。一覧と詳細でずれると詳細ページの PREV／NEXT が食い違う。
 - 画像実体は `/media`（Payload アップロード、gitignore 済み）と `public/assets/`（静的画像）に分かれる。
 
 ## よく使うコマンド

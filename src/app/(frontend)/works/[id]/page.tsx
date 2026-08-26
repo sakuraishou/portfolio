@@ -1,10 +1,15 @@
 import type { Metadata } from 'next'
-import { getPayload } from 'payload'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import config from '@/payload.config'
 import DeviceShowcase from '@/components/UI/DeviceShowcase'
-import type { Media, Project } from '@/payload-types'
+import {
+  getCaseSections,
+  getSortedProjects,
+  getStatusLabel,
+  getWorkTypeLabel,
+  toProjectRefs,
+} from '@/lib/projects'
+import type { Media } from '@/payload-types'
 import styles from './WorkDetail.module.scss'
 
 function getMediaUrl(media: number | Media | null | undefined): string | null {
@@ -38,37 +43,20 @@ function getScopeName(scope: unknown): string | null {
   return typeof name === 'string' && name.trim().length > 0 ? name : null
 }
 
-function sortByOrder<T extends { sort_order?: number | null }>(items: T[]): T[] {
-  return [...items].sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999))
-}
-
-/** トップ Works と同じ並び（ダミー → DB）の全件リスト。前後ナビ・詳細取得に使う */
-async function getProjects(): Promise<Project[]> {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const res = await payload
-    .find({ collection: 'projects', depth: 1, limit: 100, sort: 'sort_order' })
-    .catch(() => null)
-  const db = res ? sortByOrder(res.docs) : []
-  return db
-}
-
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ id: string }>
 }): Promise<Metadata> {
   const { id } = await params
-  const projects = await getProjects()
+  const projects = await getSortedProjects()
   const project = projects.find((p) => String(p.id) === id)
   return { title: project?.title ?? '実績', description: project?.description ?? undefined }
 }
 
-type CaseSection = { no: string; en: string; label: string; body: string }
-
 export default async function WorkDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const projects = await getProjects()
+  const projects = await getSortedProjects()
   const index = projects.findIndex((p) => String(p.id) === id)
   if (index === -1) notFound()
 
@@ -91,16 +79,11 @@ export default async function WorkDetailPage({ params }: { params: Promise<{ id:
       ? project.techStack.map((t) => t.name).filter(Boolean).join(' / ')
       : null
 
-  const sections: CaseSection[] = (
-    [
-      { no: '01', en: 'PROBLEM', label: '課題・背景', body: project.challenge },
-      { no: '02', en: 'STACK', label: '技術選定・設計判断', body: project.approach },
-      { no: '03', en: 'HIGHLIGHT', label: '工夫・詰まった所', body: project.highlights },
-      { no: '04', en: 'RESULT', label: '結果・学び', body: project.result },
-    ] as const
-  )
-    .filter((s) => Boolean(s.body && s.body.trim()))
-    .map((s) => ({ ...s, body: s.body as string }))
+  const sections = getCaseSections(project)
+  const workTypeLabel = getWorkTypeLabel(project.workType)
+  const statusLabel = getStatusLabel(project.status)
+  const related = toProjectRefs(project.relatedProjects)
+  const lead = project.description?.trim()
 
   return (
     <article className={styles.work}>
@@ -110,8 +93,14 @@ export default async function WorkDetailPage({ params }: { params: Promise<{ id:
         </Link>
 
         <header className={styles.hero}>
-          <p className={styles.eyebrow}>CASE STUDY{period ? ` — ${period}` : ''}</p>
+          <p className={styles.eyebrow}>
+            <span>{workTypeLabel}</span>
+            {period && <span>{period}</span>}
+            {statusLabel && <span className={styles.heroStatus}>{statusLabel}</span>}
+          </p>
           <h1 className={styles.title}>{project.title}</h1>
+          {/* リードは本文より先に読ませる。旧実装ではページ末尾に出ていた */}
+          {lead && <p className={styles.lead}>{lead}</p>}
         </header>
 
         <div className="w1000">
@@ -159,7 +148,20 @@ export default async function WorkDetailPage({ params }: { params: Promise<{ id:
           </section>
         ))}
 
-        {project.description && <p className={styles.lead}>{project.description}</p>}
+        {related.length > 0 && (
+          <section className={styles.related}>
+            <h2 className={styles.relatedHead}>RELATED / 関連する実績</h2>
+            <ul className={styles.relatedList}>
+              {related.map((r) => (
+                <li key={r.id}>
+                  <Link href={`/works/${r.id}`} className={styles.relatedLink}>
+                    {r.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {project.url && (
           <a

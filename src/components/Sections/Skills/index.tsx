@@ -31,13 +31,10 @@ function SkillItem({ skill }: { skill: Skill }) {
   const iconUrl = getMediaUrl(skill.icon)
   const isStudying = Boolean(skill.studying)
   const isFeatured = Boolean(skill.featured)
-  const iconAlt =
-    typeof skill.icon === 'object' ? (skill.icon.alt ?? skill.name) : skill.name
 
   return (
     <SkillListItem
       iconUrl={iconUrl}
-      iconAlt={iconAlt}
       isStudying={isStudying}
       isFeatured={isFeatured}
       name={skill.name}

@@ -15,10 +15,10 @@ type SpecRow = {
 }
 
 const SPEC_ROWS: SpecRow[] = [
-  { label: 'MODEL', value: 'Web Engineer' },
+  { label: 'MODEL', value: 'Web / Product Engineer' },
   { label: 'BASE', value: 'Tokyo, JP' },
-  { label: 'CORE', value: 'WordPress' },
-  { label: 'BUILDING', value: 'Next.js · Nuxt × Supabase' },
+  { label: 'CORE', value: 'Frontend · Web Application' },
+  { label: 'BUILDING', value: 'Next.js · Nuxt · TypeScript' },
   { label: 'STATUS', value: 'Open to Work', status: true },
 ]
 

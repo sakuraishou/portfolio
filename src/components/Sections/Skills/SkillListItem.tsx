@@ -8,7 +8,6 @@ import styles from './Skills.module.scss'
 
 export type SkillListItemProps = {
   iconUrl: string | null
-  iconAlt: string
   isStudying: boolean
   isFeatured: boolean
   name: string
@@ -17,7 +16,6 @@ export type SkillListItemProps = {
 
 export default function SkillListItem({
   iconUrl,
-  iconAlt,
   isStudying,
   isFeatured,
   name,
@@ -27,6 +25,7 @@ export default function SkillListItem({
   const [isNarrow, setIsNarrow] = useState(false)
   const dialogId = useId()
   const dialogTitleId = useId()
+  const tooltipId = useId()
 
   const closeModal = useCallback(() => setModalOpen(false), [])
 
@@ -92,14 +91,17 @@ export default function SkillListItem({
       onClick={openModalIfSp}
       onKeyDown={onRowKeyDown}
       role={rowInteractive ? 'button' : undefined}
-      tabIndex={rowInteractive ? 0 : undefined}
+      // PC はホバーでツールチップを出すため、キーボードでも読めるようフォーカス可能にする
+      tabIndex={hasDescription ? 0 : undefined}
       aria-haspopup={rowInteractive ? 'dialog' : undefined}
       aria-expanded={rowInteractive ? modalOpen : undefined}
       aria-label={rowInteractive ? `${name}の説明を表示` : undefined}
+      aria-describedby={hasDescription && !isNarrow ? tooltipId : undefined}
     >
       {iconUrl && (
         <span className={styles.skillIcon}>
-          <Image src={iconUrl} alt={iconAlt} width={64} height={64} />
+          {/* スキル名はすぐ隣にテキストで出ているため、アイコンは装飾扱い（alt 空） */}
+          <Image src={iconUrl} alt="" width={64} height={64} />
         </span>
       )}
 
@@ -119,7 +121,7 @@ export default function SkillListItem({
 
       {hasDescription && (
         <>
-          <div className={styles.skillDescHover} role="tooltip">
+          <div id={tooltipId} className={styles.skillDescHover} role="tooltip">
             <p className={styles.skillDescription}>{description}</p>
           </div>
 

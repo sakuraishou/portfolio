@@ -115,6 +115,36 @@
   }
 }
 
+.cardFeatured {
+  color: $main;
+  font-weight: 600;
+}
+
+/* 状態は日本語なので等幅英字ではなく本文フォント。チップは クリーム背景 × オレンジ文字 */
+.cardStatus {
+  padding: 0.2rem 0.8rem;
+  background-color: $bg;
+  border-radius: 0.6rem;
+  font-family: $font-main;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  color: $main;
+
+  @include responsive(md) {
+    font-size: 1.3rem;
+  }
+}
+
+.cardSummary {
+  font-size: 1.4rem;
+  line-height: 1.7;
+  color: rgba($fontBase, 0.85);
+
+  @include responsive(md) {
+    font-size: 1.6rem;
+  }
+}
+
 .cardTitle {
   font-size: 2.2rem;
   font-weight: 700;

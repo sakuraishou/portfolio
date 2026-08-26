@@ -1,8 +1,11 @@
-import { getPayload } from 'payload'
-import config from '@/payload.config'
 import Link from 'next/link'
 import Title from '@/components/UI/Title'
 import DeviceShowcase from '@/components/UI/DeviceShowcase'
+import {
+  getSortedProjects,
+  getStatusLabel,
+  getWorkTypeLabel,
+} from '@/lib/projects'
 import styles from './Works.module.scss'
 import type { Media, Project } from '@/payload-types'
 
@@ -23,20 +26,8 @@ function getTechLine(techStack: Project['techStack']): string | null {
   return names.length > 0 ? names.join(' · ') : null
 }
 
-function sortByOrder<T extends { sort_order?: number | null }>(items: T[]): T[] {
-  return [...items].sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999))
-}
-
 export default async function Works() {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const { docs: rawProjects } = await payload.find({
-    collection: 'projects',
-    depth: 1,
-    limit: 100,
-    sort: 'sort_order',
-  })
-  const projects = sortByOrder(rawProjects)
+  const projects = await getSortedProjects()
 
   return (
     <section id="works" className={styles.works}>
@@ -53,6 +44,9 @@ export default async function Works() {
               const mobileAlt = getMediaAlt(project.mobileImage, `${project.title} SP表示`)
               const confidential = Boolean(project.confidential)
               const techLine = getTechLine(project.techStack)
+              const workTypeLabel = getWorkTypeLabel(project.workType)
+              const statusLabel = getStatusLabel(project.status)
+              const summary = project.summary?.trim()
               const no = String(i + 1).padStart(2, '0')
               // PC では奇数（01・03…）を左右反転
               const reverse = i % 2 === 0
@@ -76,9 +70,14 @@ export default async function Works() {
                     <div className={styles.cardText}>
                       <p className={styles.cardTop}>
                         <span className={styles.cardNo}>{no}</span>
-                        <span className={styles.cardTag}>CASE STUDY</span>
+                        <span className={styles.cardTag}>{workTypeLabel}</span>
+                        {project.isFeatured && (
+                          <span className={styles.cardFeatured}>FEATURED</span>
+                        )}
+                        {statusLabel && <span className={styles.cardStatus}>{statusLabel}</span>}
                       </p>
                       <h3 className={styles.cardTitle}>{project.title}</h3>
+                      {summary && <p className={styles.cardSummary}>{summary}</p>}
                       {techLine && <p className={styles.cardStack}>{techLine}</p>}
                       <span className={styles.cardMore}>
                         詳細を見る

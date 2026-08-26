@@ -216,12 +216,19 @@
   }
 }
 
-.itemHasDesc:hover .skillDescHover {
+.itemHasDesc:hover .skillDescHover,
+.itemHasDesc:focus-visible .skillDescHover {
   @include responsive(md) {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
   }
+}
+
+/* キーボード操作時にどの行を見ているか分かるようにする */
+.itemHasDesc:focus-visible {
+  outline: 0.2rem solid rgba($main, 0.6);
+  outline-offset: 0.2rem;
 }
 
 .skillDescModalRoot {

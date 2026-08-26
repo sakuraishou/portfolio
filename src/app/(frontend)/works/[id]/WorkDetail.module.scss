@@ -35,9 +35,23 @@
 
 .eyebrow {
   @include mono;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 1.6rem;
   font-size: 1.2rem;
   letter-spacing: 0.16em;
   color: $main;
+}
+
+/* 状態は日本語なので本文フォント。チップは クリーム背景 × オレンジ文字 */
+.heroStatus {
+  padding: 0.2rem 0.8rem;
+  background-color: $bg;
+  border-radius: 0.6rem;
+  font-family: $font-main;
+  font-size: 1.2rem;
+  letter-spacing: 0.04em;
 }
 
 .title {
@@ -64,6 +78,52 @@
   @include responsive(md) {
     margin-top: 4rem;
     font-size: 1.8rem;
+  }
+}
+
+.related {
+  margin-top: 6rem;
+
+  @include responsive(md) {
+    margin-top: 8rem;
+  }
+}
+
+.relatedHead {
+  @include mono;
+  font-size: 1.2rem;
+  letter-spacing: 0.16em;
+  color: $main;
+
+  @include responsive(md) {
+    font-size: 1.4rem;
+  }
+}
+
+.relatedList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.relatedLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 4.4rem;
+  font-size: 1.5rem;
+  line-height: 1.7;
+  color: $fontBase;
+  text-decoration: underline;
+  text-underline-offset: 0.4rem;
+  transition: color 0.2s ease;
+
+  @include responsive(md) {
+    font-size: 1.7rem;
+  }
+
+  &:hover {
+    color: $main;
   }
 }
 
