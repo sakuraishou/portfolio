@@ -23,6 +23,16 @@ test.describe('WORKS 詳細', () => {
     // 戻る導線
     await page.getByRole('link', { name: /WORKS \/ 実績一覧へ/ }).click()
     await expect(page).toHaveURL(/\/#works$/)
+
+    // 回帰テスト: 戻った直後、スクロールしなくても画面内のカードが表示されている
+    // （ScrollFX がスクロール復元前に初期化されると opacity:0 のまま残る不具合があった）
+    const backCard = page.locator('#works li[data-reveal]').first()
+    await expect
+      .poll(
+        async () => backCard.evaluate((el) => Number(getComputedStyle(el).opacity)),
+        { message: '戻った直後にカードが非表示のまま', timeout: 5000 },
+      )
+      .toBe(1)
   })
 
   test('存在しない実績IDは404を返す', async ({ page }) => {

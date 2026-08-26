@@ -20,78 +20,94 @@ gsap.registerPlugin(useGSAP, ScrollTrigger)
  *
  * reveal 完了後は inline transform を消すため、ホバー時の transform 等は壊さない。
  * prefers-reduced-motion 指定時はすべて無効化し、静止状態で表示する。
+ *
+ * セットアップは2フレーム遅らせて行う。詳細ページから「実績一覧へ」で戻ったときは
+ * ブラウザのスクロール復元／#works へのジャンプが effect より先に走るため、
+ * 復元前に判定すると画面内の要素まで opacity:0 で隠してしまい、
+ * ユーザーがスクロールするまで何も表示されない（実際に起きた不具合）。
+ * 復元完了後に判定し、その時点で画面内にある要素はアニメーションせず即時表示する。
  */
 export default function ScrollFX() {
-  useGSAP(() => {
+  useGSAP((_context, contextSafe) => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduce) return
 
-    // ---- 出現（reveal） ----
-    const reveals = gsap.utils.toArray<HTMLElement>('[data-reveal]')
-    const riseEls = reveals.filter((el) => el.dataset.reveal !== 'fade')
-    const fadeEls = reveals.filter((el) => el.dataset.reveal === 'fade')
+    const setup = contextSafe!(() => {
+      // ---- 出現（reveal） ----
+      const reveals = gsap.utils.toArray<HTMLElement>('[data-reveal]')
+      // batch の start（top 88%）と同じ基準。ここより上にある要素は「もう見えている」扱い
+      const threshold = window.innerHeight * 0.88
+      const pending = reveals.filter((el) => el.getBoundingClientRect().top >= threshold)
 
-    if (riseEls.length > 0) {
-      gsap.set(riseEls, { opacity: 0, y: 24, willChange: 'transform, opacity' })
-      ScrollTrigger.batch(riseEls, {
-        start: 'top 88%',
-        onEnter: (batch) =>
-          gsap.to(batch, {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            ease: 'power3.out',
-            stagger: 0.09,
-            overwrite: 'auto',
-            // hover 等の transform を壊さないよう、出現後は inline transform を消す
-            clearProps: 'transform,willChange',
-          }),
+      const riseEls = pending.filter((el) => el.dataset.reveal !== 'fade')
+      const fadeEls = pending.filter((el) => el.dataset.reveal === 'fade')
+
+      if (riseEls.length > 0) {
+        gsap.set(riseEls, { opacity: 0, y: 24, willChange: 'transform, opacity' })
+        ScrollTrigger.batch(riseEls, {
+          start: 'top 88%',
+          onEnter: (batch) =>
+            gsap.to(batch, {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: 'power3.out',
+              stagger: 0.09,
+              overwrite: 'auto',
+              // hover 等の transform を壊さないよう、出現後は inline transform を消す
+              clearProps: 'transform,willChange',
+            }),
+        })
+      }
+
+      if (fadeEls.length > 0) {
+        gsap.set(fadeEls, { opacity: 0, willChange: 'opacity' })
+        ScrollTrigger.batch(fadeEls, {
+          start: 'top 90%',
+          onEnter: (batch) =>
+            gsap.to(batch, {
+              opacity: 1,
+              duration: 0.9,
+              ease: 'power2.out',
+              stagger: 0.08,
+              overwrite: 'auto',
+              clearProps: 'willChange',
+            }),
+        })
+      }
+
+      // ---- パララックス ----
+      const parallaxEls = gsap.utils.toArray<HTMLElement>('[data-parallax]')
+      parallaxEls.forEach((el) => {
+        const amount = Number(el.dataset.parallaxSpeed ?? 14)
+        const fromTop = el.dataset.parallaxAnchor === 'top'
+        const trigger = el.closest('section') ?? el
+        gsap.to(el, {
+          yPercent: -amount,
+          ease: 'none',
+          scrollTrigger: {
+            trigger,
+            start: fromTop ? 'top top' : 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        })
       })
-    }
 
-    if (fadeEls.length > 0) {
-      gsap.set(fadeEls, { opacity: 0, willChange: 'opacity' })
-      ScrollTrigger.batch(fadeEls, {
-        start: 'top 90%',
-        onEnter: (batch) =>
-          gsap.to(batch, {
-            opacity: 1,
-            duration: 0.9,
-            ease: 'power2.out',
-            stagger: 0.08,
-            overwrite: 'auto',
-            clearProps: 'willChange',
-          }),
-      })
-    }
-
-    // 途中位置でのリロード対策：すでに画面上方へ通過済みの要素は即時表示にして取り残さない
-    const passed = reveals.filter((el) => el.getBoundingClientRect().bottom < 0)
-    if (passed.length > 0) {
-      gsap.set(passed, { opacity: 1, y: 0, clearProps: 'transform,willChange' })
-    }
-
-    // ---- パララックス ----
-    const parallaxEls = gsap.utils.toArray<HTMLElement>('[data-parallax]')
-    parallaxEls.forEach((el) => {
-      const amount = Number(el.dataset.parallaxSpeed ?? 14)
-      const fromTop = el.dataset.parallaxAnchor === 'top'
-      const trigger = el.closest('section') ?? el
-      gsap.to(el, {
-        yPercent: -amount,
-        ease: 'none',
-        scrollTrigger: {
-          trigger,
-          start: fromTop ? 'top top' : 'top bottom',
-          end: 'bottom top',
-          scrub: true,
-        },
-      })
+      // フォント確定後にトリガー位置を再計算（レイアウトシフト対策）
+      if (typeof document !== 'undefined' && document.fonts) {
+        document.fonts.ready.then(() => ScrollTrigger.refresh()).catch(() => {})
+      }
     })
 
-    // フォント確定後にトリガー位置を再計算（レイアウトシフト対策）
-    if (typeof document !== 'undefined' && document.fonts) {
-      document.fonts.ready.then(() => ScrollTrigger.refresh()).catch(() => {})
+    // スクロール復元・ハッシュジャンプが済むのを待ってから判定する
+    let raf2 = 0
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(setup)
+    })
+    return () => {
+      cancelAnimationFrame(raf1)
+      cancelAnimationFrame(raf2)
     }
   })
 

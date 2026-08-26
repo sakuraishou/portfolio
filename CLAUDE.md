@@ -109,6 +109,7 @@ src/
 
 - `data-reveal` … ビューポート進入時に フェード＋わずかな上昇で出現。大きいブロックは `data-reveal="fade"`（透明度のみ）。
 - `data-parallax` … 装飾要素向けの控えめなパララックス。`data-parallax-speed`（移動量 yPercent・既定 14）/ `data-parallax-anchor="top"`（初期表示で見えている要素はセクション上端基準）。
+- 途中位置から開いた場合（詳細 → 一覧へ戻る・リロード・ハッシュ直リンク）は、スクロール位置の復元を待ってから（2フレーム後に）判定し、その時点で画面内にある要素はアニメーションなしで即時表示する。復元前に隠すと、スクロールするまで何も表示されない不具合になる（2026-08 修正済み・E2E で回帰確認）。
 - 注意: reveal は出現後に inline transform を `clearProps` で除去するため、**ベース／ホバーで `transform` に依存する要素（例: ツールチップの `translateX(-50%)`、カードのホバー浮き）には `data-reveal` を付けない**（親や別要素に付ける）。`transform: translate()` で中央寄せした要素にパララックスを足すときは `xPercent/yPercent` を併用して中央寄せを保つ（`FirstView` の透かし参照）。
 - `prefers-reduced-motion: reduce` 指定時はドライバ側で全演出を無効化し、静止状態で表示する（CSS で隠さないため JS 無効でも表示は壊れない）。
 
