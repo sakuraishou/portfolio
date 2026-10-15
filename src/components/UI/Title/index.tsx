@@ -13,18 +13,22 @@ export default function Title({ children, en, no, as: Tag = 'h2', className = ''
   // no 指定時：MV と統一した見出し。未指定時：従来の見出し（manual Cover 等）
   if (no) {
     return (
-      <div className={`${styles.head} ${className}`.trim()}>
+      // 出現演出は ScrollFX が data-title-* を拾って行う（罫線 → 連番デコード → 帯が走って見出し）
+      <div className={`${styles.head} ${className}`.trim()} data-title-head>
         {en && (
           <span className={styles.wm} aria-hidden data-parallax data-parallax-speed="22">
             {en}
           </span>
         )}
-        <span className={styles.eyebrow} data-reveal>
-          <span className={styles.eyebrowLine} aria-hidden />
-          {en ? `${no} / ${en}` : no}
+        <span className={styles.eyebrow} data-title-eyebrow>
+          <span className={styles.eyebrowLine} aria-hidden data-title-line />
+          <span data-title-label>{en ? `${no} / ${en}` : no}</span>
         </span>
-        <Tag className={styles.jp} data-reveal>
-          {children}
+        <Tag className={styles.jp}>
+          <span className={styles.jpText}>
+            <span data-title-text>{children}</span>
+            <span className={styles.jpBar} aria-hidden data-title-bar />
+          </span>
         </Tag>
       </div>
     )

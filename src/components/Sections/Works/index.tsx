@@ -72,7 +72,8 @@ export default async function Works({ filterType }: WorksProps) {
                 <li
                   key={project.id}
                   className={styles.worksList__item}
-                  data-reveal
+                  // 動きは中のデバイス表示（data-depth）が担うので、カード自体は透明度だけで出す
+                  data-reveal="fade"
                   data-worktype={project.workType === 'site-work' ? 'site-work' : 'case-study'}
                 >
                   <Link
@@ -91,7 +92,9 @@ export default async function Works({ filterType }: WorksProps) {
 
                     <div className={styles.cardText}>
                       <p className={styles.cardTop}>
-                        <span className={styles.cardNo}>{no}</span>
+                        <span className={styles.cardNo} data-scramble>
+                          {no}
+                        </span>
                         <span
                           className={`${styles.cardTag} ${
                             project.workType === 'site-work' ? styles.cardTagSite : ''

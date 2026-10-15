@@ -30,6 +30,8 @@ export default function DeviceShowcase({
 
   // 社外秘のときはスマホ枠（はみ出し余白も）を出さない
   const showSp = !confidential && Boolean(mobileUrl)
+  // 一覧だけ、ScrollFX のスクロール連動の奥行き演出を乗せる（詳細は静止）
+  const depth = variant === 'list'
 
   return (
     <div
@@ -41,8 +43,9 @@ export default function DeviceShowcase({
       ]
         .filter(Boolean)
         .join(' ')}
+      data-depth={depth ? '' : undefined}
     >
-      <div className={styles.pc}>
+      <div className={styles.pc} data-depth-pc={depth ? '' : undefined}>
         <div className={styles.pc__bar} aria-hidden>
           <span className={styles.pc__dot} />
           <span className={styles.pc__dot} />
@@ -83,7 +86,7 @@ export default function DeviceShowcase({
         </div>
       </div>
       {!confidential && mobileUrl && (
-        <div className={styles.sp}>
+        <div className={styles.sp} data-depth-sp={depth ? '' : undefined}>
           <div className={styles.sp__screen}>
             <Image
               src={mobileUrl}

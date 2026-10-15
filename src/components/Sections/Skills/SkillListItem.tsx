@@ -169,7 +169,7 @@ export default function SkillListItem({
   return (
     <li
       className={`${styles.skillsList__item} ${hasDescription ? styles.itemHasDesc : ''}`}
-      data-reveal
+      data-reveal="flip"
       onClick={openModalIfSp}
       onKeyDown={onRowKeyDown}
       onMouseEnter={updatePlacement}

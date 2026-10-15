@@ -95,3 +95,19 @@
     font-size: 3.8rem;
   }
 }
+
+/* 見出しの文字を包む（帯の幅を文字幅に合わせるため inline-block） */
+.jpText {
+  position: relative;
+  display: inline-block;
+}
+
+/* 出現時に文字の上を走り抜けるアクセント色の帯（JS が scaleX を動かす。普段は幅 0 で見えない） */
+.jpBar {
+  position: absolute;
+  inset: -0.1em -0.2em;
+  background-color: var(--title-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}

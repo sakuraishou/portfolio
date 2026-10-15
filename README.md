@@ -12,7 +12,8 @@ Next.js（App Router）× Payload CMS で構築した、桜井 翔のポート�
 
 - **CMS のスキーマとフロントを型でつなぐ構成** — Payload のコレクション定義から TypeScript の型（`src/payload-types.ts`）を自動生成し、フロントは生成型だけを import します。データ構造の変更は型エラーとして検出されます。公開ページは Server Component から Payload Local API を直接呼び、公開用の API レイヤーを別途持ちません。
 - **ケーススタディをデータ構造から設計** — 実績（`Projects`）は固定の4章ではなく、任意順の章（`caseSections`: PROBLEM / DECISION / ARCHITECTURE / MIGRATION / STATUS など）を持てるスキーマにしています。開発中／本番稼働中といった状態（`status`）、案件種別（`workType`）、案件同士の関連（`relatedProjects`）も CMS から管理し、開発中の案件を完成品に見せない表示制御をデータ側で行います。
-- **演出は宣言的な仕組みに** — スクロール演出（フェード・パララックス）は client コンポーネントを1つ（`components/UI/ScrollFX`）だけ置き、各セクションは Server Component のまま `data-reveal` / `data-parallax` 属性を付けるだけで演出が乗ります。`prefers-reduced-motion` 指定時は全演出を無効化します。
+- **演出は宣言的な仕組みに** — スクロール演出（ピントが合う出現・タイルの裏返し・写真の切り抜き・見出しの帯とデコード・Works の奥行き・パララックス）は client コンポーネントを1つ（`components/UI/ScrollFX`）だけ置き、各セクションは Server Component のまま `data-reveal` / `data-scramble` / `data-parallax` などの属性を付けるだけで演出が乗ります。GSAP の ScrollTrigger / ScrambleText / SplitText を使っています。`prefers-reduced-motion` 指定時は全演出を無効化します。
+- **初回だけのローディング** — トップを最初に開いたときだけ「仕様書 No.001 の起動シーケンス」を約 3 秒再生します（タップ／キーでスキップ可）。出すかどうかは `<head>` の小さなインラインスクリプトが描画前に `sessionStorage` で判定するため、ちらつきません。ハッシュ付き URL・`prefers-reduced-motion`・2 回目以降は出しません（`components/UI/BootSequence`）。
 - **見た目と両立するアクセシビリティ** — スキル説明はホバーだけでなくキーボードフォーカスでも表示し、`aria-describedby` で紐付け。装飾アイコンは `alt=""`、SP はモーダル表示で Escape・背景タップで閉じられます。
 
 ## アーキテクチャ

@@ -3,10 +3,11 @@ import './styles.scss'
 import Header from '@/components/Layout/Header'
 import Footer from '@/components/Layout/Footer'
 import { GoogleAnalytics } from '@next/third-parties/google'
+import { BOOT_SCRIPT } from '@/components/UI/BootSequence/boot'
 
 /** Turbopack + next/font/google の解決バグを避けるため、Google Fonts は link で読み込む */
 const googleFontsStylesheet =
-  'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap'
+  'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=IBM+Plex+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap'
 
 const SITE_URL = 'https://shou0831.com'
 const SITE_NAME = 'Sho Sakurai Portfolio'
@@ -52,8 +53,11 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const isProduction = process.env.NODE_ENV === 'production'
 
   return (
-    <html lang="ja">
+    // suppressHydrationWarning: 初回ローディングの判定で <html data-boot> を描画前に付けるため
+    <html lang="ja" suppressHydrationWarning>
       <head>
+        {/* トップ初回だけのローディングを出すか、描画前に決める（components/UI/BootSequence/boot.ts） */}
+        <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href={googleFontsStylesheet} rel="stylesheet" />

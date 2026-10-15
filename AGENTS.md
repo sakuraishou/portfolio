@@ -75,7 +75,7 @@ src/
 │   ├── Layout/              # Header / Footer
 │   ├── Sections/            # FirstView / About / Skills / Works（+FilterTabs）/ Contact
 │   ├── Torisetsu/           # 「取扱説明書」の章コンポーネント + data.ts
-│   └── UI/                  # 汎用 UI（Title / DeviceShowcase / ScrollFX など）
+│   └── UI/                  # 汎用 UI（Title / DeviceShowcase / ScrollFX / BootSequence など）
 ├── payload.config.ts        # Payload 設定
 └── payload-types.ts         # 自動生成型（手で編集しない）
 tests/e2e/                   # Playwright の E2E テスト
@@ -114,11 +114,29 @@ tests/e2e/                   # Playwright の E2E テスト
 
 トップページの出現・パララックス演出は、`page.tsx` に 1 つだけ置く client ドライバ `components/UI/ScrollFX` が担う。各セクション（**Server Component のまま**でよい）は **`data-*` 属性を付けるだけ**で演出が乗る。
 
-- `data-reveal` … ビューポート進入時にフェード＋わずかな上昇で出現。大きいブロックは `data-reveal="fade"`（透明度のみ）。
+- `data-reveal` … ビューポート進入時に出現。値で動きを選ぶ（`REVEAL_VARIANTS`）: 値なし＝ピントが合う（ぼかし＋僅かな拡大が戻る）／`"fade"`＝透明度のみ（大きいブロック、**読む・入力するブロック**＝About の本文段落・Contact のフォーム項目。ぼかしで読めない時間を作らない）／`"flip"`＝タイルが横回転で裏返る（Skills のマス）／`"mask"`＝横から切り抜くように開き、中の画像が寄りから落ち着く（About の写真）。**「下から上がるだけ」の演出は使わない**（オーナー判断）。
+- `data-title-*` … `UI/Title`（`no` 指定版）が自動で付ける。罫線が伸びる → 連番ラベルがデコード → アクセント色の帯が走り抜けて見出しが出る。
+- `data-scramble` … 進入時に、記号（英数字は半角記号・日本語は全角カタカナ・**数字だけの値は数字を含まない記号** `#*/<>_-+=`＝途中に本物らしい番号・件数が出ないように）から本来の文字へデコードする。**中身がテキストだけの要素に付ける**（子要素は消える）。文字セットは `ScrollFX/scramble.ts`。
+- `data-depth`（`data-depth-pc` / `data-depth-sp`）… Works 一覧の `DeviceShowcase` が自動で付ける。スクロールに同期して PC 枠が奥から起き上がり、スマホが逆方向に流れる。枠より縦長の画像は上→下へ送られる。
 - `data-parallax` … 装飾要素向けの控えめなパララックス。`data-parallax-speed`（yPercent・既定 14）/ `data-parallax-anchor="top"`。
+- FirstView は ScrollFX とは別に、自前のタイムラインで「仕様書の起動シーケンス」（トンボ → 型番デコード → 見出しが奥から起き上がりつつ Fraunces の `wght` が細→太へ → カードが開いてスキャン → 値デコード）を流す。Fraunces は `wght` 300..700 の可変範囲で読み込んでいる（`layout.tsx`）。
+  - **SSR の完成形のチラ見え対策**: `layout.tsx` の `BOOT_SCRIPT` が、reduced-motion でなければ描画前に `<html data-fx>` を付ける（ローディングの有無とは無関係・全ページ）。`FirstView.module.scss` はこの印があり、かつ section に `data-fx-ready` が無い間だけ、演出対象（透かし・トンボ・型番・見出し・サブ・スペック・経歴行・SCROLL）を `visibility: hidden` にする。JS は同じ要素を `autoAlpha: 0` で隠し終えたら `data-fx-ready` を付けて CSS の非表示を外す（以降は GSAP だけが表示を握る）。JS が来ないときの保険として、CSS アニメーションで 6 秒後に visible に戻す。**演出対象を増やしたら、JS の初期 `gsap.set` と CSS のセレクタの両方に足す**。先に隠す要素の出現は `from` ではなく終点を明示した `fromTo` で書く（隠した状態を「現在値」として読まれ 0→0 になるため）。
+- 使っている GSAP プラグイン: `ScrollTrigger` / `ScrambleTextPlugin` / `SplitText`（いずれも gsap 本体に同梱。追加パッケージ不要）。
 - **途中位置から開いた場合**（詳細 → 一覧へ戻る・リロード・ハッシュ直リンク）: Next 16 は Link のハッシュスクロールが自前のスクロール復元と競合するため、ScrollFX が `behavior: 'instant'` でハッシュ位置へジャンプ → 画面内の要素は即時表示 → 復元ストーム後に一度だけ再補正、という流れで処理する（2026-08 実装。E2E で回帰確認）。`scroll-behavior: smooth` 前提の実装に変えないこと。
+- **Works の絞り込み**: FilterTabs は `#works` の `data-filter` を書き換えるだけでページ遷移しない。カード位置が大きく動くため、ScrollFX が `data-filter` を MutationObserver で監視し、変わったら `ScrollTrigger.refresh()`（通過済みのカードは通常どおり出現）→ 1 秒後に画面内の取り残しを `revealHiddenInView` で出す。これが無いと、それまで非表示だったカードが古いトリガー位置のまま opacity:0 で残る（2026-10 修正）。
 - 注意: reveal は出現後に inline transform を `clearProps` で除去するため、**ベース／ホバーで `transform` に依存する要素には `data-reveal` を付けない**（親や別要素に付ける）。中央寄せ要素へのパララックスは `xPercent/yPercent` を併用する（`FirstView` の透かし参照）。
 - `prefers-reduced-motion: reduce` 時は全演出を無効化し、静止状態で表示する。
+
+### トップ初回のローディング（BootSequence）
+
+トップを**同じタブのセッションで最初に開いたときだけ**、「仕様書 No.001 の起動シーケンス」を約 3 秒（実質 2.4 秒＋パネルが割れる 0.8 秒）再生する。実装は `components/UI/BootSequence/`（`boot.ts`＝判定・連携、`index.tsx`＝演出）。
+
+- **出すかどうかは描画前に決める**: `layout.tsx` の `<head>` のインラインスクリプト（`BOOT_SCRIPT`）が条件を満たすときだけ `<html data-boot="play">` を付け、CSS はこの属性があるときだけオーバーレイを表示する（ちらつき・ハイドレーション不一致を避けるため。`<html>` に `suppressHydrationWarning` を付けているのはこのため）。再生済みは `sessionStorage`（`portfolio:boot:v1`）に記録。
+- **出さない条件**: トップ（`/`）以外／URL にハッシュあり（`/#works` へ戻る導線・直リンク）／`prefers-reduced-motion: reduce`／再生済み／`sessionStorage` が使えない（例外は握りつぶして出さない側）／**`navigator.webdriver`（Playwright の E2E・撮影ツール）**。別ページから Link でトップへ来た場合もスクリプトは再実行されないので出ない。目視で確かめるときは Playwright の `addInitScript` で `navigator.webdriver` を false にする。
+- **流れ**: トンボ → ブートログのデコード＋`000→100` の桁リール＋目盛りの進捗バー → 畳んで Fraunces の `No.001` が太さを変えて締まる → 中央に罫線 → パネルが上下に割れ（裏のオレンジが追う）FirstView が現れる。タップ／クリック／キー／ホイールで締めへスキップ（オーバーレイ自体は `pointer-events: none`、入力は window で拾う＝クリックは下へ素通しする）。
+- **FirstView との連携**: パネルが割れ始めた瞬間に `releaseBoot()` が `boot:done` イベントを出し、FirstView は `waitForBoot()` でそれを待ってから起動シーケンスを始める（ローディングが無ければ即開始。取りこぼしても 6 秒で開始）。
+- **固まらない保険**: 表示中は `html[data-boot]` で `overflow: hidden`（スクロール停止）。JS が来ない場合は CSS アニメーションで 4.5 秒までに消え、インラインスクリプトのタイマーが属性を外す。JS が引き継ぐと `data-boot="run"` になり保険は止まる。マウントが大きく遅れた（開発時の初回コンパイル等）ときは演出せずに抜ける。JS 側にも 7 秒の上限あり。終了時に属性を外し `ScrollTrigger.refresh()`。
+- ローディングの文言は E2E の `getByText`（部分一致・大文字小文字無視）に引っかからないようにする（例: `Web / Product Engineer` を含めない。オーバーレイは非表示でも DOM に残るため）。
 
 ## Payload 開発ルール
 

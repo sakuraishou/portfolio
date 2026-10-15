@@ -46,7 +46,7 @@ export default async function About() {
 
           {/* 本文ボディ（写真｜詳細） */}
           <div className={styles.body}>
-            <figure className={styles.photo} data-reveal>
+            <figure className={styles.photo} data-reveal="mask">
               <Image
                 src="/assets/about/about-img.png"
                 alt="桜井 翔のプロフィール写真"
@@ -64,7 +64,7 @@ export default async function About() {
               <p className={styles.lead} data-reveal>
                 「作りたい」を、一番近くで形にするエンジニア。
               </p>
-              <p className={styles.text} data-reveal>
+              <p className={styles.text} data-reveal="fade">
                 Webサイト・Webシステムの要件整理から設計、実装、運用改善まで一貫して担当しています。PHP／WordPressで培ったWeb開発経験を土台に、現在はNext.js／Nuxt／TypeScript、Headless
                 CMS、DB・API連携を用いたWebアプリケーションや業務システム、Web基盤の開発へ領域を広げています。事業や現場の課題を整理し、技術選定から実装・継続運用までつなげることを得意としています。
               </p>
@@ -73,7 +73,9 @@ export default async function About() {
                 {SPEC.map((row) => (
                   <div key={row.label} className={styles.specRow}>
                     <dt className={styles.specKey}>{row.label}</dt>
-                    <dd className={styles.specVal}>{row.value}</dd>
+                    <dd className={styles.specVal} data-scramble>
+                      {row.value}
+                    </dd>
                   </div>
                 ))}
               </dl>

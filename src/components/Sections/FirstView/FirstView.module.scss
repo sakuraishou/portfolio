@@ -137,6 +137,34 @@
   will-change: transform, opacity;
 }
 
+/*
+ * 描画前の先行非表示（SSR の完成形が一瞬見えてから演出が始まる「チラ見え」対策）。
+ * html[data-fx]（reduced-motion でないとき、<head> のスクリプトが描画前に付ける）の間、
+ * JS が最初に autoAlpha:0 にする要素を CSS で先に隠しておく。JS が inline で隠し終えると
+ * section に data-fx-ready が付き、この指定は外れる（以降は GSAP が表示を握る）。
+ * 保険: JS が来ない（失敗・極端に遅い）ときも見えなくならないよう、6 秒で visible に戻す。
+ * JS が引き継いだ後はセレクタ自体が外れるので、ローディング＋フォント待ち後の演出には割り込まない。
+ */
+:global(html[data-fx]) .firstView:not([data-fx-ready]) {
+  .watermark,
+  .crops span,
+  .eyebrow,
+  .title,
+  .sub,
+  .spec,
+  .footMeta,
+  .scrollCue {
+    visibility: hidden;
+    animation: fxFailsafe 0s linear 6s forwards;
+  }
+}
+
+@keyframes fxFailsafe {
+  to {
+    visibility: visible;
+  }
+}
+
 /* ===== 1行目：型番ヘッダー ===== */
 .eyebrow {
   @include mono;
@@ -247,6 +275,8 @@
 
 /* ===== スペックカード ===== */
 .spec {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   padding: 0.4rem 1.8rem;
   background: rgba(#fff, 0.55);
@@ -263,6 +293,24 @@
     flex-basis: 38rem;
     max-width: 38rem;
   }
+}
+
+/* 起動時に上から下へ走るスキャンライン（JS が動かす。普段は透明） */
+.specScan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  height: 0.2rem;
+  background-color: $main;
+  box-shadow: 0 0 1.4rem 0.2rem rgba($main, 0.45);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.specList {
+  margin: 0;
 }
 
 .specRow {
@@ -363,6 +411,13 @@
   @include responsive(md) {
     bottom: 2.8rem;
     font-size: 1.1rem;
+  }
+
+  /* 縦が短い SP（375×667・320×568 など）は本体が下端まで届き、経歴行に重なるため出さない */
+  @include responsive(sp) {
+    @include responsive(short) {
+      display: none;
+    }
   }
 }
 

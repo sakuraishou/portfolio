@@ -1,0 +1,440 @@
+@use '@/app/(frontend)/_styles/variables' as *;
+@use '@/app/(frontend)/_styles/mixins' as *;
+
+/*
+ * トップ初回のローディング。<html data-boot> があるときだけ表示する（boot.ts 参照）。
+ *  - play … 描画前にインラインスクリプトが付与。JS が来なければ 4s 後から 0.5s で自然に消える保険付き
+ *  - run  … JS が引き継いで再生中（保険のアニメーションは止める）
+ * オーバーレイ自体は pointer-events: none（スキップ入力は window で拾う。E2E のクリックも素通し）
+ */
+.boot {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+:global(html[data-boot='play']) .boot {
+  display: block;
+  animation: bootFailsafe 0.5s ease-out 4s forwards;
+}
+
+:global(html[data-boot='run']) .boot {
+  display: block;
+}
+
+@keyframes bootFailsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(html[data-boot]) .boot {
+    display: none;
+  }
+}
+
+/* ===== 上下に割れるパネル（手前＝クリーム／裏＝オレンジが少し遅れて追う） ===== */
+.under,
+.panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+}
+
+.under {
+  background: $main;
+}
+
+.underTop,
+.panelTop {
+  top: 0;
+}
+
+.underBottom,
+.panelBottom {
+  bottom: 0;
+}
+
+.panel {
+  overflow: hidden;
+  background: $bg;
+}
+
+/* パネル 1 枚の中身は画面全体の大きさで描き、半分だけ見せる（上下で 1 枚の紙に見える） */
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 200%;
+
+  .panelTop & {
+    top: 0;
+  }
+
+  .panelBottom & {
+    bottom: 0;
+  }
+}
+
+/* 四隅のトンボ（FirstView と同じ記号） */
+.crops {
+  position: absolute;
+  inset: 1.4rem;
+
+  @include responsive(md) {
+    inset: 2.2rem;
+  }
+
+  span {
+    position: absolute;
+    width: 1.4rem;
+    height: 1.4rem;
+    border: 0.1rem solid rgba($fontBase, 0.45);
+    visibility: hidden;
+
+    @include responsive(md) {
+      width: 1.8rem;
+      height: 1.8rem;
+    }
+  }
+
+  span:nth-child(1) {
+    top: 0;
+    left: 0;
+    border-right: 0;
+    border-bottom: 0;
+  }
+  span:nth-child(2) {
+    top: 0;
+    right: 0;
+    border-left: 0;
+    border-bottom: 0;
+  }
+  span:nth-child(3) {
+    bottom: 0;
+    left: 0;
+    border-right: 0;
+    border-top: 0;
+  }
+  span:nth-child(4) {
+    bottom: 0;
+    right: 0;
+    border-left: 0;
+    border-top: 0;
+  }
+}
+
+/* コーナーの注記（トンボの内側に添える） */
+.meta {
+  @include mono;
+  position: absolute;
+  font-size: 0.95rem;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  white-space: nowrap;
+  color: rgba($fontBase, 0.6);
+  visibility: hidden;
+
+  @include responsive(md) {
+    font-size: 1.1rem;
+  }
+}
+
+.metaTl,
+.metaTr {
+  top: 2rem;
+
+  @include responsive(md) {
+    top: 3rem;
+  }
+}
+
+.metaBl,
+.metaBr {
+  bottom: 2rem;
+
+  @include responsive(md) {
+    bottom: 3rem;
+  }
+}
+
+.metaTl,
+.metaBl {
+  left: 3.4rem;
+
+  @include responsive(md) {
+    left: 4.8rem;
+  }
+}
+
+.metaTr,
+.metaBr {
+  right: 3.4rem;
+
+  @include responsive(md) {
+    right: 4.8rem;
+  }
+}
+
+.metaBr {
+  color: $main;
+}
+
+/* ===== 型番スタンプ（中央。割れ目がちょうど文字の中心を通る） ===== */
+.stamp {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  text-align: center;
+}
+
+.stampNo {
+  @include display;
+  font-size: 8.4rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: $fontBase;
+  white-space: nowrap;
+  visibility: hidden;
+
+  @include responsive(md) {
+    font-size: 17rem;
+  }
+}
+
+.stampNum {
+  color: $main;
+}
+
+.stampCaption {
+  @include mono;
+  position: absolute;
+  top: calc(100% + 1.6rem);
+  left: 0;
+  right: 0;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  line-height: 1;
+  white-space: nowrap;
+  color: rgba($fontBase, 0.6);
+  visibility: hidden;
+
+  @include responsive(md) {
+    top: calc(100% + 2.4rem);
+    font-size: 1.3rem;
+  }
+}
+
+/* 割れる直前に中央を走る罫線 */
+.seam {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  margin-top: -0.5px;
+  background: $main;
+  visibility: hidden;
+}
+
+/* ===== 進捗表示（ログ・カウンター・目盛り）。パネルが割れる前に畳む ===== */
+.stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% - 4.8rem);
+  max-width: 52rem;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+}
+
+.log {
+  @include mono;
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: $fontBase;
+
+  @include responsive(md) {
+    font-size: 1.3rem;
+  }
+}
+
+.logLine {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  visibility: hidden;
+}
+
+.logPrompt {
+  flex: none;
+  color: $main;
+}
+
+.logKey {
+  flex: none;
+  white-space: pre;
+}
+
+/* 点線のリーダー（キーとステータスをつなぐ） */
+.logLeader {
+  flex: 1 1 auto;
+  min-width: 2rem;
+  height: 0.3rem;
+  background-image: radial-gradient(circle, rgba($fontBase, 0.4) 0.07rem, transparent 0.08rem);
+  background-size: 0.6rem 0.3rem;
+  background-repeat: repeat-x;
+  background-position: left center;
+}
+
+.logStatus {
+  flex: none;
+  letter-spacing: 0.1em;
+  color: $main;
+  visibility: hidden;
+}
+
+/* 000 → 100 の桁リール */
+.counter {
+  @include display;
+  display: flex;
+  align-items: flex-end;
+  margin-top: 2.4rem;
+  font-size: 8.8rem;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 1.1;
+  color: $fontBase;
+  visibility: hidden;
+
+  @include responsive(md) {
+    margin-top: 3.2rem;
+    font-size: 14rem;
+  }
+}
+
+.digit {
+  display: block;
+  width: 0.62em;
+  height: 1.1em;
+  overflow: hidden;
+}
+
+.reel {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  span {
+    display: block;
+    height: 1.1em;
+  }
+}
+
+.counterUnit {
+  @include mono;
+  margin: 0 0 1.2rem 0.8rem;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: $main;
+
+  @include responsive(md) {
+    margin-bottom: 2.4rem;
+    font-size: 1.8rem;
+  }
+}
+
+.counterLabel {
+  @include mono;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+  margin: 0 0 1.2rem auto;
+  font-size: 0.95rem;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  color: rgba($fontBase, 0.6);
+
+  @include responsive(md) {
+    margin-bottom: 2.4rem;
+    font-size: 1.1rem;
+  }
+}
+
+/* ヘアラインの進捗バー＋目盛り */
+.ruler {
+  position: relative;
+  height: 1.2rem;
+  margin-top: 1.4rem;
+}
+
+.rulerTrack,
+.rulerFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.rulerTrack {
+  height: 1px;
+  background: rgba($fontBase, 0.25);
+}
+
+.rulerFill {
+  top: -0.5px;
+  height: 2px;
+  background: $main;
+  transform: scaleX(0);
+  transform-origin: 0% 50%;
+}
+
+.rulerTicks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.rulerTick {
+  display: block;
+  width: 1px;
+  height: 0.5rem;
+  background: rgba($fontBase, 0.4);
+
+  &:nth-child(1),
+  &:nth-child(6),
+  &:nth-child(11) {
+    height: 1rem;
+  }
+}
+
+/* JS が引き継ぐまでの点滅カーソル */
+.cursor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.8rem;
+  height: 1.4rem;
+  margin: -0.7rem 0 0 -0.4rem;
+  background: $main;
+  animation: bootBlink 0.9s steps(1) infinite;
+}
+
+@keyframes bootBlink {
+  50% {
+    opacity: 0;
+  }
+}

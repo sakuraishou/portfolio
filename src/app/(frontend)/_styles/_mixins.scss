@@ -1,3 +1,4 @@
+@use 'sass:list';
 @use 'sass:math';
 @use 'sass:map';
 @use 'sass:meta';
@@ -73,6 +74,11 @@ $breakpoints: (
   ),
   'yoko': (
     orientation: landscape,
+  ),
+  // 縦が短い画面（幅:高さ が 1:2 より横寄り。例: 375×667 / 320×568）。
+  // SP は rem が画面幅に比例するため、要素の縦の収まりは「縦横比」で決まる。sp と入れ子で使う
+  'short': (
+    min-aspect-ratio: list.slash(1, 2),
   ),
 ) !default;
 

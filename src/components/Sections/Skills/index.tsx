@@ -135,7 +135,7 @@ export default async function Skills() {
               <div key={block.categoryId} className={styles.categoryBlock}>
                 <h3 className={styles.categoryTitle} data-reveal>
                   {block.categoryName.toUpperCase()}
-                  <span className={styles.categoryCount}>
+                  <span className={styles.categoryCount} data-scramble>
                     {String(block.skills.length).padStart(2, '0')}
                   </span>
                 </h3>

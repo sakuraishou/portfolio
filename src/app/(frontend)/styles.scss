@@ -22,6 +22,11 @@ html {
   }
 }
 
+// トップ初回のローディング表示中はスクロールを止める（属性は BootSequence が外す）
+html[data-boot] {
+  overflow: hidden;
+}
+
 body {
   width: 100%;
   font-size: 1.6rem;
