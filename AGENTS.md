@@ -15,7 +15,8 @@
 | `AGENTS.md`（本ファイル） | **正本**。全体像・規約・Payload ルールのすべて |
 | `CLAUDE.md` | `@AGENTS.md` の参照のみ（内容を書かない） |
 | `.claude/skills/` | コーディング規約スキルの**正本**（typescript-rules / scss-rules / design-rules） |
-| `.agents/skills/` | ↑への **symlink**（実体を置かない。二重管理でドリフトした事故があるため） |
+| `.claude/agents/` | Claude Code のサブエージェント。`qa`＝品質チェック／`visitor-tester`＝閲覧者目線の確認（どちらも**読み取り専用・報告のみ**。DB 書き込みとお問い合わせ送信は禁止）／`works-writer`＝別プロジェクトを読んで Works に登録・更新／`works-screenshot`＝案件の画面を撮影して Works の PC・SP 画像に登録（対象案件の画像と Media だけ）。`works-writer` と `works-screenshot` は**本番 DB に書き込む**ため、バックアップ必須・削除禁止 |
+| `.agents/skills/` | `.claude/skills/` への **symlink**（実体を置かない。二重管理でドリフトした事故があるため） |
 | `.cursor/rules/*.mdc` | Cursor が自動適用する補助ルール（security-critical＝§セキュリティの詳細版） |
 | `.cursor/context/*.md` | Payload の詳細リファレンス（ツール非依存。§詳細ドキュメント参照） |
 | `_archive/`（git 追跡外） | 完了した作業ドキュメント・データ更新パッチのローカルバックアップ |

@@ -55,3 +55,6 @@ node_modules/
 # 内部作業ドキュメント（公開リポジトリに含めない）
 /docs/github-profile-plan.md
 /_archive/
+
+# works-writer などが使う一時スクリプト
+/.tmp-claude/

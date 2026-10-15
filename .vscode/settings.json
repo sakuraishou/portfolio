@@ -35,7 +35,8 @@
   "editor.formatOnSaveMode": "file",
   "files.exclude": {
     "**/.next": true,
-    "**/.pnpm-store": true
+    "**/.pnpm-store": true,
+    "**/.cc-writes": true
   },
   "files.watcherExclude": {
     "**/.pnpm-store/**": true,
@@ -44,6 +45,7 @@
   },
   "search.exclude": {
     "**/.pnpm-store": true,
+    "**/.cc-writes": true,
     "**/pnpm-lock.yaml": true
   },
   "typescript.tsdk": "node_modules/typescript/lib",
