@@ -231,6 +231,32 @@
   }
 }
 
+/* 高さを絞られたとき（JS が max-height を付ける）に、中身だけをスクロールさせる */
+.skillDescHoverInner {
+  @include responsive(md) {
+    display: flex;
+    flex-direction: column;
+    /* 外側の上下 padding（1rem × 2）と枠線（0.1rem × 2）の分を引く */
+    max-height: calc(var(--tooltip-max-height, none) - 2.2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* 上に収まらないとき（セクション上端・固定ヘッダーに当たるとき）は行の下へ出す。
+   セクションの overflow: hidden は残したまま、出す向きだけを変える */
+.skillDescHoverBottom {
+  @include responsive(md) {
+    top: calc(100% + 0.8rem);
+    bottom: auto;
+
+    &::after {
+      top: auto;
+      bottom: 100%;
+    }
+  }
+}
+
 .itemHasDesc:hover .skillDescHover,
 .itemHasDesc:focus-visible .skillDescHover,
 .itemHasDesc:focus-within .skillDescHover {

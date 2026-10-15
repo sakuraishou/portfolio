@@ -1,7 +1,13 @@
 'use client'
 
 import { useCallback, useEffect, useId, useState } from 'react'
-import type { KeyboardEvent as ReactKeyboardEvent, MouseEvent, SyntheticEvent } from 'react'
+import type {
+  CSSProperties,
+  FocusEvent,
+  KeyboardEvent as ReactKeyboardEvent,
+  MouseEvent,
+  SyntheticEvent,
+} from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -22,6 +28,44 @@ export type SkillListItemProps = {
   relatedWorks: RelatedWork[]
 }
 
+type TooltipPlacement = 'top' | 'bottom'
+
+type TooltipLayout = {
+  placement: TooltipPlacement
+  /** 出す側の余白に収まらないときだけ高さを絞る（中身はスクロール） */
+  maxHeight: number | null
+}
+
+/** 行とツールチップの隙間（SCSS の 0.8rem と合わせる） */
+const TOOLTIP_GAP_PX = 8
+
+/**
+ * ツールチップを行の上下どちらに出すか、どこまでの高さに収めるかを決める。
+ * セクションは overflow: hidden で、固定ヘッダーも上に被さるため、
+ * 「セクション内かつ画面内」で上に収まらなければ、広いほう（多くは下）へ出す。
+ * どちらにも収まらなければ、広いほうの余白まで高さを絞る。
+ */
+function decideLayout(row: HTMLElement): TooltipLayout {
+  const tooltip = row.querySelector<HTMLElement>('[role="tooltip"]')
+  if (!tooltip) return { placement: 'top', maxHeight: null }
+  const rowRect = row.getBoundingClientRect()
+  const sectionRect = row.closest('section')?.getBoundingClientRect()
+  const headerBottom = document.querySelector('header')?.getBoundingClientRect().bottom ?? 0
+  const upperLimit = Math.max(sectionRect?.top ?? 0, headerBottom, 0)
+  const lowerLimit = Math.min(sectionRect?.bottom ?? window.innerHeight, window.innerHeight)
+  // 前回絞った高さに引きずられないよう、内側の本来の高さ（scrollHeight）＋外側の余白で測る
+  const inner = tooltip.firstElementChild as HTMLElement | null
+  const chrome = inner ? tooltip.offsetHeight - inner.offsetHeight : 0
+  const needed = (inner?.scrollHeight ?? tooltip.offsetHeight) + chrome + TOOLTIP_GAP_PX
+  const above = rowRect.top - upperLimit
+  const below = lowerLimit - rowRect.bottom
+  if (above >= needed) return { placement: 'top', maxHeight: null }
+  if (below >= needed) return { placement: 'bottom', maxHeight: null }
+  const placement = below > above ? 'bottom' : 'top'
+  const room = Math.max(below, above) - TOOLTIP_GAP_PX
+  return { placement, maxHeight: Math.max(room, 0) }
+}
+
 export default function SkillListItem({
   iconUrl,
   isStudying,
@@ -32,6 +76,10 @@ export default function SkillListItem({
 }: SkillListItemProps) {
   const [modalOpen, setModalOpen] = useState(false)
   const [isNarrow, setIsNarrow] = useState(false)
+  const [tooltipLayout, setTooltipLayout] = useState<TooltipLayout>({
+    placement: 'top',
+    maxHeight: null,
+  })
   const dialogId = useId()
   const dialogTitleId = useId()
   const tooltipId = useId()
@@ -93,6 +141,15 @@ export default function SkillListItem({
 
   const rowInteractive = hasDescription && isNarrow
 
+  /** PC のツールチップを出す直前に、上下どちらに出すかを測る */
+  const updatePlacement = useCallback(
+    (e: MouseEvent<HTMLLIElement> | FocusEvent<HTMLLIElement>) => {
+      if (!hasDescription || isNarrow) return
+      setTooltipLayout(decideLayout(e.currentTarget))
+    },
+    [hasDescription, isNarrow],
+  )
+
   /** 「この技術を使った実績」リンク。JSなしでも辿れる素の Link にする */
   const worksLinks = relatedWorks.length > 0 && (
     <div className={styles.skillWorks}>
@@ -115,6 +172,8 @@ export default function SkillListItem({
       data-reveal
       onClick={openModalIfSp}
       onKeyDown={onRowKeyDown}
+      onMouseEnter={updatePlacement}
+      onFocus={updatePlacement}
       role={rowInteractive ? 'button' : undefined}
       // PC はホバーでツールチップを出すため、キーボードでも読めるようフォーカス可能にする
       tabIndex={hasDescription ? 0 : undefined}
@@ -146,9 +205,23 @@ export default function SkillListItem({
 
       {hasDescription && (
         <>
-          <div id={tooltipId} className={styles.skillDescHover} role="tooltip">
-            {description?.trim() && <p className={styles.skillDescription}>{description}</p>}
-            {worksLinks}
+          <div
+            id={tooltipId}
+            className={`${styles.skillDescHover} ${
+              tooltipLayout.placement === 'bottom' ? styles.skillDescHoverBottom : ''
+            }`.trim()}
+            style={
+              tooltipLayout.maxHeight !== null
+                ? ({ '--tooltip-max-height': `${tooltipLayout.maxHeight}px` } as CSSProperties)
+                : undefined
+            }
+            role="tooltip"
+          >
+            {/* スクロールは内側だけにする（外側を overflow させると、行との隙間を埋める ::after まで切れる） */}
+            <div className={styles.skillDescHoverInner}>
+              {description?.trim() && <p className={styles.skillDescription}>{description}</p>}
+              {worksLinks}
+            </div>
           </div>
 
           {modalOpen &&
