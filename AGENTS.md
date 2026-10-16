@@ -132,7 +132,7 @@ tests/e2e/                   # Playwright の E2E テスト
 トップを**同じタブのセッションで最初に開いたときだけ**、「仕様書 No.001 の起動シーケンス」を約 3 秒（実質 2.4 秒＋パネルが割れる 0.8 秒）再生する。実装は `components/UI/BootSequence/`（`boot.ts`＝判定・連携、`index.tsx`＝演出）。
 
 - **出すかどうかは描画前に決める**: `layout.tsx` の `<head>` のインラインスクリプト（`BOOT_SCRIPT`）が条件を満たすときだけ `<html data-boot="play">` を付け、CSS はこの属性があるときだけオーバーレイを表示する（ちらつき・ハイドレーション不一致を避けるため。`<html>` に `suppressHydrationWarning` を付けているのはこのため）。再生済みは `sessionStorage`（`portfolio:boot:v1`）に記録。
-- **出さない条件**: トップ（`/`）以外／URL にハッシュあり（`/#works` へ戻る導線・直リンク）／`prefers-reduced-motion: reduce`／再生済み／`sessionStorage` が使えない（例外は握りつぶして出さない側）／**`navigator.webdriver`（Playwright の E2E・撮影ツール）**。別ページから Link でトップへ来た場合もスクリプトは再実行されないので出ない。目視で確かめるときは Playwright の `addInitScript` で `navigator.webdriver` を false にする。
+- **出さない条件**: トップ（`/`）以外／URL にハッシュあり（`/#works` へ戻る導線・直リンク）／`prefers-reduced-motion: reduce`／再生済み／`sessionStorage` が使えない（例外は握りつぶして出さない側）／**`navigator.webdriver`（Playwright の E2E・撮影ツール）**。別ページから Link でトップへ来た場合もスクリプトは再実行されないので出ない。**確認用に `/?boot` を付けると、再生済み・ハッシュ・自動操作に関係なく毎回出る**（reduced-motion とトップ以外は出ない。再生済みの記録も付けない）。Playwright で目視するときも `/?boot` で開けばよい。
 - **流れ**: トンボ → ブートログのデコード＋`000→100` の桁リール＋目盛りの進捗バー → 畳んで Fraunces の `No.001` が太さを変えて締まる → 中央に罫線 → パネルが上下に割れ（裏のオレンジが追う）FirstView が現れる。タップ／クリック／キー／ホイールで締めへスキップ（オーバーレイ自体は `pointer-events: none`、入力は window で拾う＝クリックは下へ素通しする）。
 - **FirstView との連携**: パネルが割れ始めた瞬間に `releaseBoot()` が `boot:done` イベントを出し、FirstView は `waitForBoot()` でそれを待ってから起動シーケンスを始める（ローディングが無ければ即開始。取りこぼしても 6 秒で開始）。
 - **固まらない保険**: 表示中は `html[data-boot]` で `overflow: hidden`（スクロール停止）。JS が来ない場合は CSS アニメーションで 4.5 秒までに消え、インラインスクリプトのタイマーが属性を外す。JS が引き継ぐと `data-boot="run"` になり保険は止まる。マウントが大きく遅れた（開発時の初回コンパイル等）ときは演出せずに抜ける。JS 側にも 7 秒の上限あり。終了時に属性を外し `ScrollTrigger.refresh()`。
