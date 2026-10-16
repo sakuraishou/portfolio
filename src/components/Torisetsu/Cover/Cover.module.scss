@@ -75,20 +75,25 @@
   }
 }
 
-/* パンくず（現在地＋ホームへ戻る） */
+/* パンくず（現在地＋ホームへ戻る）
+   SP: 表紙の中身が画面より高く「上詰め」になるため、絶対配置だと本文（DOCUMENT 行）と重なる。
+       通常フローに置き、section の上余白（固定ヘッダーの下）から本文の前に並べる。
+   PC: 中身が縦中央寄せで上に余白があるので、従来どおり上部に絶対配置する。 */
 .crumb {
-  position: absolute;
-  top: 7rem;
-  left: 0;
-  right: 0;
+  position: relative;
   z-index: 2;
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  margin-bottom: 2rem;
   font-size: 1.3rem;
 
   @include responsive(md) {
+    position: absolute;
     top: 9rem;
+    left: 0;
+    right: 0;
+    margin-bottom: 0;
     font-size: 1.4rem;
   }
 }
@@ -99,7 +104,12 @@
   gap: 0.4rem;
   color: rgba($fontBase, 0.7);
   font-weight: 500;
+  min-height: max(4.4rem, 44px); // SP のタップ領域（320px 幅でも 44px を割らない）
   transition: color 0.2s ease;
+
+  @include responsive(md) {
+    min-height: 0;
+  }
 
   &:hover {
     color: $main;

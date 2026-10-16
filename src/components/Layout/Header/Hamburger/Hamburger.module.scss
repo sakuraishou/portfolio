@@ -4,8 +4,11 @@
 .hamburger {
   @include center;
   flex-direction: column;
-  width: 3.5rem;
-  height: 4.4rem;
+  // タップ領域は 44px 四方以上。線の見た目の位置は従来どおり右端に揃える（余白分を負マージンで戻す）
+  // rem は画面幅に比例するので、320px 幅でも 44px を割らないよう px の下限を付ける
+  width: max(4.4rem, 44px);
+  height: max(4.4rem, 44px);
+  margin-right: calc((3.5rem - max(4.4rem, 44px)) / 2);
   background: transparent;
   border: none;
   border-radius: 0.8rem;
@@ -46,7 +49,7 @@
 
 .line {
   display: block;
-  width: 100%;
+  width: 3.5rem;
   height: 0.3rem;
   background: $main;
   border-radius: 99.9rem;

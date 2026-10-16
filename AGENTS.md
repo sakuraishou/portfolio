@@ -127,6 +127,14 @@ tests/e2e/                   # Playwright の E2E テスト
 - 注意: reveal は出現後に inline transform を `clearProps` で除去するため、**ベース／ホバーで `transform` に依存する要素には `data-reveal` を付けない**（親や別要素に付ける）。中央寄せ要素へのパララックスは `xPercent/yPercent` を併用する（`FirstView` の透かし参照）。
 - `prefers-reduced-motion: reduce` 時は全演出を無効化し、静止状態で表示する。
 
+### 固定ヘッダーのスクロール帯
+
+`components/Layout/Header` は、スクロール量が 24px を超えると `.scrolled` を付け、ロゴとメニューボタンの後ろに帯（`$bg` の半透明＋ぼかし＋下端ヘアライン）を出す。ロゴ・ボタンが本文の行頭を隠さないため。スクロール 0（FirstView の初期表示）では出さない。
+
+- 帯は `header::before` で描く。**`backdrop-filter` や `transform` を `header` 本体に付けない**（中の SP 開閉メニュー `position: fixed` の基準が header に変わって崩れる）。
+- ヘッダーには ScrollFX の `data-reveal` を付けない。`prefers-reduced-motion: reduce` では帯の出入りのトランジションを止める。
+- メニューボタンのタップ領域は `max(4.4rem, 44px)`（rem は画面幅に比例するので 320px 幅でも 44px を割らないよう下限を付けている）。
+
 ### トップ初回のローディング（BootSequence）
 
 トップを**同じタブのセッションで最初に開いたときだけ**、「仕様書 No.001 の起動シーケンス」を約 3 秒（実質 2.4 秒＋パネルが割れる 0.8 秒）再生する。実装は `components/UI/BootSequence/`（`boot.ts`＝判定・連携、`index.tsx`＝演出）。

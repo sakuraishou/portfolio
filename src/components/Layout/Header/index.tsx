@@ -3,11 +3,34 @@
 import styles from './Header.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
-import { type CSSProperties, useState } from 'react'
+import { type CSSProperties, useEffect, useState } from 'react'
 import HamburgerButton from './Hamburger'
+
+// これ以上スクロールしたら帯を出す（px）。最初の画面（スクロール 0）では出さない
+const SCROLL_THRESHOLD = 24
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  // 少しでもスクロールしたら、ロゴとメニューボタンの後ろに薄い帯を敷く（本文の文字を隠さないため）
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    let frame = 0
+    const update = () => {
+      frame = 0
+      setIsScrolled(window.scrollY > SCROLL_THRESHOLD)
+    }
+    const onScroll = () => {
+      if (frame) return
+      frame = window.requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (frame) window.cancelAnimationFrame(frame)
+    }
+  }, [])
 
   const NAV_ITEMS = [
     { href: '/#about', label: '私について', en: 'ABOUT' },
@@ -17,7 +40,7 @@ export default function Header() {
   ]
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
       <Link className={styles.logo} href="/">
         <Image src="/assets/header/logo.png" alt="Logo" width={100} height={100} />
       </Link>
