@@ -26,7 +26,7 @@ flowchart LR
   app --> db[("Supabase\nPostgreSQL")]
 ```
 
-- **フレームワーク**: Next.js 16（App Router・Turbopack）+ React 19 + TypeScript（`strict: true`）
+- **フレームワーク**: Next.js 16.4（App Router・Turbopack）+ React 19.3 + TypeScript 6.0（`strict: true`）
 - **CMS**: Payload CMS 3.x（DB アダプタ: `@payloadcms/db-postgres`）。管理画面は `/admin`
 - **DB**: Supabase の PostgreSQL（直接接続）。無料プランの自動休止は GitHub Actions の定期ジョブ（`keepalive.yml`）で防止
 - **スタイル**: SCSS Modules。ブレークポイント・書体・配色は `_variables.scss` / `_mixins.scss` で一元管理
@@ -34,7 +34,7 @@ flowchart LR
 - **アニメーション**: GSAP（`@gsap/react` の `useGSAP` + `ScrollTrigger`）
 - **メール送信**: nodemailer（お問い合わせフォーム → `/api/contact`）
 - **アクセス解析**: Google Analytics 4（本番ビルドのみ有効）
-- **ランタイム / パッケージ管理**: Node.js 24 / pnpm
+- **ランタイム / パッケージ管理**: Node.js 24（24.22.1 以上）/ pnpm 11
 
 ## データモデル
 

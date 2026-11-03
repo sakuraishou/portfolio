@@ -40,19 +40,19 @@ Next.js（App Router）+ Payload CMS で構築した個人ポートフォリオ�
 
 ## 技術スタック
 
-- **フレームワーク**: Next.js 16.3（App Router。dev / build とも Turbopack が既定）
-- **CMS**: Payload CMS 3.88（DB アダプタ: `@payloadcms/db-postgres`。管理画面の日本語化に `@payloadcms/translations` を直接依存で使用）
-- **言語**: TypeScript 6.0（`strict: true`。7 系は typescript-eslint が未対応のため見送り）
-- **UI**: React 19
+- **フレームワーク**: Next.js 16.4（App Router。dev / build とも Turbopack が既定）
+- **CMS**: Payload CMS 3.92（DB アダプタ: `@payloadcms/db-postgres`。管理画面の日本語化に `@payloadcms/translations` を直接依存で使用）
+- **言語**: TypeScript 6.0（`strict: true`。7 系は typescript-eslint 8.72 の peer が `<6.1.0` のため見送り）
+- **UI**: React 19.3
 - **スタイル**: SCSS Modules（`sass`）。**全 SCSS への自動注入（prependData）は廃止済み** — 変数・mixin を使うファイルは必ず明示的に `@use` する（詳細は `/scss-rules`）
 - **フォント**: Google Fonts を `layout.tsx` の `<link>` で読込。**日本語＝Zen Kaku Gothic New / 見出し英字＝Fraunces / ラベル・データ英字（等幅）＝IBM Plex Mono** の3書体（`@include display` / `@include mono`。詳細は `/scss-rules`・`/design-rules`）
 - **アニメーション**: GSAP（`@gsap/react` の `useGSAP` + `ScrollTrigger`。トップ MV・全セクションのスクロール演出（後述の ScrollFX）・`/manual`）
-- **メール送信**: nodemailer（お問い合わせフォーム → `/api/contact`）
+- **メール送信**: nodemailer 10（お問い合わせフォーム → `/api/contact`。型は本体同梱のため `@types/nodemailer` は不要）
 - **アクセス解析**: Google Analytics 4（`@next/third-parties/google`。`NODE_ENV=production` かつ `NEXT_PUBLIC_GA_ID` がある時のみ有効）
-- **テスト**: Playwright（e2e）。`tests/e2e/` に主要導線（トップ表示・一覧→詳細→戻る・絞り込み・404・/manual）の回帰テストあり。ホスト側で実行（初回のみ `npx playwright install chromium`）。起動中の開発サーバーを再利用する
-- **Lint**: ESLint 9（`pnpm lint` = `eslint .`。Next 16 で `next lint` は廃止。設定は `eslint.config.mjs` の flat config）
-- **ランタイム**: Node.js 24（現行 LTS。Docker イメージ `node:24-*`）
-- **パッケージ管理**: **pnpm 11**（`packageManager: pnpm@11.24.0`）。ビルドスクリプト許可・公開直後パッケージの除外は `pnpm-workspace.yaml`（`allowBuilds` / `minimumReleaseAgeExclude`）で管理し、**Dockerfile にも COPY が必要**。`.npmrc` で `node-linker=hoisted`（Next standalone 互換）
+- **テスト**: Playwright（e2e）。`tests/e2e/` に主要導線（トップ表示・一覧→詳細→戻る・絞り込み・404・/manual）の回帰テストあり。ホスト側で実行（初回のみ `npx playwright install chromium`）。起動中の開発サーバーを再利用する（`playwright.config.ts` の webServer は `pnpm dev`。開発サーバーが止まっていると dev が起動し、**本番 DB へスキーマが push される**ので、依存を上げた直後などは webServer を外した設定で本番モードのサーバーへ向ける。ベース URL は `PW_BASE_URL`）
+- **Lint**: ESLint 9（`pnpm lint` = `eslint .`。Next 16 で `next lint` は廃止。設定は `eslint.config.mjs` の flat config）。10 系は eslint-config-next が使う eslint-plugin-react / import / jsx-a11y が peer 未対応のため見送り（2026-11 時点。Lint 結果自体は同じだった）
+- **ランタイム**: Node.js 24（メンテナンス LTS、2028-04 まで。Docker イメージ `node:24-*` で最新 24.x が入る）。26 は LTS 入り直後のため見送り。Payload 3.92 は Node 24 なら **24.22.1 以上**が必須（`engines.node` もこれに合わせている）
+- **パッケージ管理**: **pnpm 11**（`packageManager: pnpm@11.28.9`。Dockerfile・docker-compose.yml の版と一致させる）。ビルドスクリプト許可・公開直後パッケージの除外・推移的依存の強制（`overrides`）は `pnpm-workspace.yaml`（`allowBuilds` / `minimumReleaseAgeExclude` / `overrides`）で管理し、**Dockerfile にも COPY が必要**。`.npmrc` で `node-linker=hoisted`（Next standalone 互換）。pnpm 12 は `.npmrc` の `node-linker` を読まず symlink 構成になるため見送り（上げるときは設定を `pnpm-workspace.yaml` の `nodeLinker` へ移す）
 
 ## ディレクトリ構成
 
@@ -178,7 +178,18 @@ tests/e2e/                   # Playwright の E2E テスト
 - [ ] 必要なら `pnpm generate:types` ／ `pnpm generate:importmap`
 - [ ] セキュリティ 3 原則を再確認
 - [ ] **スキーマ変更でテーブルを追加した場合、本番 Supabase で RLS 有効化 SQL を再実行**（新テーブルは RLS 無効で作られるため。→ 次節）
+- [ ] **Payload を上げたら、本番 DB のスキーマが変わらないか確認する**（→ 次項）
 - [ ] 変更内容に応じてドキュメントを最新化
+
+### Payload を上げてスキーマが変わるとき
+
+本番は migration を使わず（`src/migrations` なし）、スキーマは dev モードの自動 push だけで反映している。Payload 本体が列を足す版（例: 3.90.0 で auth コレクションに `reset_password_requested_at`）では、**新版をデプロイする前に本番 DB へ列を足す**必要がある（列が無いと users の読み書き＝ログインが失敗する）。
+
+1. リリースノート（`payloadcms/payload` の GitHub releases）で `migrate` / 新フィールドの記載を確認する。
+2. 差分を**使い捨ての Postgres で確定**する: `docker run postgres:17` を立て、旧版と新版それぞれで dev push させ（`.env` は渡さず `DATABASE_URL` を `-e` で明示）、`pg_dump --schema-only` を比較する。**新しい依存で本番 DB に向けて `pnpm dev` を起動しない**（そのまま本番へ push される）。
+3. 差分を冪等な SQL（`add column if not exists` 等）にまとめ、本番の対象テーブルをバックアップ → 適用 → 確認（型・NULL 可・行数・RLS）。旧版が動いたままでも害がないことを使い捨て DB で確かめておく。
+4. その後に新版をデプロイする。テーブルが増えた場合は RLS 有効化 SQL も再実行する。
+5. 旧版のまま `pnpm dev` を起動すると、push が新しい列を**削除しようとして確認プロンプトを出す**（行が 0 件だと確認なしで消える）。列追加後は先に `docker compose down -v` で依存を入れ直してから開発サーバーを起動する。
 
 ### 詳細ドキュメント（.cursor/context/）
 
