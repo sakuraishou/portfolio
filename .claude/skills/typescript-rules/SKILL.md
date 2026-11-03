@@ -87,7 +87,7 @@ export default async function About() {
 - リストレンダリングは安定した `key`（`item.id` など。index は避ける）。
 - 空表示の出し分けは三項 or `&&` で明示（`{tags.length > 0 && (...)}`）。
 - className 合成はテンプレートリテラル: `` className={`${styles.title} ${className}`.trim()} ``。CSS Modules クラスは `styles.xxx` で参照。
-- React 19 / Next 15 の非同期 API に注意（`await headers()`、`params` は Promise 等）。
+- React 19 / Next 15 以降（現在 16）の非同期 API に注意（`await headers()`、`params` は Promise 等）。
 
 ## 小さな純粋関数
 

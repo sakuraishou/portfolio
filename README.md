@@ -27,8 +27,8 @@ flowchart LR
 ```
 
 - **フレームワーク**: Next.js 16.4（App Router・Turbopack）+ React 19.3 + TypeScript 6.0（`strict: true`）
-- **CMS**: Payload CMS 3.x（DB アダプタ: `@payloadcms/db-postgres`）。管理画面は `/admin`
-- **DB**: Supabase の PostgreSQL（直接接続）。無料プランの自動休止は GitHub Actions の定期ジョブ（`keepalive.yml`）で防止
+- **CMS**: Payload CMS 3.92（DB アダプタ: `@payloadcms/db-postgres`）。管理画面は `/admin`
+- **DB**: Supabase の PostgreSQL（Transaction pooler 経由。`public` の全テーブルで RLS 有効）。無料プランの自動休止は GitHub Actions の定期ジョブ（`keepalive.yml`）で防止
 - **スタイル**: SCSS Modules。ブレークポイント・書体・配色は `_variables.scss` / `_mixins.scss` で一元管理
 - **フォント**: 日本語 = Zen Kaku Gothic New / 見出し英字 = Fraunces / ラベル・データ英字（等幅）= IBM Plex Mono
 - **アニメーション**: GSAP（`@gsap/react` の `useGSAP` + `ScrollTrigger`）
@@ -53,6 +53,7 @@ flowchart LR
 - **E2E テスト（Playwright）**: `tests/e2e/` に主要導線の回帰テストを実装しています — トップの表示（ファーストビュー・Skills・WORKS）、一覧 → 詳細 → 一覧へ戻る回遊、種別の絞り込み、存在しない実績IDの404、`/manual` への導線。`pnpm test:e2e` で実行（開発サーバー起動中はそれを再利用）
 - **型チェック**: `pnpm exec tsc --noEmit`（strict）
 - **Lint**: `pnpm lint`（`next/core-web-vitals` + `next/typescript`）
+- **依存の脆弱性**: `pnpm audit` で確認し、親パッケージが古い版を固定している推移的依存は `pnpm-workspace.yaml` の `overrides` で修正版へ強制しています。公開から 24 時間未満のパッケージは入れない設定です（pnpm の `minimumReleaseAge`）
 - **フォーマット**: Prettier（`semi: false` / `singleQuote` / `trailingComma: all`）
 
 ## デプロイ

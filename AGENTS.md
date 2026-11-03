@@ -209,7 +209,7 @@ Supabase は `public` スキーマのテーブルに対して外部向けの Web
 
 ### 対処（安全・冪等）
 
-`public` の全テーブルで RLS を**有効化**する。アプリは**テーブル所有者 `postgres` で接続**しているため、有効化しても（`FORCE ROW LEVEL SECURITY` を付けない限り）**所有者は素通り＝アプリ動作に影響しない**。ポリシーは不要。
+`public` の全テーブルで RLS を**有効化**する。アプリは**テーブル所有者 `postgres`（`BYPASSRLS` 付き）で接続**しているため、有効化しても（`FORCE ROW LEVEL SECURITY` を付けない限り）**所有者は素通り＝アプリ動作に影響しない**。ポリシーは不要（2026-11 の有効化時に、所有者・`BYPASSRLS`・FORCE なし・ポリシー 0 件を確認済み）。
 
 Supabase ダッシュボード → SQL Editor で以下を実行（何度流しても安全）:
 
@@ -235,6 +235,32 @@ Supabase の **Free プランは 7 日間 DB 活動が無いとプロジェク�
 
 - 必要な Secret: **`KEEPALIVE_DATABASE_URL`**（Supabase の **Session pooler 接続文字列**。直接接続は IPv6 のみで Actions から届かないことがある）。
 - GitHub は**リポジトリに 60 日間コミットが無いと schedule ワークフローを自動無効化**する。長期間コミットが無い場合は Actions 画面から再有効化する。
+
+## 依存の更新と残っている脆弱性
+
+最後の更新: **2026-11**（Next 16.4.4 / Payload 3.92.1 / React 19.3.1 / nodemailer 10 ほか。`pnpm audit` の指摘 49 → 5 件）。
+
+依存を上げるときの流れ:
+
+1. `pnpm outdated` / `pnpm audit` で対象を洗い出す。Payload はリリースノートでスキーマ変更の有無を確認する（あれば「Payload を上げてスキーマが変わるとき」の手順）。
+2. **新しい依存で本番 DB に向けて `pnpm dev` を起動しない**。確認は本番イメージ（`docker build`）を本番 DB に向けて別ポートで起動して行う（本番モードは schema push しない）。
+3. 型・Lint・E2E・SP 幅の目視 → main へ取り込み → push → デプロイ → VPS 内から確認。
+4. ローカルの開発サーバーは `docker compose down -v` で依存を入れ直してから起動する。
+
+**次に依存を上げるときにやること**:
+
+- `pnpm-workspace.yaml` の `minimumReleaseAgeExclude` から `next@16.4.4` 系の除外（公開直後に入れたための一時措置）を外す。
+- `overrides` の `dompurify` が親（monaco-editor）の追従で不要になっていれば外す。
+- 下表の残りが消えたか `pnpm audit` で確認する。見送り中の TypeScript 7 / ESLint 10 / pnpm 12（理由は「技術スタック」）の対応状況を見る。
+
+**2026-11 時点で残している指摘（オーナー判断で親パッケージの更新待ち）**:
+
+| 重さ | パッケージ（経由） | 内容 | 残している理由 |
+|---|---|---|---|
+| high ×2 | happy-dom（`@payloadcms/richtext-lexical` → `@lexical/headless`） | 信頼できない HTML の解析時の SSRF など | 解析する HTML は管理者が書いたものだけで、閲覧者の入力は入らない。`overrides` で 21 系へ上げられるがメジャーをまたぐため本文エディタの確認が要る |
+| moderate | esbuild（`drizzle-kit` 内） | 開発サーバーへの外部サイトからのリクエスト | 開発用ツールのみ。本番に入らない |
+| moderate | minimatch（ESLint 内） | パターンによる DoS | Lint 実行時のみ |
+| low | deepmerge（payload 内） | プロトタイプ汚染 | 合成するのはこちらの設定だけ。修正版なし |
 
 ## デプロイ
 
