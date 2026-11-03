@@ -34,4 +34,4 @@ services:
     # Next 16 のため dev は Turbopack が既定
     # pnpm を固定バージョンで導入し、lockfile を厳守して依存をインストールしてから dev 起動
     # pnpm が既に入っていれば再インストールしない（起動時の不要なネットワーク依存を減らす）
-    command: sh -c "pnpm --version 2>/dev/null | grep -q 11.24.0 || npm install -g pnpm@11.24.0; pnpm install --frozen-lockfile && (pnpm dev || pnpm devsafe)"
+    command: sh -c "pnpm --version 2>/dev/null | grep -q 11.28.9 || npm install -g pnpm@11.28.9; pnpm install --frozen-lockfile && (pnpm dev || pnpm devsafe)"

@@ -20,4 +20,24 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - sharp
   - '@img/*'
+  # next 16.4.4 系はセキュリティ修正版（RCE・SSRF 等）で、公開から24時間未満の時点で導入したため
+  # 版を固定して除外した（2026-11 の依存更新時に pnpm が自動追加）。次に依存を上げるときに外してよい
+  - '@next/env@16.4.4'
+  - '@next/eslint-plugin-next@16.4.4'
+  - '@next/swc-darwin-arm64@16.4.4'
+  - '@next/swc-darwin-x64@16.4.4'
+  - '@next/swc-linux-arm64-gnu@16.4.4'
+  - '@next/swc-linux-arm64-musl@16.4.4'
+  - '@next/swc-linux-x64-gnu@16.4.4'
+  - '@next/swc-linux-x64-musl@16.4.4'
+  - '@next/swc-win32-arm64-msvc@16.4.4'
+  - '@next/swc-win32-x64-msvc@16.4.4'
+  - '@next/third-parties@16.4.4'
+  - eslint-config-next@16.4.4
+  - next@16.4.4
 
+# 推移的依存のセキュリティ修正の強制（同じメジャー内のパッチのみ）。
+# 親パッケージが修正前の版を固定しているもの。親側が追従したら外してよい
+overrides:
+  # monaco-editor 0.57.0（Payload 管理画面のコードエディタ）が 3.4.15 固定。3.4.17 で critical/high 修正
+  'dompurify@<3.4.17': ^3.4.17
