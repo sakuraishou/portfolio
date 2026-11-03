@@ -197,8 +197,11 @@ payload-overview / collections / fields / field-type-guards / access-control / a
 
 ## 本番 DB（Supabase）と RLS
 
-本番 DB は **Supabase の Postgres**。アプリ（Payload）は `DATABASE_URL` の**直接接続（`postgres` ロール）**で読み書きしており、**Supabase の自動生成 REST API（PostgREST）や client SDK は使っていない**。
+本番 DB は **Supabase の Postgres**。アプリ（Payload）は `DATABASE_URL`（**Transaction pooler・ポート 6543** 経由の `postgres` ロール）で読み書きしており、**Supabase の自動生成 REST API（PostgREST）や client SDK は使っていない**。
 なお**ローカル開発もこの本番 DB に直結している**（compose に db サービスは無い）。管理画面・Local API での編集は即本番反映になるため、データを変更する作業は必ずバックアップを取ってから行う。
+
+- **psql で本番に繋ぐときは、セッション単位の `SET` を使わない**。Transaction pooler では裏の接続が使い回されるため、`set default_transaction_read_only = on` のような設定が**別の接続（本番アプリを含む）に残る**。読み取り専用の確認は `begin read only; … rollback;`、書き込みは `begin read write; … commit;` とトランザクション単位で指定する（2026-11 に確認用 SQL の設定が残り、直後の列追加が `read-only transaction` で失敗した）。残ってしまったら `reset default_transaction_read_only` を何本か並列で流して戻す。
+- 2026-11 まで、本番の全テーブルで RLS が**無効のまま**だった（下記 SQL が未実行だった）。Payload 3.92 への更新時に有効化済み。
 
 ### なぜ RLS が要るか
 
